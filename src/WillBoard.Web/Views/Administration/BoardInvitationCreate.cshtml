@@ -1,0 +1,43 @@
+﻿@using Microsoft.AspNetCore.Routing
+@using WillBoard.Application.Administration.Commands.BoardInvitationCreate
+@using WillBoard.Application.Administration.Queries.BoardInvitationCreate
+@using WillBoard.Core.Managers
+@using WillBoard.Web.Services
+@inject LinkGenerator _linkGenerator
+@inject ViewService _viewService
+@inject AccountManager _accountManager
+@model BoardInvitationCreateViewModel
+@{
+    Layout = "~/Views/Shared/_AdministrationLayout.cshtml";
+}
+
+<main>
+    <article>
+        <header>Board - Invitation - Create</header>
+        <section>
+            <form method="post">
+                <input type="hidden" name="csrf" value="@ViewData["csrf"]" autocomplete="off">
+                <input type="hidden" name="@nameof(BoardInvitationCreateCommand.BoardId)" value="@Model.Board.BoardId" autocomplete="off">
+                <table>
+                    <tbody>
+                        <tr>
+                            <th>@nameof(BoardInvitationCreateCommand.AccountId)</th>
+                            <td>
+                                <input type="text" name="@nameof(BoardInvitationCreateCommand.AccountId)">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardInvitationCreateCommand.Message)</th>
+                            <td>
+                                <textarea name="@nameof(BoardInvitationCreateCommand.Message)"></textarea>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>
+                    <button type="submit">Create</button>
+                </p>
+            </form>
+        </section>
+    </article>
+</main>

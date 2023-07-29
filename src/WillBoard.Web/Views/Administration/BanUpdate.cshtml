@@ -1,0 +1,87 @@
+﻿@using Microsoft.AspNetCore.Routing
+@using WillBoard.Application.Administration.Commands.BanUpdate
+@using WillBoard.Application.Administration.Queries.BanUpdate
+@using WillBoard.Core.Entities
+@using WillBoard.Core.Enums
+@using WillBoard.Core.Managers
+@using WillBoard.Web.Services
+@using WillBoard.Core.Extensions
+@using WillBoard.Core.Utilities
+@inject LinkGenerator _linkGenerator
+@inject ViewService _viewService
+@inject AccountManager _accountManager
+@model BanUpdateViewModel
+@{
+    Layout = "~/Views/Shared/_AdministrationLayout.cshtml";
+}
+
+<main>
+    <article>
+        <header>Ban - Update</header>
+        <section>
+            <form method="post">
+                <input type="hidden" name="csrf" value="@ViewData["csrf"]" autocomplete="off">
+                <input type="hidden" name="@nameof(BanUpdateCommand.BanId)" value="@Model.Ban.BanId" autocomplete="off">
+                <table>
+                    <tbody>
+                        <tr>
+                            <th>@nameof(BanUpdateCommand.IpVersion)</th>
+                            <td>
+                                <select name="@nameof(BanUpdateCommand.IpVersion)" required>
+                                    <option value="@((int)IpVersion.None)" @(Model.Ban.IpVersion == IpVersion.None ? "selected" : "") disabled>@IpVersion.None</option>
+                                    <option value="@((int)IpVersion.IpVersion4)" @(Model.Ban.IpVersion == IpVersion.IpVersion4 ? "selected" : "")>@IpVersion.IpVersion4</option>
+                                    <option value="@((int)IpVersion.IpVersion6)" @(Model.Ban.IpVersion == IpVersion.IpVersion6 ? "selected" : "")>@IpVersion.IpVersion6</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BanUpdateCommand.IpNumberFrom)</th>
+                            <td>
+                                <input type="number" name="@nameof(BanUpdateCommand.IpNumberFrom)" value="@Model.Ban.IpNumberFrom" min="0" required>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BanUpdateCommand.IpNumberTo)</th>
+                            <td>
+                                <input type="number" name="@nameof(BanUpdateCommand.IpNumberTo)" value="@Model.Ban.IpNumberTo" min="0" required>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BanUpdateCommand.ExclusionIpNumberCollection)</th>
+                            <td>
+                                <textarea name="@nameof(BanUpdateCommand.ExclusionIpNumberCollection)">@ArrayConversion.SerializeBigInteger(Model.Ban.ExclusionIpNumberCollection)</textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BanUpdateCommand.Expiration)</th>
+                            <td>
+                                <input type="datetime-local" name="@nameof(BanUpdateCommand.Expiration)" value="@Model.Ban.Expiration?.ToIso8601String()">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BanUpdateCommand.Appeal)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BanUpdateCommand.Appeal)" value="true" @(Model.Ban.Appeal ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BanUpdateCommand.Reason)</th>
+                            <td>
+                                <textarea name="@nameof(BanUpdateCommand.Reason)">@Model.Ban.Reason</textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BanUpdateCommand.Note)</th>
+                            <td>
+                                <textarea name="@nameof(BanUpdateCommand.Note)">@Model.Ban.Note</textarea>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>
+                    <button type="submit">Update @Model.Ban.BanId</button>
+                </p>
+            </form>
+        </section>
+    </article>
+</main>

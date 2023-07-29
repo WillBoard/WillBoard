@@ -1,0 +1,16 @@
+﻿@using WillBoard.Application.ViewModels
+@using WillBoard.Core.Interfaces.Caches
+@using WillBoard.Core.Interfaces.Services
+@using WillBoard.Core.Managers
+@inject BoardManager _boardManager
+@inject ILocalizationService _localizationService
+@inject IConfigurationCache _configurationCache
+@model ApplicationViewModel
+
+<input type="checkbox" id="watcher">
+<label for="watcher" class="icon"></label>
+<section class="watcher">
+    <h3>Watcher</h3>
+    <noscript>Watcher is available only with enabled JavaScript</noscript>
+    <ul></ul>
+</section>

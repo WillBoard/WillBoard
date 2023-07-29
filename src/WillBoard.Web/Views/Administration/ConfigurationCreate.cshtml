@@ -1,0 +1,54 @@
+﻿@using Microsoft.AspNetCore.Routing
+@using WillBoard.Application.Administration.Commands.ConfigurationCreate
+@using WillBoard.Application.Administration.Queries.ConfigurationCreate
+@using WillBoard.Core.Entities
+@using WillBoard.Core.Enums
+@using WillBoard.Core.Managers
+@using WillBoard.Web.Services
+@inject LinkGenerator _linkGenerator
+@inject ViewService _viewService
+@inject AccountManager _accountManager
+@model ConfigurationCreateViewModel
+@{
+    Layout = "~/Views/Shared/_AdministrationLayout.cshtml";
+}
+
+<main>
+    <article>
+        <header>Configuration - Create</header>
+        <section>
+            <form method="post">
+                <input type="hidden" name="csrf" value="@ViewData["csrf"]" autocomplete="off">
+                <table>
+                    <tbody>
+                        <tr>
+                            <th>@nameof(ConfigurationCreateCommand.Key)</th>
+                            <td>
+                                <input type="text" name="@nameof(ConfigurationCreateCommand.Key)" required>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(ConfigurationCreateCommand.Value)</th>
+                            <td>
+                                <textarea name="@nameof(ConfigurationCreateCommand.Value)" required></textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(ConfigurationCreateCommand.Type)</th>
+                            <td>
+                                <select name="@nameof(ConfigurationCreateCommand.Type)" required>
+                                    <option value="@((int)ConfigurationType.Boolean)">@ConfigurationType.Boolean</option>
+                                    <option value="@((int)ConfigurationType.String)">@ConfigurationType.String</option>
+                                    <option value="@((int)ConfigurationType.Integer)">@ConfigurationType.Integer</option>
+                                </select>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>
+                    <button type="submit">Create</button>
+                </p>
+            </form>
+        </section>
+    </article>
+</main>

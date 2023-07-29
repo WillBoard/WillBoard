@@ -1,0 +1,20 @@
+﻿@using Microsoft.AspNetCore.Routing
+@using WillBoard.Core.Entities
+@using WillBoard.Core.Enums
+@using WillBoard.Core.Interfaces.Caches
+@inject LinkGenerator _linkGenerator
+@inject IBoardCache _boardCache
+@{
+    IEnumerable<Board> boardCollection = await _boardCache.GetCollectionAsync();
+}
+
+<h3><span class="icon"></span>Boards</h3>
+<ul class="navigation-boards">
+    @foreach (var board in boardCollection)
+    {
+        if (board.Visibility == BoardVisibility.Visible)
+        {
+            <li data-boardid="@board.BoardId"><a href="@_linkGenerator.GetPathByAction("Classic", "Board", new { boardId = board.BoardId })" title="/@board.BoardId/ - @board.Name"><span class="initiale">@board.BoardId.AsSpan(0, board.BoardId.Length > 2 ? 2 : board.BoardId.Length).ToString()</span><span>/@board.BoardId/ - @board.Name</span></a></li>
+        }
+    }
+</ul>

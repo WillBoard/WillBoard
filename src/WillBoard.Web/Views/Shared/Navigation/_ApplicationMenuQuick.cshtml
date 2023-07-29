@@ -1,0 +1,16 @@
+﻿@using Microsoft.AspNetCore.Routing
+@using WillBoard.Application.ViewModels
+@using WillBoard.Core.Enums;
+@inject LinkGenerator _linkGenerator
+@model ApplicationViewModel
+
+<h3><span class="icon"></span>Quick</h3>
+<ul class="navigation-quick">
+    <li><a href="#top"><span class="icon"></span><span>Top</span></a></li>
+    <li><a href="#bottom"><span class="icon"></span><span>Bottom</span></a></li>
+    <li><a href="@_linkGenerator.GetPathByAction("Index", "Application")"><span class="icon"></span><span>Overview</span></a></li>
+    @if (Model.ViewType == ViewType.Application)
+    {
+        <li><a href="@_linkGenerator.GetPathByAction("Boards", "Administration")"><span class="icon"></span><span>Administration</span></a></li>
+    }
+</ul>

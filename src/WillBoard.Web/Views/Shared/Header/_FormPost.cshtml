@@ -1,0 +1,209 @@
+﻿@using Microsoft.AspNetCore.Routing
+@using WillBoard.Application.ViewModels
+@using WillBoard.Core.Consts
+@using WillBoard.Core.Enums
+@using WillBoard.Core.Interfaces.Services
+@using WillBoard.Core.Managers
+@inject LinkGenerator _linkGenerator
+@inject BoardManager _boardManager
+@inject ILocalizationService _localizationService
+@inject IVerificationService _verificationService
+@inject IFileService _fileService
+@model FormPostViewModel
+@{
+    var board = _boardManager.GetBoard();
+    var name = await _localizationService.GetLocalizationAsync(board.Language, TranslationKey.Name);
+    var email = await _localizationService.GetLocalizationAsync(board.Language, TranslationKey.Email);
+    var subject = await _localizationService.GetLocalizationAsync(board.Language, TranslationKey.Subject);
+    var message = await _localizationService.GetLocalizationAsync(board.Language, TranslationKey.Message);
+    var options = await _localizationService.GetLocalizationAsync(board.Language, TranslationKey.Options);
+    var sage = await _localizationService.GetLocalizationAsync(board.Language, TranslationKey.Sage);
+    var spoiler = await _localizationService.GetLocalizationAsync(board.Language, TranslationKey.Spoiler);
+    var country = await _localizationService.GetLocalizationAsync(board.Language, TranslationKey.Country);
+    var userId = await _localizationService.GetLocalizationAsync(board.Language, TranslationKey.UserId);
+    var password = await _localizationService.GetLocalizationAsync(board.Language, TranslationKey.Password);
+    var newThread = await _localizationService.GetLocalizationAsync(board.Language, TranslationKey.NewThread);
+    var reply = await _localizationService.GetLocalizationAsync(board.Language, TranslationKey.Reply);
+}
+
+<section class="post">
+    <form method="post" enctype="multipart/form-data" action="@_linkGenerator.GetPathByAction("CreatePost", "Board" , new { boardId = board.BoardId })">
+        <input type="hidden" name="csrf" value="@ViewData["csrf"]" autocomplete="off">
+        <input type="hidden" name="boardId" value="@board.BoardId" autocomplete="off">
+        <input type="hidden" name="threadId" value="@Model.ThreadId" autocomplete="off">
+        <table>
+            @if (board.ThreadFieldNameAvailability && Model.BoardViewType == BoardViewType.ClassicBoard)
+            {
+                <tr data-field="name">
+                    <th><label for="name">@await _localizationService.GetLocalizationAsync(board.Language, name)</label></th>
+                    <td><input type="text" id="name" name="name" minlength="@board.ThreadFieldNameLengthMin" maxlength="@board.ThreadFieldNameLengthMax" @Html.Raw(board.ThreadFieldNameRequirement ? "required" : "")></td>
+                </tr>
+            }
+            @if (board.ReplyFieldNameAvailability && Model.BoardViewType == BoardViewType.ClassicThread)
+            {
+                <tr data-field="name">
+                    <th><label for="name">@await _localizationService.GetLocalizationAsync(board.Language, name)</label></th>
+                    <td><input type="text" id="name" name="name" minlength="@board.ReplyFieldNameLengthMin" maxlength="@board.ReplyFieldNameLengthMax" @Html.Raw(board.ReplyFieldNameRequirement ? "required" : "")></td>
+                </tr>
+            }
+            @if (board.ThreadFieldEmailAvailability && Model.BoardViewType == BoardViewType.ClassicBoard)
+            {
+                <tr data-field="email">
+                    <th><label for="email">@await _localizationService.GetLocalizationAsync(board.Language, email)</label></th>
+                    <td><input type="text" id="email" name="email" minlength="@board.ThreadFieldEmailLengthMin" maxlength="@board.ThreadFieldEmailLengthMax" @Html.Raw(board.ThreadFieldEmailRequirement ? "required" : "")></td>
+                </tr>
+            }
+            @if (board.ReplyFieldEmailAvailability && Model.BoardViewType == BoardViewType.ClassicThread)
+            {
+                <tr data-field="email">
+                    <th><label for="email">@await _localizationService.GetLocalizationAsync(board.Language, email)</label></th>
+                    <td><input type="text" id="email" name="email" minlength="@board.ReplyFieldEmailLengthMin" maxlength="@board.ReplyFieldEmailLengthMax" @Html.Raw(board.ReplyFieldEmailRequirement ? "required" : "")></td>
+                </tr>
+            }
+            @if (board.ThreadFieldSubjectAvailability && Model.BoardViewType == BoardViewType.ClassicBoard)
+            {
+                <tr data-field="subject">
+                    <th><label for="subject">@await _localizationService.GetLocalizationAsync(board.Language, subject)</label></th>
+                    <td><input type="text" id="subject" name="subject" minlength="@board.ThreadFieldSubjectLengthMin" maxlength="@board.ThreadFieldSubjectLengthMax" @Html.Raw(board.ThreadFieldSubjectRequirement ? "required" : "")></td>
+                </tr>
+            }
+            @if (board.ReplyFieldSubjectAvailability && Model.BoardViewType == BoardViewType.ClassicThread)
+            {
+                <tr data-field="subject">
+                    <th><label for="subject">@await _localizationService.GetLocalizationAsync(board.Language, subject)</label></th>
+                    <td><input type="text" id="subject" name="subject" minlength="@board.ReplyFieldSubjectLengthMin" maxlength="@board.ReplyFieldSubjectLengthMax" @Html.Raw(board.ReplyFieldSubjectRequirement ? "required" : "")></td>
+                </tr>
+            }
+            @if (board.ThreadFieldMessageAvailability && Model.BoardViewType == BoardViewType.ClassicBoard)
+            {
+                <tr data-field="message">
+                    <td colspan="2"><textarea name="message" placeholder="@await _localizationService.GetLocalizationAsync(board.Language, message)" minlength="@board.ThreadFieldMessageLengthMin" maxlength="@board.ThreadFieldMessageLengthMax" @Html.Raw(board.ThreadFieldMessageRequirement ? "required" : "") accesskey="t"></textarea>
+                </tr>
+            }
+            @if (board.ReplyFieldMessageAvailability && Model.BoardViewType == BoardViewType.ClassicThread)
+            {
+                <tr data-field="message">
+                    <td colspan="2"><textarea name="message" placeholder="@await _localizationService.GetLocalizationAsync(board.Language, message)" minlength="@board.ReplyFieldMessageLengthMin" maxlength="@board.ReplyFieldMessageLengthMax" @Html.Raw(board.ReplyFieldMessageRequirement ? "required" : "") accesskey="t"></textarea>
+                </tr>
+            }
+            @if (board.ThreadFieldFileAvailability && Model.BoardViewType == BoardViewType.ClassicBoard)
+            {
+                <tr data-field="file">
+                    <td colspan="2"><input type="file" name="file" id="file" accept="@Html.Raw(string.Join(",", board.ThreadFieldFileTypeCollection))" @Html.Raw(board.ThreadFieldFileRequirement ? "required" : "")></td>
+                </tr>
+            }
+            @if (board.ReplyFieldFileAvailability && Model.BoardViewType == BoardViewType.ClassicThread)
+            {
+                <tr data-field="file">
+                    <td colspan="2"><input type="file" name="file" id="file" accept="@Html.Raw(string.Join(",", board.ReplyFieldFileTypeCollection))" @Html.Raw(board.ReplyFieldFileRequirement ? "required" : "")></td>
+                </tr>
+            }
+            @if (board.ThreadFieldVerificationMode != VerificationMode.None || board.ReplyFieldVerificationMode == VerificationMode.None)
+            {
+                @if (board.FieldVerificationType == VerificationType.ReCaptcha)
+                {
+                    <tr data-field="captcha" class="captcha recaptcha @(!Model.Verification ? @" hide" : string.Empty)">
+                        <td colspan="2">
+                            <div name="framename" id="framename" class="g-recaptcha" data-sitekey="@board.VerificationPublicKey"></div>
+                            <noscript>
+                                <div style="margin: auto; width: 300px;">
+                                    <div style="width: 302px; height: 422px; position: relative;">
+                                        <div style="width: 302px; height: 422px; position: absolute;">
+                                            <iframe src="https://www.google.com/recaptcha/api/fallback?k=@board.VerificationPublicKey" frameborder="0" scrolling="no" style="width: 302px; height:422px; border-style: none;"></iframe>
+                                        </div>
+                                    </div>
+                                    <div style="width: 300px; height: 60px; border-style: none; bottom: 12px; left: 25px; margin: 0px; padding: 0px; right: 25px; background: #f9f9f9; border: 1px solid #c1c1c1; border-radius: 3px;">
+                                        <textarea id="g-recaptcha-response" name="g-recaptcha-response" class="g-recaptcha-response" style="width: 250px; height: 40px; border: 1px solid #c1c1c1; margin: 10px 25px; padding: 0px; resize: none;"></textarea>
+                                    </div>
+                                </div>
+                            </noscript>
+                        </td>
+                    </tr>
+                }
+                else if (board.FieldVerificationType == VerificationType.ClassicCaptcha)
+                {
+                    <tr data-field="captcha" class="captcha classiccaptcha @(!Model.Verification ? @" hide" : string.Empty)">
+                        <td colspan="2">
+                            <noscript>
+                                <iframe src="/api/captcha/wildcard"></iframe>
+                                <input type="text" name="verificationValue" autocomplete="off" placeholder="Code">
+                            </noscript>
+                        </td>
+                    </tr>
+                }
+            }
+            @if ((board.ThreadFieldOptionSageAvailability || board.ThreadFieldOptionSpoilerAvailability || board.ThreadFieldOptionCountryAvailability || board.ThreadFieldOptionUserIdAvailability) && Model.BoardViewType == BoardViewType.ClassicBoard)
+            {
+                <tr data-field="options">
+                    <th><label>@await _localizationService.GetLocalizationAsync(board.Language, options)</label></th>
+                    <td>
+                        @if (board.ThreadFieldOptionSageAvailability)
+                        {
+                            <input id="option-sage" type="checkbox" name="optionSage" value="true">
+                            <label for="option-sage" title="@sage"></label>
+                        }
+                        @if (board.ThreadFieldOptionSpoilerAvailability)
+                        {
+                            <input id="option-spoiler" type="checkbox" name="optionSpoiler" value="true">
+                            <label for="option-spoiler" title="@spoiler"></label>
+                        }
+                        @if (board.ThreadFieldOptionCountryAvailability)
+                        {
+                            <input id="option-country" type="checkbox" name="optionCountry" value="true">
+                            <label for="option-country" title="@country"></label>
+                        }
+                        @if (board.ThreadFieldOptionUserIdAvailability)
+                        {
+                            <input id="option-userId" type="checkbox" name="optionUserId" value="true">
+                            <label for="option-userId" title="@userId"></label>
+                        }
+                    </td>
+                </tr>
+            }
+            @if ((board.ReplyFieldOptionSageAvailability || board.ReplyFieldOptionSpoilerAvailability) && Model.BoardViewType == BoardViewType.ClassicThread)
+            {
+                <tr data-field="options">
+                    <th><label>@await _localizationService.GetLocalizationAsync(board.Language, options)</label></th>
+                    <td>
+                        @if (board.ReplyFieldOptionSageAvailability)
+                        {
+                            <input id="option-sage" type="checkbox" name="optionSage" value="true">
+                            <label for="option-sage" title="@sage"></label>
+                        }
+                        @if (board.ReplyFieldOptionSpoilerAvailability)
+                        {
+                            <input id="option-spoiler" type="checkbox" name="optionSpoiler" value="true">
+                            <label for="option-spoiler" title="@spoiler"></label>
+                        }
+                    </td>
+                </tr>
+            }
+            @if (board.ThreadFieldPasswordAvailability && Model.BoardViewType == BoardViewType.ClassicBoard)
+            {
+                <tr data-field="password">
+                    <th><label for="password">@await _localizationService.GetLocalizationAsync(board.Language, password)</label></th>
+                    <td>
+                        <input type="password" name="password" id="password" minlength="@board.ThreadFieldPasswordLengthMin" maxlength="@board.ThreadFieldPasswordLengthMax" @Html.Raw(board.ThreadFieldPasswordRequirement ? "required" : "")>
+                    </td>
+                </tr>
+            }
+            @if (board.ReplyFieldPasswordAvailability && Model.BoardViewType == BoardViewType.ClassicThread)
+            {
+                <tr data-field="password">
+                    <th><label for="password">@await _localizationService.GetLocalizationAsync(board.Language, password)</label></th>
+                    <td>
+                        <input type="password" name="password" id="password" minlength="@board.ReplyFieldPasswordLengthMin" maxlength="@board.ReplyFieldPasswordLengthMax" @Html.Raw(board.ReplyFieldPasswordRequirement ? "required" : "")>
+                    </td>
+                </tr>
+            }
+        </table>
+        @if (Model.BoardViewType == BoardViewType.ClassicBoard)
+        {
+            <input type="submit" value="@await _localizationService.GetLocalizationAsync(board.Language, newThread)" accesskey="s">
+        }
+        @if (Model.BoardViewType == BoardViewType.ClassicThread)
+        {
+            <input type="submit" value="@await _localizationService.GetLocalizationAsync(board.Language, reply)" accesskey="s">
+        }
+    </form>
+</section>

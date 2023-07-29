@@ -1,0 +1,21 @@
+﻿{
+    "logger": {
+        "level": "Information",
+        "filterCollection": {
+            "Microsoft": "Warning"
+        }
+    },
+    "database": {
+        "type": "MySQL",
+        "connectionString": ""
+    },
+    "cache": {
+        "type": "Memory",
+        "configurationString": ""
+    },
+    "administration": {
+        "verificationType": "None",
+        "verificationPublicKey": "",
+        "verificationSecretKey": ""
+    }
+}

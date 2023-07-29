@@ -1,0 +1,36 @@
+﻿@using Microsoft.AspNetCore.Routing
+@using WillBoard.Application.Administration.Commands.BoardCreate
+@using WillBoard.Application.Administration.Queries.BoardCreate
+@using WillBoard.Core.Managers
+@using WillBoard.Web.Services
+@inject LinkGenerator _linkGenerator
+@inject ViewService _viewService
+@inject AccountManager _accountManager
+@model BoardCreateViewModel
+@{ 
+    Layout = "~/Views/Shared/_AdministrationLayout.cshtml";
+}
+
+<main>
+    <article>
+        <header>Board - Create</header>
+        <section>
+            <form method="post">
+                <input type="hidden" name="csrf" value="@ViewData["csrf"]" autocomplete="off">
+                <table>
+                    <tbody>
+                        <tr>
+                            <th>@nameof(BoardCreateCommand.BoardId)</th>
+                            <td>
+                                <input type="text" name="@nameof(BoardCreateCommand.BoardId)">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>
+                    <button type="submit">Create</button>
+                </p>
+            </form>
+        </section>
+    </article>
+</main>

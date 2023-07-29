@@ -1,0 +1,11 @@
+﻿@using WillBoard.Core.Managers
+@using WillBoard.Application.ViewModels
+@inject BoardManager _boardManager
+@{
+    var board = _boardManager.GetBoard();
+}
+
+@if (!string.IsNullOrEmpty(board.InformationHeader))
+{
+    <aside>@Html.Raw(board.InformationHeader)</aside>
+}

@@ -1,0 +1,28 @@
+﻿@using Microsoft.AspNetCore.Routing
+@using WillBoard.Core.Managers
+@inject LinkGenerator _linkGenerator
+@inject AccountManager _accountManager
+@inject BoardManager _boardManager
+@{
+	var board = _boardManager.GetBoard();
+}
+
+<h3><span class="icon"></span>Board</h3>
+<ul class="navigation-board">
+	<li>
+		<a href="@(_accountManager.CheckPermission(board.BoardId, e => e.PermissionBoardView) ? _linkGenerator.GetPathByAction("BoardViewClassic", "Administration", new { boardId = board.BoardId }) : _linkGenerator.GetPathByAction("Classic", "Board", new { boardId = board.BoardId }))"><span class="icon"></span><span>Classic</span></a>
+	</li>
+	@if (board.CatalogAvailability)
+	{
+		<li>
+			<a href="@(_accountManager.CheckPermission(board.BoardId, e => e.PermissionBoardView) ? _linkGenerator.GetPathByAction("BoardViewCatalog", "Administration", new { boardId = board.BoardId }) : _linkGenerator.GetPathByAction("Catalog", "Board", new { boardId = board.BoardId }))"><span class="icon"></span><span>Catalog</span></a>
+		</li>
+	}
+	@if (board.SearchAvailability)
+	{
+		<li>
+			<a href="@(_accountManager.CheckPermission(board.BoardId, e => e.PermissionBoardView) ? _linkGenerator.GetPathByAction("BoardViewSearch", "Administration", new { boardId = board.BoardId }) : _linkGenerator.GetPathByAction("Search", "Board", new { boardId = board.BoardId }))"><span class="icon"></span><span>Search</span></a>
+		</li>
+	}
+	<li><a href="@_linkGenerator.GetPathByAction("Ban", "Board", new { boardId = board.BoardId })"><span class="icon"></span><span>Ban</span></a></li>
+</ul>

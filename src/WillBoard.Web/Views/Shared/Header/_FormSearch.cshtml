@@ -1,0 +1,113 @@
+﻿@using Microsoft.AspNetCore.Routing
+@using WillBoard.Application.ViewModels
+@using WillBoard.Core.Consts
+@using WillBoard.Core.Interfaces.Services
+@using WillBoard.Core.Managers
+@inject LinkGenerator _linkGenerator
+@inject AccountManager _accountManager
+@inject BoardManager _boardManager
+@inject ILocalizationService _localizationService
+@inject IVerificationService _verificationService
+@inject IFileService _fileService
+@model FormSearchViewModel
+@{
+    var board = _boardManager.GetBoard();
+    var search = await _localizationService.GetLocalizationAsync(board.Language, TranslationKey.Search);
+    var postId = await _localizationService.GetLocalizationAsync(board.Language, TranslationKey.PostId);
+    var threadId = await _localizationService.GetLocalizationAsync(board.Language, TranslationKey.ThreadId);
+    var message = await _localizationService.GetLocalizationAsync(board.Language, TranslationKey.Message);
+    var file = await _localizationService.GetLocalizationAsync(board.Language, TranslationKey.File);
+    var type = await _localizationService.GetLocalizationAsync(board.Language, TranslationKey.Type);
+    var order = await _localizationService.GetLocalizationAsync(board.Language, TranslationKey.Order);
+    var thread = await _localizationService.GetLocalizationAsync(board.Language, TranslationKey.Thread);
+    var reply = await _localizationService.GetLocalizationAsync(board.Language, TranslationKey.Reply);
+    var all = await _localizationService.GetLocalizationAsync(board.Language, TranslationKey.All);
+    var with = await _localizationService.GetLocalizationAsync(board.Language, TranslationKey.With);
+    var without = await _localizationService.GetLocalizationAsync(board.Language, TranslationKey.Without);
+    var oldest = await _localizationService.GetLocalizationAsync(board.Language, TranslationKey.Oldest);
+    var latest = await _localizationService.GetLocalizationAsync(board.Language, TranslationKey.Latest);
+}
+
+<section class="search">
+    <form method="get" action="@(_accountManager.CheckPermission(board.BoardId, e => e.PermissionBoardView) ? _linkGenerator.GetPathByAction("BoardViewSearch", "Administration", new { boardId = board.BoardId }) : _linkGenerator.GetPathByAction(" Search", "Board" , new { boardId=board.BoardId }))">
+        <table>
+            <tbody>
+                <tr>
+                    <td colspan="2">
+                        <input type="text" name="message" minlength="6" maxlength="32" placeholder="@message" value="@Model.Message">
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <label for="postId">@postId</label>
+                    </th>
+                    <td>
+                        <input type="number" name="postId" id="postId" @(Model.PostId != null ? $"value={Model.PostId}" : "")>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <label for="threadId">@threadId</label>
+                    </th>
+                    <td>
+                        <input type="number" name="threadId" id="threadId" @(Model.ThreadId != null ? $"value={Model.ThreadId}" : "")>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <label>@file</label>
+                    </th>
+                    <td>
+                        <input type="radio" id="file-all" name="file" value="all" @(Model.File != "with" && Model.File != "without" ? $"checked" : "")>
+                        <label for="file-all">
+                            @all
+                        </label>
+                        <input type="radio" id="file-with" name="file" value="with" @(Model.File == "with" ? $"checked" : "")>
+                        <label for="file-with">
+                            @with
+                        </label>
+                        <input type="radio" id="file-without" name="file" value="without" @(Model.File == "without" ? $"checked" : "")>
+                        <label for="file-without">
+                            @without
+                        </label>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <label>@type</label>
+                    </th>
+                    <td>
+                        <input type="radio" id="type-all" name="type" value="all" @(Model.Type != "thread" && Model.File != "reply" ? $"checked" : "")>
+                        <label for="type-all">
+                            @all
+                        </label>
+                        <input type="radio" id="type-thread" name="type" value="thread" @(Model.Type == "thread" ? $"checked" : "")>
+                        <label for="type-thread">
+                            @thread
+                        </label>
+                        <input type="radio" id="type-reply" name="type" value="reply" @(Model.Type == "reply" ? $"checked" : "")>
+                        <label for="type-reply">
+                            @reply
+                        </label>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <label>@order</label>
+                    </th>
+                    <td>
+                        <input type="radio" id="order-asc" name="order" value="asc" @(Model.Order != "desc" ? $"checked" : "")>
+                        <label for="order-asc">
+                            @oldest
+                        </label>
+                        <input type="radio" id="order-desc" name="order" value="desc" @(Model.Order == "desc" ? $"checked" : "")>
+                        <label for="order-desc">
+                            @latest
+                        </label>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <input type="submit" value="@search" accesskey="s">
+    </form>
+</section>

@@ -1,0 +1,27 @@
+﻿@using Microsoft.AspNetCore.Routing
+@using WillBoard.Application.Administration.Commands.ConfigurationDelete
+@using WillBoard.Application.Administration.Queries.ConfigurationDelete
+@using WillBoard.Core.Managers
+@using WillBoard.Web.Services
+@inject LinkGenerator _linkGenerator
+@inject ViewService _viewService
+@inject AccountManager _accountManager
+@model ConfigurationDeleteViewModel
+@{
+    Layout = "~/Views/Shared/_AdministrationLayout.cshtml";
+}
+
+<main>
+    <article>
+        <header>Configuration - Delete</header>
+        <section>
+            <form method="post">
+                <input type="hidden" name="csrf" value="@ViewData["csrf"]" autocomplete="off">
+                <input type="hidden" name="@nameof(ConfigurationDeleteCommand.Key)" value="@Model.Configuration.Key" autocomplete="off">
+                <p>
+                    <button type="submit">Delete @Model.Configuration.Key</button>
+                </p>
+            </form>
+        </section>
+    </article>
+</main>

@@ -1,0 +1,77 @@
+﻿@using Microsoft.AspNetCore.Routing
+@using WillBoard.Application.ViewModels
+@using WillBoard.Core.Enums
+@using WillBoard.Core.Interfaces.Caches
+@using WillBoard.Core.Managers
+@inject LinkGenerator _linkGenerator
+@inject AccountManager _accountManager
+@inject IBoardCache _boardCache
+@model AdministrationViewModel
+@{
+    var account = _accountManager.GetAccount();
+    var boardCollection = await _boardCache.GetCollectionAsync();
+}
+
+<nav>
+    <input type="checkbox" id="navigation">
+    <label for="navigation">Menu</label>
+    <section class="navigation">
+        <h3>Quick</h3>
+        <ul class="navigation-board">
+            <li><a href="#top">Top</a></li>
+            <li><a href="#bottom">Bottom</a></li>
+        </ul>
+        <h3>General</h3>
+        <ul class="navigation-board">
+            <li><a href="@_linkGenerator.GetPathByAction("Boards", "Administration")">Boards</a></li>
+        </ul>
+        <h3>Manage</h3>
+        <ul class="navigation-board">
+            @foreach (var board in boardCollection)
+            {
+                if (_accountManager.CheckPermission(board.BoardId))
+                {
+                    <li>
+                        <input type="checkbox" id="board-@board.BoardId">
+                        <label for="board-@board.BoardId">@board.BoardId</label>
+                        <ul>
+                            <li><a href="@_linkGenerator.GetPathByAction("BoardViewClassic", "Administration", new { boardId = board.BoardId } )">View</a></li>
+                            <li><a href="@_linkGenerator.GetPathByAction("BoardReports", "Administration", new { boardId = board.BoardId } )">Reports</a></li>
+                            <li><a href="@_linkGenerator.GetPathByAction("BoardBans", "Administration", new { boardId = board.BoardId } )">Bans</a></li>
+                            <li><a href="@_linkGenerator.GetPathByAction("BoardBanAppeals", "Administration", new { boardId = board.BoardId } )">Appeals</a></li>
+                            <li><a href="@_linkGenerator.GetPathByAction("BoardAuthorizations", "Administration", new { boardId = board.BoardId } )">Authorizations</a></li>
+                            <li><a href="@_linkGenerator.GetPathByAction("BoardInvitations", "Administration", new { boardId = board.BoardId } )">Invitations</a></li>
+                            <li><a href="@_linkGenerator.GetPathByAction("BoardUpdate", "Administration", new { boardId = board.BoardId } )">Update</a></li>
+                            <li><a href="@_linkGenerator.GetPathByAction("BoardDelete", "Administration", new { boardId = board.BoardId } )">Delete</a></li>
+                        </ul>
+                    </li>
+                }
+            }
+        </ul>
+        <h3>Personal</h3>
+        <ul class="navigation-account">
+            <li><a href="@_linkGenerator.GetPathByAction("Account", "Administration", new { accountId = account.AccountId })">Account</a></li>
+            <li><a href="@_linkGenerator.GetPathByAction("AccountAuthentications", "Administration", new { accountId = account.AccountId })">Authentications</a></li>
+            <li><a href="@_linkGenerator.GetPathByAction("AccountInvitations", "Administration", new { accountId = account.AccountId })">Invitations</a></li>
+        </ul>
+        @if (account.Type == AccountType.Administrator)
+        {
+            <h3>Administrator</h3>
+            <ul class="navigation-administrator">
+                <li><a href="@_linkGenerator.GetPathByAction("Bans", "Administration")">Bans</a></li>
+                <li><a href="@_linkGenerator.GetPathByAction("BanAppeals", "Administration")">Appeals</a></li>
+                <li><a href="@_linkGenerator.GetPathByAction("Reports", "Administration")">Reports</a></li>
+                <li><a href="@_linkGenerator.GetPathByAction("Accounts", "Administration")">Accounts</a></li>
+                <li><a href="@_linkGenerator.GetPathByAction("Navigations", "Administration")">Navigation</a></li>
+                <li><a href="@_linkGenerator.GetPathByAction("Configurations", "Administration")">Configurations</a></li>
+                <li><a href="@_linkGenerator.GetPathByAction("Translations", "Administration")">Translations</a></li>
+                <li><a href="@_linkGenerator.GetPathByAction("Cache", "Administration")">Cache</a></li>
+                <li><a href="#">Online Counter</a></li>
+                <li><a href="#">Synchronizations</a></li>
+            </ul>
+        }
+    </section>
+    <a>Administration</a>
+    <aside>
+    </aside>
+</nav>

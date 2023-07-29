@@ -1,0 +1,62 @@
+﻿@using Microsoft.AspNetCore.Routing
+@using WillBoard.Application.ViewModels
+@using WillBoard.Core.Consts
+@using WillBoard.Core.Enums
+@using WillBoard.Core.Extensions
+@using WillBoard.Core.Interfaces.Services
+@using WillBoard.Core.Managers
+@using WillBoard.Core.Utilities
+@inject LinkGenerator _linkGenerator
+@inject AccountManager _accountManager
+@inject BoardManager _boardManager
+@inject ILocalizationService _localizationService
+@model ReplyViewModel
+@{
+    var board = _boardManager.GetBoard();
+    var permissionBoardView = _accountManager.CheckPermission(Model.Reply.BoardId, e => e.PermissionBoardView);
+    var report = await _localizationService.GetLocalizationAsync(board.Language, TranslationKey.Report);
+    var delete = await _localizationService.GetLocalizationAsync(board.Language, TranslationKey.Delete);
+    var options = await _localizationService.GetLocalizationAsync(board.Language, TranslationKey.Options);
+}
+
+<section class="reply" data-boardid="@Model.Reply.BoardId" data-postid="@Model.Reply.PostId" @(Model.BoardViewType == BoardViewType.ClassicThread ? $"id={Model.Reply.PostId}" : "")>
+    <div class="info">
+        <input type="checkbox" id="options-@(Model.Reply.BoardId + Model.Reply.PostId)">
+        <label for="options-@(Model.Reply.BoardId + Model.Reply.PostId)" title="@options"></label>        
+        <aside class="options">
+            <a href="@_linkGenerator.GetPathByAction("Report", "Board", new { boardid = Model.Reply.BoardId, postid = Model.Reply.PostId })" target="_blank">@report</a>
+            <a href="@_linkGenerator.GetPathByAction("Delete", "Board", new { boardid = Model.Reply.BoardId, postid = Model.Reply.PostId })" target="_blank">@delete</a>
+        </aside>
+        @if (permissionBoardView)
+        {
+            <a title="@Model.Reply.UserAgent" href="@_linkGenerator.GetPathByAction("BoardIp", "Administration", new { boardId = Model.Reply.BoardId, ipVersion = (int)Model.Reply.IpVersion, ipNumber = Model.Reply.IpNumber })" class="ip">@IpConversion.IpNumberToIpAddressString(Model.Reply.IpVersion, Model.Reply.IpNumber)</a>
+            <input type="checkbox" id="administration-@(Model.Reply.BoardId + Model.Reply.PostId)">
+            <label for="administration-@(Model.Reply.BoardId + Model.Reply.PostId)"></label>
+            <aside class="administration">
+                @await Html.PartialAsync("~/Views/Shared/Post/_AdministrationOptions.cshtml", Model.Reply)
+            </aside>
+        }
+        @if (!string.IsNullOrEmpty(Model.Reply.Subject))
+        {
+            <span class="subject">@Model.Reply.Subject</span>
+        }
+        <a class="name" @(string.IsNullOrEmpty(Model.Reply.Email) ? "" : $@"href=mailto:{Model.Reply.Email}")>@(string.IsNullOrEmpty(Model.Reply.Name) ? board.Anonymous : Model.Reply.Name)</a>
+        @if ((board.UserIdRequirement || Model.Reply.ForceUserId) && !string.IsNullOrEmpty(Model.Reply.UserId))
+        {
+            <span class="user-id">@Model.Reply.UserId</span>
+        }
+        @if ((board.CountryRequirement || Model.Reply.ForceCountry) && !string.IsNullOrEmpty(Model.Reply.Country))
+        {
+            <span class="country @Model.Reply.Country.ToLower()" title="@Model.Reply.Country"></span>
+        }
+        @await Html.PartialAsync("~/Views/Shared/Post/_FileInfo.cshtml", Model.Reply)
+        <time datetime="@Model.Reply.Creation.ToUtcIso8601String()">@Model.Reply.CreationLocal.ToRfc3339String()</time>
+        <a href="@_linkGenerator.GetPathToClassicThread(Model.Reply.BoardId, Model.Reply.ThreadId, Model.Reply.PostId, AnchorType.Default, administration: permissionBoardView)">#</a>
+        <a class="reply" href="@_linkGenerator.GetPathToClassicThread(Model.Reply.BoardId, Model.Reply.ThreadId, Model.Reply.PostId, AnchorType.Reply, administration: permissionBoardView)">@Model.Reply.PostId</a>
+        @await Html.PartialAsync("~/Views/Shared/Post/_IncomingPostMentions.cshtml", Model.Reply)
+    </div>
+    <div class="content">
+        @await Html.PartialAsync("~/Views/Shared/Post/_FilePreview.cshtml", Model.Reply)
+        <div class="message">@Html.Raw(Model.Reply.MessageDynamic ?? "")</div>
+    </div>
+</section>

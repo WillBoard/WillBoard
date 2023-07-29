@@ -1,0 +1,39 @@
+﻿@using Microsoft.AspNetCore.Routing
+@using WillBoard.Application.ViewModels
+@using WillBoard.Core.Consts
+@using WillBoard.Core.Interfaces.Caches
+@using WillBoard.Core.Interfaces.Services
+@using WillBoard.Core.Managers
+@inject LinkGenerator _linkGenerator
+@inject BoardManager _boardManager
+@inject ILocalizationService _localizationService
+@inject IConfigurationCache _configurationCache
+@model PostViewModel
+@{
+	Layout = "~/Views/Shared/_BoardLayout.cshtml";
+	var board = _boardManager.GetBoard();
+	var reportSystemAvailability = await _configurationCache.GetAsync(ConfigurationKey.ReportSystemAvailability);
+}
+
+<main class="other">
+	<section>
+		<h1>@await _localizationService.GetLocalizationAsync(board.Language, "Report")</h1>
+		<form method="post" action="@_linkGenerator.GetPathByAction("Report", "Board", new { boardId = Model.Post.BoardId, postId = Model.Post.PostId })">
+			<input type="hidden" name="csrf" value="@ViewData["csrf"]" autocomplete="off">
+			<input type="hidden" value="@Model.Post.BoardId" name="boardId" />
+			<input type="hidden" value="@Model.Post.PostId" name="postId" />
+			<p>
+				<input type="text" name="reason" placeholder="@await _localizationService.GetLocalizationAsync(board.Language, "Reason")" />
+			</p>
+			<p class="center">
+				<button type="submit" formaction="@_linkGenerator.GetPathByAction("ReportBoard", "Board", new { boardId = Model.Post.BoardId, postId = Model.Post.PostId })" @(board.ReportBoardAvailability ? "" : "disabled")>@await _localizationService.GetLocalizationAsync(board.Language, "Board")</button>
+				<button type="submit" formaction="@_linkGenerator.GetPathByAction("ReportSystem", "Board", new { boardId = Model.Post.BoardId, postId = Model.Post.PostId })" @(reportSystemAvailability.Value ? "" : "disabled")>@await _localizationService.GetLocalizationAsync(board.Language, "System")</button>
+			</p>
+		</form>
+	</section>
+</main>
+
+<footer>
+	@await Html.PartialAsync("~/Views/Shared/Footer/_BoardFooter.cshtml")
+	@await Html.PartialAsync("~/Views/Shared/Footer/_ApplicationFooter.cshtml")
+</footer>

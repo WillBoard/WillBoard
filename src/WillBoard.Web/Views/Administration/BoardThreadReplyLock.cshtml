@@ -1,0 +1,39 @@
+﻿@using Microsoft.AspNetCore.Routing;
+@using WillBoard.Application.Administration.Commands.BoardThreadReplyLock
+@using WillBoard.Application.Administration.Queries.BoardThreadReplyLock
+@using WillBoard.Core.Managers
+@using WillBoard.Web.Services
+@using WillBoard.Core.Extensions
+@inject LinkGenerator _linkGenerator
+@inject ViewService _viewService
+@inject AccountManager _accountManager
+@model BoardThreadReplyLockViewModel
+@{
+    Layout = "~/Views/Shared/_AdministrationLayout.cshtml";
+}
+
+<main>
+    <article>
+        <header>Board - Thread - Reply Lock</header>
+        <section>
+            <form method="post">
+                <input type="hidden" name="csrf" value="@ViewData["csrf"]" autocomplete="off">
+                <input type="hidden" name="@nameof(BoardThreadReplyLockCommand.BoardId)" value="@Model.Post.BoardId" autocomplete="off">
+                <input type="hidden" name="@nameof(BoardThreadReplyLockCommand.PostId)" value="@Model.Post.PostId" autocomplete="off">
+                <table>
+                    <tbody>
+                        <tr>
+                            <th>@nameof(BoardThreadReplyLockCommand.ReplyLock)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardThreadReplyLockCommand.ReplyLock)" value="true" @(Model.Post.ReplyLock ? "checked" : "") />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>
+                    <button type="submit">Reply Lock @Model.Post.BoardId/@Model.Post.PostId</button>
+                </p>
+            </form>
+        </section>
+    </article>
+</main>

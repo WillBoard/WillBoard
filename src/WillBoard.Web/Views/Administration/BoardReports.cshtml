@@ -1,0 +1,121 @@
+﻿@using Microsoft.AspNetCore.Routing
+@using WillBoard.Application.Administration.Commands.BoardReportDelete
+@using WillBoard.Application.Administration.Queries.BoardReports
+@using WillBoard.Core.Entities
+@using WillBoard.Core.Extensions;
+@using WillBoard.Core.Managers
+@using WillBoard.Core.Utilities
+@using WillBoard.Web.Services
+@inject LinkGenerator _linkGenerator
+@inject ViewService _viewService
+@inject AccountManager _accountManager
+@model BoardReportsViewModel
+@{
+	Layout = "~/Views/Shared/_AdministrationLayout.cshtml";
+}
+
+<main>
+	<article>
+		<header>Board - Reports</header>
+		<section>
+			<table>
+				<tbody>
+					<tr>
+						<th rowspan="2">@nameof(Report.ReportId)</th>
+						<th>@nameof(Report.Creation)</th>
+						<th>@nameof(Report.ReferenceBoardId)</th>
+						<th>@nameof(Report.ReferencePostId)</th>
+						<th>@nameof(Report.IpVersion)</th>
+						<th>@nameof(Report.IpNumber)</th>
+						<th>@nameof(Report.Reason)</th>
+						<th rowspan="2">Link action</th>
+						<th rowspan="2">Quick action</th>
+					</tr>
+					<tr>
+						<th>Post @nameof(Post.Creation)</th>
+						<th>Post @nameof(Post.IpVersion)</th>
+						<th>Post @nameof(Post.IpNumber)</th>
+						<th>Post @nameof(Post.UserAgent)</th>
+						<th>Post @nameof(Post.FileNameOriginal)</th>
+						<th>Post @nameof(Post.MessageStatic)</th>
+					</tr>
+					@foreach (var reportDictionary in Model.ReportDictionary)
+					{
+						var permissionBoardView = _accountManager.CheckPermission(reportDictionary.Key.ReferenceBoardId, e => e.PermissionBoardView);
+
+						<tr>
+							<td rowspan="2">@reportDictionary.Key.ReportId</td>
+							<td>@reportDictionary.Key.Creation.ToRfc3339String()</td>
+							<td>
+								<a href="@permissionBoardView ? @_linkGenerator.GetPathByAction(" BoardViewClassic", "Administration" , new { boardId = reportDictionary.Key.ReferenceBoardId }) : @_linkGenerator.GetPathByAction("Classic", "Board" , new { boardId = reportDictionary.Key.ReferenceBoardId })">@reportDictionary.Key.ReferenceBoardId</a>
+							</td>
+							<td>
+								@if (reportDictionary.Value != null)
+								{
+									<a href="@_linkGenerator.GetPathToClassicThread(reportDictionary.Key.ReferenceBoardId, reportDictionary.Value.ThreadId, reportDictionary.Value.PostId, AnchorType.Default, administration: permissionBoardView)">@reportDictionary.Key.ReferencePostId</a>
+								}
+								else
+								{
+									@reportDictionary.Key.ReferencePostId
+								}
+							</td>
+							<td>@reportDictionary.Key.IpVersion</td>
+							<td><a href="@_linkGenerator.GetPathByAction("BoardIp", "Administration", new { boardId = reportDictionary.Key.BoardId, ipVersion = (int)reportDictionary.Key.IpVersion, ipNumber = reportDictionary.Key.IpNumber })">@reportDictionary.Key.IpNumber</a> (@IpConversion.IpNumberToIpAddressString(reportDictionary.Key.IpVersion, reportDictionary.Key.IpNumber))</td>
+							<td>@reportDictionary.Key.Reason</td>
+							<td class="link-action" rowspan="2">
+								@if (reportDictionary.Value != null)
+								{
+									@if (@_accountManager.CheckPermission(reportDictionary.Key.ReferenceBoardId, e => e.PermissionBanCreate))
+									{
+										<a href="@_linkGenerator.GetPathByAction("BoardBanCreate", "Administration", new { boardId = reportDictionary.Key.ReferenceBoardId, ipVersion = reportDictionary.Value.IpVersion, ipNumber = reportDictionary.Value.IpNumber })">Ban</a>
+									}
+								}
+							</td>
+							<td rowspan="2">
+								@if (@_accountManager.CheckPermission(reportDictionary.Key.ReferenceBoardId, e => e.PermissionReportDelete))
+								{
+									<form action="@_linkGenerator.GetPathByAction("BoardReportDelete", "Administration", new { boardId = reportDictionary.Key.ReferenceBoardId, reportId = reportDictionary.Key.ReportId })" method="post">
+										<input type="hidden" name="csrf" value="@ViewData["csrf"]" autocomplete="off">
+										<input type="hidden" name="@nameof(BoardReportDeleteCommand.BoardId)" value="@reportDictionary.Key.ReferenceBoardId" autocomplete="off">
+										<input type="hidden" name="@nameof(BoardReportDeleteCommand.ReportId)" value="@reportDictionary.Key.ReportId" autocomplete="off">
+										<button type="submit">Delete report</button>
+									</form>
+								}
+							</td>
+						</tr>
+						<tr>
+							@if (reportDictionary.Value != null)
+							{
+								<td>@reportDictionary.Value.Creation.ToRfc3339String()</td>
+								<td>@reportDictionary.Value.IpVersion</td>
+								<td><a href="@_linkGenerator.GetPathByAction("BoardIp", "Administration", new { boardId = reportDictionary.Value.BoardId, ipVersion = (int)reportDictionary.Value.IpVersion, ipNumber = reportDictionary.Value.IpNumber })">@reportDictionary.Value.IpNumber</a> (@IpConversion.IpNumberToIpAddressString(reportDictionary.Value.IpVersion, reportDictionary.Value.IpNumber))</td>
+								<td>@reportDictionary.Value.UserAgent</td>
+								<td>@reportDictionary.Value.FileNameOriginal</td>
+								<td>@Html.Raw(reportDictionary.Value.MessageStatic)</td>
+							}
+							else
+							{
+								<td colspan="6">Post not found</td>
+							}
+						</tr>
+					}
+				</tbody>
+			</table>
+		</section>
+		<footer>
+			<nav>
+				@for (var i = 1; i <= Model.PageMax; i++)
+				{
+					@if (i == Model.Page)
+					{
+						<a>@i</a>
+					}
+					else
+					{
+						<a href="@_linkGenerator.GetPathByAction("BoardReports", "Administration", new { boardId = Model.Board.BoardId, page = i })">@i</a>
+					}
+				}
+			</nav>
+		</footer>
+	</article>
+</main>

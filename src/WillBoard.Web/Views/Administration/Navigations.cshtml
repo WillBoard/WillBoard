@@ -1,0 +1,52 @@
+﻿@using Microsoft.AspNetCore.Routing
+@using WillBoard.Application.Administration.Queries.Navigations
+@using WillBoard.Core.Entities
+@using WillBoard.Core.Managers
+@using WillBoard.Web.Services
+@using WillBoard.Core.Utilities
+@inject LinkGenerator _linkGenerator
+@inject ViewService _viewService
+@inject AccountManager _accountManager
+@model NavigationsViewModel
+@{
+    Layout = "~/Views/Shared/_AdministrationLayout.cshtml";
+}
+
+<main>
+    <article>
+        <header>Navigations</header>
+        <section>
+            <a href="@_linkGenerator.GetPathByAction("NavigationCreate", "Administration")">Create</a>
+        </section>
+        <section>
+            <table>
+                <tbody>
+                    <tr>
+                        <th>@nameof(Navigation.NavigationId)</th>
+                        <th>@nameof(Navigation.Priority)</th>
+                        <th>@nameof(Navigation.Icon)</th>
+                        <th>@nameof(Navigation.Name)</th>
+                        <th>@nameof(Navigation.Url)</th>
+                        <th>@nameof(Navigation.Tab)</th>
+                        <th>Link action</th>
+                    </tr>
+                    @foreach (var configuration in Model.NavigationCollection)
+                    {
+                        <tr>
+                            <td>@configuration.NavigationId</td>
+                            <td>@configuration.Priority</td>
+                            <td>@configuration.Icon</td>
+                            <td>@configuration.Name</td>
+                            <td>@configuration.Url</td>
+                            <td>@configuration.Tab</td>
+                            <td>
+                                <a href="@_linkGenerator.GetPathByAction("NavigationUpdate", "Administration", new { navigationId = configuration.NavigationId })">Update</a>
+                                <a href="@_linkGenerator.GetPathByAction("NavigationDelete", "Administration", new { navigationId = configuration.NavigationId })">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </section>
+    </article>
+</main>

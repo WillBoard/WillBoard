@@ -1,0 +1,26 @@
+﻿@using Microsoft.AspNetCore.Routing
+@using WillBoard.Application.Administration.Commands.BoardAuthorizationDelete
+@using WillBoard.Application.Administration.Queries.BoardAuthorizationDelete
+@using WillBoard.Core.Managers
+@using WillBoard.Web.Services
+@inject LinkGenerator _linkGenerator
+@inject ViewService _viewService
+@inject AccountManager _accountManager
+@model BoardAuthorizationDeleteViewModel
+@{ 
+    Layout = "~/Views/Shared/_AdministrationLayout.cshtml";
+}
+
+<main>
+    <article>
+        <header>Board - Authorization- Delete</header>
+        <section>
+            <form method="post">
+                <input type="hidden" name="csrf" value="@ViewData["csrf"]" autocomplete="off">
+                <input type="hidden" name="@nameof(BoardAuthorizationDeleteCommand.BoardId)" value="@Model.Authorization.BoardId" autocomplete="off">
+                <input type="hidden" name="@nameof(BoardAuthorizationDeleteCommand.AuthorizationId)" value="@Model.Authorization.AuthorizationId" autocomplete="off">
+                <p><button type="submit">Delete @Model.Authorization.AuthorizationId</button></p>
+            </form>
+        </section>
+    </article>
+</main>

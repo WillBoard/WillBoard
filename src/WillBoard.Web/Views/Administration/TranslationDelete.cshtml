@@ -1,0 +1,28 @@
+﻿@using Microsoft.AspNetCore.Routing
+@using WillBoard.Application.Administration.Commands.TranslationDelete
+@using WillBoard.Application.Administration.Queries.TranslationDelete
+@using WillBoard.Core.Managers
+@using WillBoard.Web.Services
+@inject LinkGenerator _linkGenerator
+@inject ViewService _viewService
+@inject AccountManager _accountManager
+@model TranslationDeleteViewModel
+@{
+	Layout = "~/Views/Shared/_AdministrationLayout.cshtml";
+}
+
+<main>
+	<article>
+		<header>Translation - Delete</header>
+		<section>
+			<form method="post">
+				<input type="hidden" name="csrf" value="@ViewData["csrf"]" autocomplete="off">
+				<input type="hidden" name="@nameof(TranslationDeleteCommand.Language)" value="@Model.Translation.Language" autocomplete="off">
+				<input type="hidden" name="@nameof(TranslationDeleteCommand.Key)" value="@Model.Translation.Key" autocomplete="off">
+				<p>
+					<button type="submit">Delete @Model.Translation.Language - @Model.Translation.Key</button>
+				</p>
+			</form>
+		</section>
+	</article>
+</main>

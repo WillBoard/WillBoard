@@ -1,0 +1,50 @@
+﻿@using Microsoft.AspNetCore.Routing
+@using WillBoard.Application.Administration.Commands.TranslationCreate
+@using WillBoard.Application.Administration.Queries.TranslationCreate
+@using WillBoard.Core.Entities
+@using WillBoard.Core.Enums
+@using WillBoard.Core.Managers
+@using WillBoard.Web.Services
+@inject LinkGenerator _linkGenerator
+@inject ViewService _viewService
+@inject AccountManager _accountManager
+@model TranslationCreateViewModel
+@{
+	Layout = "~/Views/Shared/_AdministrationLayout.cshtml";
+}
+
+<main>
+	<article>
+		<header>Translation - Create</header>
+		<section>
+			<form method="post">
+				<input type="hidden" name="csrf" value="@ViewData["csrf"]" autocomplete="off">
+				<table>
+					<tbody>
+						<tr>
+							<th>@nameof(TranslationCreateCommand.Language)</th>
+							<td>
+								<input type="text" name="@nameof(TranslationCreateCommand.Language)" required>
+							</td>
+						</tr>
+						<tr>
+							<th>@nameof(TranslationCreateCommand.Key)</th>
+							<td>
+								<input type="text" name="@nameof(TranslationCreateCommand.Key)" required>
+							</td>
+						</tr>
+						<tr>
+							<th>@nameof(TranslationCreateCommand.Value)</th>
+							<td>
+								<textarea name="@nameof(TranslationCreateCommand.Value)" required></textarea>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<p>
+					<button type="submit">Create</button>
+				</p>
+			</form>
+		</section>
+	</article>
+</main>

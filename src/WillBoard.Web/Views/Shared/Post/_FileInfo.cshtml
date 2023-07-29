@@ -1,0 +1,28 @@
+﻿@using WillBoard.Core.Consts
+@using WillBoard.Core.Entities
+@using WillBoard.Core.Interfaces.Services
+@using WillBoard.Core.Managers
+@using WillBoard.Core.Utilities
+@inject BoardManager _boardManager
+@inject ILocalizationService _localizationService
+@model Post
+@{
+    var board = _boardManager.GetBoard();
+    var fileDeleted = await _localizationService.GetLocalizationAsync(board.Language, TranslationKey.FileDeleted);
+    var fileTitle = $@"{FormatUtility.FormatDataSize(Model.FileSize)}{(Model.FileWidth == 0 || Model.FileHeight == 0 ? "" : $@" {Model.FileWidth}x{Model.FileHeight}")}{(Model.FileDuration == 0 ? "" : $@" {String.Format("{0:0.00}", Model.FileDuration)}s")} ""{Model.FileNameOriginal}"" ({@Model.FileMimeType})";
+}
+
+@if (Model.File)
+{
+    if (!Model.FileDeleted)
+    {
+        <a class="file" title="@fileTitle" href="/boards/@Model.BoardId/source/@Model.FileName">
+            <span>@Model.FileNameOriginal.Substring(0, Model.FileNameOriginal.LastIndexOf("."))</span>
+            <span>@Model.FileNameOriginal.Substring(Model.FileNameOriginal.LastIndexOf("."))</span>
+        </a>
+    }
+    else
+    {
+        <a class="file">@fileDeleted</a>
+    }
+}

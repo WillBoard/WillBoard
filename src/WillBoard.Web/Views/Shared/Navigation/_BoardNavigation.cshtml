@@ -1,0 +1,38 @@
+﻿@using Microsoft.AspNetCore.Routing
+@using WillBoard.Application.ViewModels
+@using WillBoard.Core.Enums
+@using WillBoard.Core.Interfaces.Services
+@using WillBoard.Core.Managers
+@inject LinkGenerator _linkGenerator
+@inject AccountManager _accountManager
+@inject BoardManager _boardManager
+@inject IOnlineCounterService _onlineCounterService
+@model BoardViewModel
+@{
+    var board = _boardManager.GetBoard();
+}
+
+<nav>
+    <input type="checkbox" id="navigation">
+    <label for="navigation" class="icon"></label>
+    <section class="navigation">
+        @await Html.PartialAsync("~/Views/Shared/Navigation/_BoardMenuQuick.cshtml", Model)
+        @await Html.PartialAsync("~/Views/Shared/Navigation/_BoardMenuBoard.cshtml")
+        @await Html.PartialAsync("~/Views/Shared/Navigation/_ApplicationMenuBoards.cshtml")
+        @await Html.PartialAsync("~/Views/Shared/Navigation/_ApplicationMenuOther.cshtml")
+    </section>
+    <a href="@(_accountManager.CheckPermission(board.BoardId, e => e.PermissionBoardView) ? _linkGenerator.GetPathByAction("BoardViewClassic", "Administration", new { boardId = board.BoardId }) : _linkGenerator.GetPathByAction("Classic", "Board", new { boardId = board.BoardId }))">@Model.Title</a>
+    @if(board.OnlineCounterAvailability)
+    {
+        <span class="online-counter">@_onlineCounterService.Count() online</span>
+    }
+    <aside>
+        @await Html.PartialAsync("~/Views/Shared/Navigation/_PanelWatcher.cshtml", Model)
+        @if ((Model.BoardViewType == BoardViewType.ClassicBoard && board.SynchronizationBoardAvailability) || (Model.BoardViewType == BoardViewType.ClassicThread && board.SynchronizationThreadAvailability))
+        {
+            @await Html.PartialAsync("~/Views/Shared/Navigation/_PanelSynchronization.cshtml", Model)
+        }
+        @await Html.PartialAsync("~/Views/Shared/Navigation/_PanelInformation.cshtml", Model)
+        @await Html.PartialAsync("~/Views/Shared/Navigation/_PanelSettings.cshtml", Model)
+    </aside>
+</nav>

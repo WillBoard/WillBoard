@@ -1,0 +1,46 @@
+﻿@using Microsoft.AspNetCore.Routing
+@using WillBoard.Application.Administration.Queries.Translations;
+@using WillBoard.Core.Entities
+@using WillBoard.Core.Managers
+@using WillBoard.Web.Services
+@using WillBoard.Core.Utilities
+@inject LinkGenerator _linkGenerator
+@inject ViewService _viewService
+@inject AccountManager _accountManager
+@model TranslationsViewModel
+@{
+	Layout = "~/Views/Shared/_AdministrationLayout.cshtml";
+}
+
+<main>
+	<article>
+		<header>Translations</header>
+		<section>
+			<a href="@_linkGenerator.GetPathByAction("TranslationCreate", "Administration")">Create</a>
+		</section>
+		<section>
+			<table>
+				<tbody>
+					<tr>
+						<th>@nameof(Translation.Language)</th>
+						<th>@nameof(Translation.Key)</th>
+						<th>@nameof(Translation.Value)</th>
+						<th>Link action</th>
+					</tr>
+					@foreach (var translation in Model.TranslationCollection)
+					{
+						<tr>
+							<td>@translation.Language</td>
+							<td>@translation.Key</td>
+							<td>@translation.Value</td>
+							<td class="link-action">
+								<a href="@_linkGenerator.GetPathByAction("TranslationUpdate", "Administration", new { language = translation.Language, key = translation.Key })">Update</a>
+								<a href="@_linkGenerator.GetPathByAction("TranslationDelete", "Administration", new { language = translation.Language, key = translation.Key })">Delete</a>
+							</td>
+						</tr>
+					}
+				</tbody>
+			</table>
+		</section>
+	</article>
+</main>

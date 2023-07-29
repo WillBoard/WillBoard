@@ -1,0 +1,212 @@
+﻿@using WillBoard.Application.ViewModels
+@using WillBoard.Core.Consts
+@using WillBoard.Core.Interfaces.Caches
+@using WillBoard.Core.Interfaces.Services
+@using WillBoard.Core.Managers
+@inject BoardManager _boardManager
+@inject ILocalizationService _localizationService
+@inject IConfigurationCache _configurationCache
+@model ApplicationViewModel
+@{
+    var board = _boardManager.GetBoard();
+
+    var reply = await _localizationService.GetLocalizationAsync(board.Language, TranslationKey.Reply);
+    var thread = await _localizationService.GetLocalizationAsync(board.Language, TranslationKey.Thread);
+    var report = await _localizationService.GetLocalizationAsync(board.Language, TranslationKey.Report);
+
+    var reportSystemAvailability = await _configurationCache.GetAsync(ConfigurationKey.ReportSystemAvailability);
+    var reportSystemLengthMin = await _configurationCache.GetAsync(ConfigurationKey.ReportSystemLengthMin);
+    var reportSystemLengthMax = await _configurationCache.GetAsync(ConfigurationKey.ReportSystemLengthMax);
+    var reportSystemTimeMin = await _configurationCache.GetAsync(ConfigurationKey.ReportSystemTimeMin);
+    var reportSystemIpMax = await _configurationCache.GetAsync(ConfigurationKey.ReportSystemIpMax);
+}
+
+<input type="checkbox" id="information">
+<label for="information" class="icon"></label>
+<section class="information">
+    <h3>Information</h3>
+    <article>
+        @if (!string.IsNullOrEmpty(board.InformationAside))
+        {
+            <p>@Html.Raw(board.InformationAside)</p>
+        }
+        <h4>@thread</h4>
+        <p class="level-1">Create action</p>
+        <p class="level-2">Minimum time: @board.ThreadTimeMin</p>
+        @if (board.ThreadDeleteAvailability)
+        {
+            <p class="level-1">Delete action</p>
+            <p class="level-2">Minimum time: @board.ThreadDeleteTimeMin</p>
+            <p class="level-2">Maximum time: @board.ThreadDeleteTimeMax</p>
+        }
+        @if (board.ThreadFileDeleteAvailability)
+        {
+            <p class="level-1">File delete action</p>
+            <p class="level-2">Minimum time: @board.ThreadFileDeleteTimeMin</p>
+            <p class="level-2">Maximum time: @board.ThreadFileDeleteTimeMax</p>
+        }
+        @if (board.ThreadFieldNameAvailability)
+        {
+            <p class="level-1">Name field</p>
+            <p class="level-2">Requirement: @board.ThreadFieldNameRequirement</p>
+            <p class="level-2">Minimum length: @board.ThreadFieldNameLengthMin</p>
+            <p class="level-2">Maximum length: @board.ThreadFieldNameLengthMax</p>
+        }
+        @if (board.ThreadFieldEmailAvailability)
+        {
+            <p class="level-1">Email field</p>
+            <p class="level-2">Requirement: @board.ThreadFieldEmailRequirement</p>
+            <p class="level-2">Minimum length: @board.ThreadFieldEmailLengthMin</p>
+            <p class="level-2">Maximum length: @board.ThreadFieldEmailLengthMax</p>
+        }
+        @if (board.ThreadFieldSubjectAvailability)
+        {
+            <p class="level-1">Subject field</p>
+            <p class="level-2">Requirement: @board.ThreadFieldSubjectRequirement</p>
+            <p class="level-2">Minimum length: @board.ThreadFieldSubjectLengthMin</p>
+            <p class="level-2">Maximum length: @board.ThreadFieldSubjectLengthMax</p>
+        }
+        @if (board.ThreadFieldMessageAvailability)
+        {
+            <p class="level-1">Message field</p>
+            <p class="level-2">Requirement: @board.ThreadFieldMessageRequirement</p>
+            <p class="level-2">Minimum length: @board.ThreadFieldMessageLengthMin</p>
+            <p class="level-2">Maximum length: @board.ThreadFieldMessageLengthMax</p>
+            <p class="level-2">Maximum line: @board.ThreadFieldMessageLineMax</p>
+            <p class="level-2">Maximum link: @board.ThreadFieldMessageLinkMax</p>
+            <p class="level-2">Maximum mention: @board.ThreadFieldMessageMentionMax</p>
+        }
+        @if (board.ThreadFieldFileAvailability)
+        {
+            <p class="level-1">File field</p>
+            <p class="level-2">Requirement: @board.ThreadFieldFileRequirement</p>
+            <p class="level-2">Minimum size: @board.ThreadFieldFileSizeMin</p>
+            <p class="level-2">Maximum size: @board.ThreadFieldFileSizeMax</p>
+            <p class="level-2">Originality: @board.ThreadFieldFileOriginality</p>
+            <p class="level-2">Types: @string.Join(", ", board.ThreadFieldFileTypeCollection)</p>
+            <p class="level-2">Minimum image width: @board.ThreadFieldFileImageWidthMin</p>
+            <p class="level-2">Maximum image width: @board.ThreadFieldFileImageWidthMax</p>
+            <p class="level-2">Minimum image height: @board.ThreadFieldFileImageHeightMin</p>
+            <p class="level-2">Maximum image height: @board.ThreadFieldFileImageHeightMax</p>
+            <p class="level-2">Minimum video width: @board.ThreadFieldFileVideoWidthMin</p>
+            <p class="level-2">Maximum video width: @board.ThreadFieldFileVideoWidthMax</p>
+            <p class="level-2">Minimum video height: @board.ThreadFieldFileVideoHeightMin</p>
+            <p class="level-2">Maximum video height: @board.ThreadFieldFileVideoHeightMax</p>
+            <p class="level-2">Minimum video duration @board.ThreadFieldFileVideoDurationMin</p>
+            <p class="level-2">Maximum video duration: @board.ThreadFieldFileVideoDurationMax</p>
+            <p class="level-2">Minimum audio duration: @board.ThreadFieldFileAudioDurationMin</p>
+            <p class="level-2">Maximum audio duration: @board.ThreadFieldFileAudioDurationMax</p>
+            <p class="level-2">Maximum preview height: @board.ThreadFilePreviewWidthMax</p>
+            <p class="level-2">Maximum preview width: @board.ThreadFilePreviewHeightMax</p>
+        }
+        @if (board.ThreadFieldPasswordAvailability)
+        {
+            <p class="level-1">Password field</p>
+            <p class="level-2">Requirement: @board.ThreadFieldPasswordRequirement</p>
+            <p class="level-2">Minimum length: @board.ThreadFieldPasswordLengthMin</p>
+            <p class="level-2">Maximum length: @board.ThreadFieldPasswordLengthMax</p>
+        }
+        <p class="level-1">Thread propierties</p>
+        <p class="level-2">Maximum reply bump: @board.ThreadBumpLockReplyMax</p>
+        <p class="level-2">Maximum reply time: @board.ThreadBumpLockTimeMax</p>
+        <p class="level-2">Maximum excessive time: @board.ThreadExcessiveTimeMax</p>
+
+        <h4>@reply</h4>
+        <p class="level-1">Create action</p>
+        <p class="level-2">Minimum time: @board.ReplyTimeMin</p>
+        @if (board.ReplyDeleteAvailability)
+        {
+            <p class="level-1">Delete action</p>
+            <p class="level-2">Minimum time: @board.ReplyDeleteTimeMin</p>
+            <p class="level-2">Maximum time: @board.ReplyDeleteTimeMax</p>
+        }
+        @if (board.ReplyFileDeleteAvailability)
+        {
+            <p class="level-1">File delete action</p>
+            <p class="level-2">Minimum time: @board.ReplyFileDeleteTimeMin</p>
+            <p class="level-2">Maximum time: @board.ReplyFileDeleteTimeMax</p>
+        }
+        @if (board.ReplyFieldNameAvailability)
+        {
+            <p class="level-1">Name field</p>
+            <p class="level-2">Requirement: @board.ReplyFieldNameRequirement</p>
+            <p class="level-2">Minimum length: @board.ReplyFieldNameLengthMin</p>
+            <p class="level-2">Maximum length: @board.ReplyFieldNameLengthMax</p>
+        }
+        @if (board.ReplyFieldEmailAvailability)
+        {
+            <p class="level-1">Email field</p>
+            <p class="level-2">Requirement: @board.ReplyFieldEmailRequirement</p>
+            <p class="level-2">Minimum length: @board.ReplyFieldEmailLengthMin</p>
+            <p class="level-2">Maximum length: @board.ReplyFieldEmailLengthMax</p>
+        }
+        @if (board.ReplyFieldSubjectAvailability)
+        {
+            <p class="level-1">Subject field</p>
+            <p class="level-2">Requirement: @board.ReplyFieldSubjectRequirement</p>
+            <p class="level-2">Minimum length: @board.ReplyFieldSubjectLengthMin</p>
+            <p class="level-2">Maximum length: @board.ReplyFieldSubjectLengthMax</p>
+        }
+        @if (board.ReplyFieldMessageAvailability)
+        {
+            <p class="level-1">Message field</p>
+            <p class="level-2">Requirement: @board.ReplyFieldMessageRequirement</p>
+            <p class="level-2">Minimum length: @board.ReplyFieldMessageLengthMin</p>
+            <p class="level-2">Maximum length: @board.ReplyFieldMessageLengthMax</p>
+            <p class="level-2">Maximum line: @board.ReplyFieldMessageLineMax</p>
+            <p class="level-2">Maximum link: @board.ReplyFieldMessageLinkMax</p>
+            <p class="level-2">Maximum mention: @board.ReplyFieldMessageMentionMax</p>
+        }
+        @if (board.ReplyFieldFileAvailability)
+        {
+            <p class="level-1">File field</p>
+            <p class="level-2">Requirement: @board.ReplyFieldFileRequirement</p>
+            <p class="level-2">Minimum size: @board.ReplyFieldFileSizeMin</p>
+            <p class="level-2">Maximum size: @board.ReplyFieldFileSizeMax</p>
+            <p class="level-2">Originality: @board.ReplyFieldFileOriginality</p>
+            <p class="level-2">Types: @string.Join(", ", board.ReplyFieldFileTypeCollection)</p>
+            <p class="level-2">Minimum image width: @board.ReplyFieldFileImageWidthMin</p>
+            <p class="level-2">Maximum image width: @board.ReplyFieldFileImageWidthMax</p>
+            <p class="level-2">Minimum image height: @board.ReplyFieldFileImageHeightMin</p>
+            <p class="level-2">Maximum image height: @board.ReplyFieldFileImageHeightMax</p>
+            <p class="level-2">Minimum video width: @board.ReplyFieldFileVideoWidthMin</p>
+            <p class="level-2">Maximum video width: @board.ReplyFieldFileVideoWidthMax</p>
+            <p class="level-2">Minimum video height: @board.ReplyFieldFileVideoHeightMin</p>
+            <p class="level-2">Maximum video height: @board.ReplyFieldFileVideoHeightMax</p>
+            <p class="level-2">Minimum video duration: @board.ReplyFieldFileVideoDurationMin</p>
+            <p class="level-2">Maximum video duration: @board.ReplyFieldFileVideoDurationMax</p>
+            <p class="level-2">Minimum audio duration: @board.ReplyFieldFileAudioDurationMin</p>
+            <p class="level-2">Maximum audio duration: @board.ReplyFieldFileAudioDurationMax</p>
+            <p class="level-2">Maximum preview height: @board.ReplyFilePreviewWidthMax</p>
+            <p class="level-2">Maximum preview width: @board.ReplyFilePreviewHeightMax</p>
+        }
+        @if (board.ReplyFieldPasswordAvailability)
+        {
+            <p class="level-1">Password field</p>
+            <p class="level-2">Requirement: @board.ReplyFieldPasswordRequirement</p>
+            <p class="level-2">Minimum length: @board.ReplyFieldPasswordLengthMin</p>
+            <p class="level-2">Maximum length: @board.ReplyFieldPasswordLengthMax</p>
+        }
+
+        @if (board.ReportBoardAvailability || reportSystemAvailability.Value)
+        {
+            <h4>@report</h4>
+        }
+        @if (board.ReportBoardAvailability)
+        {
+            <p class="level-1">Board report action:</p>
+            <p class="level-2">Minimum length: @board.ReportBoardLengthMin</p>
+            <p class="level-2">Maximum length: @board.ReportBoardLengthMax</p>
+            <p class="level-2">Minimum time: @board.ReportBoardTimeMin</p>
+            <p class="level-2">Maximum per IP: @board.ReportBoardIpMax</p>
+        }
+        @if (reportSystemAvailability.Value)
+        {
+            <p class="level-1">System report action:</p>
+            <p class="level-2">Minimum length: @reportSystemLengthMin.Value</p>
+            <p class="level-2">Maximum length: @reportSystemLengthMax.Value</p>
+            <p class="level-2">Minimum time: @reportSystemTimeMin.Value</p>
+            <p class="level-2">Maximum per IP: @reportSystemIpMax.Value</p>
+        }
+    </article>
+</section>

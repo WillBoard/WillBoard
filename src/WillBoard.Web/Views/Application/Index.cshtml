@@ -1,0 +1,26 @@
+﻿@using Microsoft.AspNetCore.Routing
+@using WillBoard.Application.ViewModels
+@using WillBoard.Core.Consts
+@using WillBoard.Core.Interfaces.Caches
+@inject LinkGenerator _linkGenerator
+@inject IBoardCache _boardCache
+@inject IConfigurationCache _configurationCache
+@model ApplicationViewModel
+@{
+	Layout = "~/Views/Shared/_ApplicationLayout.cshtml";
+	var boardCollection = await _boardCache.GetCollectionAsync();
+	var overviewDescription = await _configurationCache.GetAsync(ConfigurationKey.OverviewDescription);
+}
+
+@await Html.PartialAsync("~/Views/Shared/Header/_Overview.cshtml")
+@if (overviewDescription != null)
+{
+	<main class="overview">
+		<section>
+			@Html.Raw(overviewDescription.Value)
+		</section>
+	</main>
+}
+<footer>
+	@await Html.PartialAsync("~/Views/Shared/Footer/_ApplicationFooter.cshtml")
+</footer>

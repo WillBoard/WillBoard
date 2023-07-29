@@ -1,0 +1,91 @@
+﻿@using Microsoft.AspNetCore.Routing
+@using WillBoard.Application.Board.Queries.Ban
+@using WillBoard.Core.Consts
+@using WillBoard.Core.Extensions
+@using WillBoard.Core.Interfaces.Services
+@using WillBoard.Core.Managers
+@using WillBoard.Core.Utilities
+@inject LinkGenerator _linkGenerator
+@inject IpManager _ipManager
+@inject BoardManager _boardManager
+@inject ILocalizationService _localizationService
+@model BanViewModel
+@{
+    Layout = "~/Views/Shared/_BoardLayout.cshtml";
+    var board = _boardManager.GetBoard();
+    var ipVersion = _ipManager.GetIpVersion();
+    var ipNumber = _ipManager.GetIpNumber();
+    var ban = await _localizationService.GetLocalizationAsync(board.Language, TranslationKey.Ban);
+    var submit = await _localizationService.GetLocalizationAsync(board.Language, TranslationKey.Submit);
+    var ipAddress = IpConversion.IpNumberToIpAddressString(_ipManager.GetIpVersion(), _ipManager.GetIpNumber());
+}
+
+<main class="other">
+    <section>
+        <h1>@ban</h1>
+        @if (Model.BanDictionary.Count == 0)
+        {
+            <p>@await _localizationService.GetLocalizationAsync(board.Language, TranslationKey.YourIpAddressIsNotBanned, ipAddress)</p>
+        }
+        else
+        {
+            foreach (var banItem in Model.BanDictionary)
+            {
+                <div>
+                    @if (banItem.Key.BoardId == null)
+                    {
+                        <p>@await _localizationService.GetLocalizationAsync(board.Language, TranslationKey.YourIpAddressIsBannedOnAllBoardsForTheFollowingReason, ipAddress)</p>
+                    }
+                    else
+                    {
+                        <p>@await _localizationService.GetLocalizationAsync(board.Language, TranslationKey.YourIpAddressIsBannedOnForTheFollowingReason, ipAddress, banItem.Key.BoardId)</p>
+                    }
+                    <p style="white-space: pre-wrap;">@banItem.Key.Reason</p>
+                    @if (banItem.Key.Expiration == null)
+                    {
+                        <p>@await _localizationService.GetLocalizationAsync(board.Language, TranslationKey.BanWasCreatedOnUtcAndWillNeverExpire, banItem.Key.Creation.ToRfc3339String())</p>
+                    }
+                    else
+                    {
+                        <p>@await _localizationService.GetLocalizationAsync(board.Language, TranslationKey.BanWasCreatedOnUtcAndWillExpireOnUtc, banItem.Key.Creation.ToRfc3339String(), banItem.Key.Expiration.Value.ToRfc3339String())</p>
+                    }
+                    @if (banItem.Key.Appeal)
+                    {
+                        if (banItem.Value == null)
+                        {
+                            <p>@await _localizationService.GetLocalizationAsync(board.Language, TranslationKey.YouCanAppealForTheBanEnterJustificationBelow)</p>
+                            <form method="post">
+                                <input type="hidden" name="csrf" value="@ViewData["csrf"]" autocomplete="off">
+                                <input type="hidden" name="boardId" value="@board.BoardId" autocomplete="off">
+                                <input type="hidden" name="banId" value="@banItem.Key.BanId" autocomplete="off">
+                                <p><textarea name="message" maxlength="255"></textarea></p>
+                                @if (banItem.Key.BoardId == null)
+                                {
+                                    <button type="submit" formaction="@_linkGenerator.GetPathByAction("BanAppealSystem", "Board", new { boardId = board.BoardId, banId = banItem.Key.BanId })">@submit</button>
+                                }
+                                else
+                                {
+                                    <button type="submit" formaction="@_linkGenerator.GetPathByAction("BanAppealBoard", "Board", new { boardId = board.BoardId, banId = banItem.Key.BanId })">@submit</button>
+                                }
+                            </form>
+                        }
+                        else
+                        {
+                            <p>@await _localizationService.GetLocalizationAsync(board.Language, TranslationKey.YouAlreadyAppealedAppeal)</p>
+                            <p style="white-space: pre-wrap;">@banItem.Value.Message</p>
+                        }
+                    }
+                    else
+                    {
+                        <p>@await _localizationService.GetLocalizationAsync(board.Language, TranslationKey.YouCanNotAppealForThisBan)</p>
+                    }
+                </div>
+            }
+        }
+    </section>
+</main>
+
+<footer>
+    @await Html.PartialAsync("~/Views/Shared/Footer/_BoardFooter.cshtml")
+    @await Html.PartialAsync("~/Views/Shared/Footer/_ApplicationFooter.cshtml")
+</footer>

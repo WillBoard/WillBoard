@@ -1,0 +1,62 @@
+﻿@using Microsoft.AspNetCore.Routing
+@using WillBoard.Application.Administration.Commands.NavigationCreate
+@using WillBoard.Application.Administration.Queries.NavigationCreate
+@using WillBoard.Core.Entities
+@using WillBoard.Core.Enums
+@using WillBoard.Core.Managers
+@using WillBoard.Web.Services
+@inject LinkGenerator _linkGenerator
+@inject ViewService _viewService
+@inject AccountManager _accountManager
+@model NavigationCreateViewModel
+@{
+    Layout = "~/Views/Shared/_AdministrationLayout.cshtml";
+}
+
+<main>
+    <article>
+        <header>Navigation - Create</header>
+        <section>
+            <form method="post">
+                <input type="hidden" name="csrf" value="@ViewData["csrf"]" autocomplete="off">
+                <table>
+                    <tbody>
+                        <tr>
+                            <th>@nameof(NavigationCreateCommand.Priority)</th>
+                            <td>
+                                <input type="number" name="@nameof(NavigationCreateCommand.Priority)" required>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(NavigationCreateCommand.Icon)</th>
+                            <td>
+                                <input type="text" name="@nameof(NavigationCreateCommand.Icon)" required>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(NavigationCreateCommand.Name)</th>
+                            <td>
+                                <input type="text" name="@nameof(NavigationCreateCommand.Name)" required>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(NavigationCreateCommand.Url)</th>
+                            <td>
+                                <input type="text" name="@nameof(NavigationCreateCommand.Url)" required>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(NavigationCreateCommand.NewTab)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(NavigationCreateCommand.NewTab)" value="true">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>
+                    <button type="submit">Create</button>
+                </p>
+            </form>
+        </section>
+    </article>
+</main>

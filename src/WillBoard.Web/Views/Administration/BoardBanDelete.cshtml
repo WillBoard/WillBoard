@@ -1,0 +1,26 @@
+﻿@using Microsoft.AspNetCore.Routing
+@using WillBoard.Application.Administration.Commands.BoardBanDelete
+@using WillBoard.Application.Administration.Queries.BoardBanDelete
+@using WillBoard.Core.Managers
+@using WillBoard.Web.Services
+@inject LinkGenerator _linkGenerator
+@inject ViewService _viewService
+@inject AccountManager _accountManager
+@model BoardBanDeleteViewModel
+@{ 
+    Layout = "~/Views/Shared/_AdministrationLayout.cshtml";
+}
+
+<main>
+    <article>
+        <header>Board - Ban - Delete</header>
+        <section>
+            <form method="post">
+                <input type="hidden" name="csrf" value="@ViewData["csrf"]" autocomplete="off">
+                <input type="hidden" name="@nameof(BoardBanDeleteCommand.BoardId)" value="@Model.Ban.BoardId" autocomplete="off">
+                <input type="hidden" name="@nameof(BoardBanDeleteCommand.BanId)" value="@Model.Ban.BanId" autocomplete="off">
+                <p><button type="submit">Delete @Model.Ban.BanId</button></p>
+            </form>
+        </section>
+    </article>
+</main>

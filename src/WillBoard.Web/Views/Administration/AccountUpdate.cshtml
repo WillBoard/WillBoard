@@ -1,0 +1,44 @@
+﻿@using Microsoft.AspNetCore.Routing
+@using WillBoard.Application.Administration.Commands.AccountUpdate
+@using WillBoard.Application.Administration.Queries.AccountUpdate
+@using WillBoard.Core.Entities
+@using WillBoard.Core.Enums
+@inject LinkGenerator _linkGenerator
+@model AccountUpdateViewModel
+@{
+    Layout = "~/Views/Shared/_AdministrationLayout.cshtml";
+}
+
+<main>
+    <article>
+        <header>Account - Update</header>
+        <section>
+            <form method="post">
+                <input type="hidden" name="csrf" value="@ViewData["csrf"]" autocomplete="off">
+                <input type="hidden" name="@nameof(AccountUpdateCommand.AccountId)" value="@Model.Account.AccountId" autocomplete="off">
+                <table>
+                    <tbody>
+                        <tr>
+                            <th>@nameof(AccountUpdateCommand.Type)</th>
+                            <td>
+                                <select name="@nameof(AccountUpdateCommand.Type)">
+                                    <option value="@((int)AccountType.User)" @(Model.Account.Type == AccountType.User ? "selected" : "")>@AccountType.User</option>
+                                    <option value="@((int)AccountType.Administrator)" @(Model.Account.Type == AccountType.Administrator ? "selected" : "")>@AccountType.Administrator</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(AccountUpdateCommand.Active)</th>
+                            <td>
+                                <input type="checkbox" value="true" name="@nameof(AccountUpdateCommand.Active)" @(Model.Account.Active ? "checked" : "")>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>
+                    <button type="submit">Update @Model.Account.AccountId</button>
+                </p>
+            </form>
+        </section>
+    </article>
+</main>

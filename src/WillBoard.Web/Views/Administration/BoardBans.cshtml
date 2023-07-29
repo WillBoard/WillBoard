@@ -1,0 +1,84 @@
+﻿@using Microsoft.AspNetCore.Routing
+@using WillBoard.Application.Administration.Queries.BoardBans
+@using WillBoard.Core.Entities
+@using WillBoard.Core.Extensions;
+@using WillBoard.Core.Managers
+@using WillBoard.Web.Services
+@using WillBoard.Core.Utilities
+@inject LinkGenerator _linkGenerator
+@inject ViewService _viewService
+@inject AccountManager _accountManager
+@model BoardBansViewModel
+@{
+    Layout = "~/Views/Shared/_AdministrationLayout.cshtml";
+}
+
+<main>
+    <article>
+        <header>Board - Bans</header>
+        <section>
+            <a href="@_linkGenerator.GetPathByAction("BoardBanCreate", "Administration", new { boardId = Model.Board.BoardId })">Create</a>
+        </section>
+        <section>
+            <table>
+                <tbody>
+                    <tr>
+                        <th>@nameof(Ban.BanId)</th>
+                        <th>@nameof(Ban.BoardId)</th>
+                        <th>@nameof(Ban.Creation)</th>
+                        <th>@nameof(Ban.Expiration)</th>
+                        <th>@nameof(Ban.Appeal)</th>
+                        <th>@nameof(Ban.IpVersion)</th>
+                        <th>@nameof(Ban.IpNumberFrom)</th>
+                        <th>@nameof(Ban.IpNumberTo)</th>
+                        <th>@nameof(Ban.ExclusionIpNumberCollection)</th>
+                        <th>@nameof(Ban.Reason)</th>
+                        <th>@nameof(Ban.Note)</th>
+                        <th>Link action</th>
+                    </tr>
+                    @foreach (var ban in Model.BanCollection)
+                    {
+                        <tr>
+                            <td>@ban.BanId</td>
+                            <td>@ban.BoardId</td>
+                            <td>@ban.Creation.ToRfc3339String()</td>
+                            <td>@ban.Expiration</td>
+                            <td>@ban.Appeal</td>
+                            <td>@ban.IpVersion</td>
+                            <td>@ban.IpNumberFrom (@IpConversion.IpNumberToIpAddressString(ban.IpVersion, ban.IpNumberFrom))</td>
+                            <td>@ban.IpNumberTo (@IpConversion.IpNumberToIpAddressString(ban.IpVersion, ban.IpNumberTo))</td>
+                            <td>@ArrayConversion.SerializeBigInteger(ban.ExclusionIpNumberCollection)</td>
+                            <td>@ban.Reason</td>
+                            <td>@ban.Note</td>
+                            <td class="link-action">
+                                @if (@_accountManager.CheckPermission(ban.BoardId, e => e.PermissionBanUpdate))
+                                {
+                                    <a href="@_linkGenerator.GetPathByAction("BoardBanUpdate", "Administration", new { boardId = ban.BoardId, banId = ban.BanId })">Update</a>
+                                }
+                                @if (@_accountManager.CheckPermission(ban.BoardId, e => e.PermissionBanDelete))
+                                {
+                                    <a href="@_linkGenerator.GetPathByAction("BoardBanDelete", "Administration", new { boardId = ban.BoardId, banId = ban.BanId })">Delete</a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </section>
+        <footer>
+            <nav>
+                @for (var i = 1; i <= Model.PageMax; i++)
+                {
+                    @if (i == Model.Page)
+                    {
+                        <a>@i</a>
+                    }
+                    else
+                    {
+                        <a href="@_linkGenerator.GetPathByAction("BoardBans", "Administration", new { boardId = Model.Board.BoardId, page = i })">@i</a>
+                    }
+                }
+            </nav>
+        </footer>
+    </article>
+</main>

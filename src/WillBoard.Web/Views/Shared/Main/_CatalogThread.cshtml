@@ -1,0 +1,35 @@
+﻿@using Microsoft.AspNetCore.Routing
+@using WillBoard.Application.ViewModels
+@using WillBoard.Core.Extensions
+@using WillBoard.Core.Interfaces.Services
+@using WillBoard.Core.Managers
+@inject LinkGenerator _linkGenerator
+@inject AccountManager _accountManager
+@inject BoardManager _boardManager
+@inject ILocalizationService _localizationService
+@model PostViewModel
+@{
+    var board = _boardManager.GetBoard();
+    var permissionBoardView = _accountManager.CheckPermission(Model.Post.BoardId, e => e.PermissionBoardView);
+    var reply = await _localizationService.GetLocalizationAsync(board.Language, "Reply");
+}
+
+<article class="thread" data-boardid="@Model.Post.BoardId" data-threadid="@Model.Post.PostId" @(Model.Post.Pin ? "data-pinned=true" : "") data-reply-count="@Model.Post.ReplyCount">
+    <section class="thread" data-boardid="@Model.Post.BoardId" data-postid="@Model.Post.PostId">
+        <div class="info">
+            <a href="@_linkGenerator.GetPathToClassicThread(Model.Post.BoardId, Model.Post.ThreadId, Model.Post.PostId, AnchorType.Default, administration: permissionBoardView)">#</a>
+            <a class="reply" href="@_linkGenerator.GetPathToClassicThread(Model.Post.BoardId, Model.Post.ThreadId, Model.Post.PostId, AnchorType.Reply, administration: permissionBoardView)">@Model.Post.PostId</a>
+            <span class="reply-count icon-before">@Model.Post.ReplyCount</span>
+            @await Html.PartialAsync("~/Views/Shared/Post/_ThreadIcons.cshtml", Model.Post)
+            <a class="button" href="@_linkGenerator.GetPathToClassicThread(Model.Post.BoardId, Model.Post.ThreadId, Model.Post.PostId, AnchorType.None, administration: permissionBoardView)">@reply</a>
+            @if (Model.Post.ReplyCount > 50)
+            {
+                <a class="button last-replies" href="@_linkGenerator.GetPathToClassicThread(Model.Post.BoardId, Model.Post.ThreadId, Model.Post.PostId, AnchorType.None, 50, permissionBoardView)">@reply (50)</a>
+            }
+        </div>
+        <div class="content">
+            @await Html.PartialAsync("~/Views/Shared/Post/_FilePreview.cshtml", Model.Post)
+            <div class="message">@Html.Raw(Model.Post.MessageDynamic ?? "")</div>
+        </div>
+    </section>
+</article>

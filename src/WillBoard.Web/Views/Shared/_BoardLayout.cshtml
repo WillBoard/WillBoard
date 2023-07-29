@@ -1,0 +1,83 @@
+﻿@using WillBoard.Application.ViewModels
+@using WillBoard.Core.Enums
+@using WillBoard.Core.Managers
+@using WillBoard.Web.Services
+@inject AccountManager _accountManager
+@inject BoardManager _boardManager
+@inject ViewService _viewService
+@model BoardViewModel
+@{
+    var board = _boardManager.GetBoard();
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@Model.Title</title>
+    <link rel="icon" href="/favicon.png">
+    <link rel="stylesheet" href="/css/main.css">
+    @foreach (var cssExternal in board.CssExternalCollection)
+    {
+        <link rel="stylesheet" href="@cssExternal">
+    }
+    @if (!string.IsNullOrEmpty(board.CssInline))
+    {
+        <style>@Html.Raw(board.CssInline)</style>
+    }
+    <script>
+        const viewConfiguration = @Html.Raw(_viewService.GenerateViewConfiguration(Model));
+        const boardConfiguration = @Html.Raw(_viewService.GenerateBoardConfiguration());
+        const localization = @Html.Raw(await _viewService.GenerateLocalization());
+        @if (_accountManager.CheckPermission(board.BoardId, e => e.PermissionBoardView))
+        {
+            @:const account = @Html.Raw(await _viewService.GenerateAccount());
+            @:const authorization = @Html.Raw(await _viewService.GenerateAuthorization());
+        }
+    </script>
+    <script src="/js/board-theme.js"></script>
+    <script src="/js/board-common.js" defer></script>
+    @if (_accountManager.CheckPermission(board.BoardId, e => e.PermissionBoardView))
+    {
+        <script src="/js/board-administration.js" defer></script>
+    }
+    @if (board.FieldVerificationType == VerificationType.ClassicCaptcha)
+    {
+        <script src="/js/board-captcha.js" defer></script>
+    }
+    @if (board.FieldVerificationType == VerificationType.ReCaptcha)
+    {
+        <script src='https://www.google.com/recaptcha/api.js' defer></script>
+    }
+    <script src="/js/board-password.js" defer></script>
+    <script src="/js/board-curb.js" defer></script>
+    <script src="/js/board-fast-reply.js" defer></script>
+    <script src="/js/board-quick-reply.js" defer></script>
+    <script src="/js/board-post.js" defer></script>
+    <script src="/js/board-synchronization.js" defer></script>
+    <script src="/js/board-custom.js" defer></script>
+    <script src="/js/board-post-mention.js" defer></script>
+    <script src="/js/board-expand.js" defer></script>
+    <script src="/js/board-long-content.js" defer></script>
+    <script src="/js/board-navigation.js" defer></script>
+    <script src="/js/board-file-preview.js" defer></script>
+    <script src="/js/board-file-expand.js" defer></script>
+    <script src="/js/board-autoscroll-thread.js" defer></script>
+    <script src="/js/board-watcher.js" defer></script>
+    @foreach(var jsExternal in board.JsExternalCollection)
+    {
+        <script src="@jsExternal" defer></script>
+    }
+    @if (!string.IsNullOrEmpty(board.JsInline))
+    {
+        <style>@Html.Raw(board.JsInline)</style>
+    }
+</head>
+<body>
+    <sup id="top"></sup>
+    @await Html.PartialAsync("~/Views/Shared/Navigation/_BoardNavigation.cshtml", Model)
+    @RenderBody()
+    <sub id="bottom"></sub>
+</body>
+</html>

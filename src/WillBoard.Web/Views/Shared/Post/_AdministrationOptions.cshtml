@@ -1,0 +1,43 @@
+﻿@using Microsoft.AspNetCore.Routing
+@using WillBoard.Core.Entities
+@using WillBoard.Core.Enums;
+@using WillBoard.Core.Managers
+@inject LinkGenerator _linkGenerator
+@inject AccountManager _accountManager
+@model Post
+@{
+    var account = _accountManager.GetAccount();
+}
+
+@if (_accountManager.CheckPermission(Model.BoardId, e => e.PermissionBanCreate))
+{
+    <a href="@_linkGenerator.GetPathByAction("BoardBanCreate", "Administration", new { boardId = Model.BoardId, ipVersion = (int)Model.IpVersion, ipNumber = Model.IpNumber })">Board - Ban - Create</a>
+}
+@if (_accountManager.CheckPermission(Model.BoardId, e => e.PermissionPostDelete))
+{
+    <a href="@_linkGenerator.GetPathByAction("BoardPostDelete", "Administration", new { boardId = Model.BoardId, postId = Model.PostId })">Board - Post - Delete</a>
+}
+@if (Model.File && !Model.FileDeleted && _accountManager.CheckPermission(Model.BoardId, e => e.PermissionPostDeleteFile))
+{
+    <a href="@_linkGenerator.GetPathByAction("BoardPostDeleteFile", "Administration", new { boardId = Model.BoardId, postId = Model.PostId })">Board - Post - Delete File</a>
+}
+@if (_accountManager.CheckPermission(Model.BoardId, e => e.PermissionPostEdit))
+{
+    <a href="@_linkGenerator.GetPathByAction("BoardPostUpdate", "Administration", new { boardId = Model.BoardId, postId = Model.PostId })">Board - Post - Update</a>
+    @if (Model.IsThread())
+    {
+        <a href="@_linkGenerator.GetPathByAction("BoardThreadBumpLock", "Administration", new { boardId = Model.BoardId, postId = Model.PostId })">Board - Thread - Bump Lock</a>
+        <a href="@_linkGenerator.GetPathByAction("BoardThreadReplyLock", "Administration", new { boardId = Model.BoardId, postId = Model.PostId })">Board - Thread - Reply Lock</a>
+        <a href="@_linkGenerator.GetPathByAction("BoardThreadPin", "Administration", new { boardId = Model.BoardId, postId = Model.PostId })">Board - Thread - Pin</a>
+        <a href="@_linkGenerator.GetPathByAction("BoardThreadExcessive", "Administration", new { boardId = Model.BoardId, postId = Model.PostId })">Board - Thread - Excessive</a>
+        <a href="@_linkGenerator.GetPathByAction("BoardThreadCopy", "Administration", new { boardId = Model.BoardId, postId = Model.PostId })">Board - Thread - Copy</a>
+    }
+}
+@if (_accountManager.CheckPermission(Model.BoardId, e => e.PermissionIpDeletePosts))
+{
+    <a href="@_linkGenerator.GetPathByAction("BoardIpDeletePosts", "Administration", new { boardId = Model.BoardId, ipVersion = (int)Model.IpVersion, ipNumber = Model.IpNumber })">Board - IP - Delete Posts</a>
+}
+@if (account.Type == AccountType.Administrator)
+{
+    <a href="@_linkGenerator.GetPathByAction("BanCreate", "Administration", new { ipVersion = (int)Model.IpVersion, ipNumber = Model.IpNumber })">Ban - Create</a>
+}

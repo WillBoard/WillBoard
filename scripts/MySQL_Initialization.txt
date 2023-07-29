@@ -1,0 +1,767 @@
+CREATE DATABASE WillBoard CHARACTER SET = 'utf8mb4' COLLATE = 'utf8mb4_unicode_ci';
+
+USE WillBoard;
+
+CREATE TABLE `BadIp`
+(
+	`IpVersion` INT NOT NULL, 
+	`IpNumberFrom` CHAR(39) NOT NULL, 
+	`IpNumberTo` CHAR(39) NOT NULL
+);
+CREATE INDEX `IpVersion` ON BadIp (IpVersion);
+CREATE INDEX `IpNumberFrom` ON BadIp (IpNumberFrom);
+CREATE INDEX `IpNumberTo` ON BadIp (IpNumberTo);
+
+CREATE TABLE `CountryIp`
+(
+	`IpVersion` INT NOT NULL, 
+	`IpNumberFrom` CHAR(39) NOT NULL, 
+	`IpNumberTo` CHAR(39) NOT NULL,
+	`CountryCode` VARCHAR(2) NOT NULL
+);
+CREATE INDEX `IpVersion` ON CountryIp (IpVersion);
+CREATE INDEX `IpNumberFrom` ON CountryIp (IpNumberFrom);
+CREATE INDEX `IpNumberTo` ON CountryIp (IpNumberTo);
+
+CREATE TABLE `Translation`
+(
+	`Language` VARCHAR(32) NOT NULL,
+	`Key` VARCHAR(128) NOT NULL, 
+	`Value` TEXT NOT NULL, 
+	
+	CONSTRAINT PK_Translation PRIMARY KEY (`Language`, `Key`)
+);
+
+CREATE TABLE `Navigation`
+(
+	`NavigationId` BINARY(16) NOT NULL, 
+	`Priority` INT NOT NULL, 
+	`Icon` TEXT NOT NULL,
+	`Name` TEXT NOT NULL,
+	`Url` TEXT NOT NULL,
+	`Tab` BIT NOT NULL,
+	
+	CONSTRAINT PK_Navigation PRIMARY KEY (`NavigationId`)
+);
+
+CREATE TABLE `Log`
+(
+	`LogId` BINARY(16) NOT NULL, 
+	`Creation` DATETIME NOT NULL, 
+	`Message` TEXT NOT NULL,
+	
+	CONSTRAINT PK_Log PRIMARY KEY (`LogId`)
+);
+
+CREATE TABLE `Account`
+(
+	`AccountId` BINARY(16) NOT NULL, 
+	`Creation` DATETIME NOT NULL, 
+	`Type` INT NOT NULL, 
+	`Active` BIT NOT NULL,
+	`Password` VARCHAR(256) NOT NULL,
+	
+	CONSTRAINT PK_Account PRIMARY KEY (`AccountId`)
+);
+
+CREATE TABLE `Authentication`
+(
+	`AuthenticationId` BINARY(16) NOT NULL, 
+	`AccountId` BINARY(16) NOT NULL, 
+	`IpVersion` INT NOT NULL, 
+	`IpNumber` CHAR(39) NOT NULL, 
+	`Creation` DATETIME NOT NULL, 
+	`Expiration` DATETIME NOT NULL, 
+	`Name` VARCHAR(256) NOT NULL,
+	
+	CONSTRAINT PK_Authentication PRIMARY KEY (`AuthenticationId`),
+	CONSTRAINT FK_AuthenticationAccountId FOREIGN KEY (`AccountId`) REFERENCES Account (`AccountId`) ON DELETE CASCADE
+);
+
+CREATE TABLE `Board`
+(
+	`BoardId` VARCHAR(128) NOT NULL, 
+	
+	`Name` TEXT NOT NULL,
+
+	`Availability` BIT NOT NULL,
+
+	`Type` INT NOT NULL, 
+	`TypeGroupCollection` TEXT NOT NULL,
+
+	`Accessibility` INT NOT NULL, 
+	`AccessibilityPassword` TEXT NOT NULL,
+	`AccessibilityIpVersion4NumberCollection` TEXT NOT NULL,
+	`AccessibilityIpVersion6NumberCollection` TEXT NOT NULL,
+
+	`Visibility` INT NOT NULL, 
+
+	`Anonymous` TEXT NOT NULL,
+	`Language` VARCHAR(32) NOT NULL,
+	`TimeZone` TEXT NOT NULL,
+
+	`OnlineCounterAvailability` BIT NOT NULL,
+
+	`CssThemeCollection` TEXT NOT NULL,
+
+	`CssInline` TEXT NOT NULL,
+	`CssExternalCollection` TEXT NOT NULL,
+
+	`JsInline` TEXT NOT NULL,
+	`JsExternalCollection` TEXT NOT NULL,
+
+	`InformationAside` TEXT NOT NULL,
+	`InformationHeader` TEXT NOT NULL,
+	`InformationFooter` TEXT NOT NULL,
+
+	`MarkupStaticCustomCollection` TEXT NOT NULL,
+	`MarkupDynamicCustomCollection` TEXT NOT NULL,
+
+	`UserIdRequirement` BIT NOT NULL,
+	`CountryRequirement` BIT NOT NULL,
+
+	`PageMax` INT NOT NULL, 
+	`PageThreadMax` INT NOT NULL, 
+	
+	`PostAvailability` BIT NOT NULL,
+
+	`ThreadReplyPreviewMax` INT NOT NULL, 
+	`ThreadPinReplyPreviewMax` INT NOT NULL,
+	
+	`ThreadBumpLockReplyMax` INT NOT NULL, 
+	`ThreadBumpLockTimeMax` INT NOT NULL,
+	
+	`ThreadExcessiveTimeMax` INT NOT NULL,
+
+	`ReplyFieldNameAvailability` BIT NOT NULL,
+	`ReplyFieldNameRequirement` BIT NOT NULL,
+	`ReplyFieldNameLengthMin` INT NOT NULL, 
+	`ReplyFieldNameLengthMax` INT NOT NULL, 
+	`ThreadFieldNameAvailability` BIT NOT NULL,
+	`ThreadFieldNameRequirement` BIT NOT NULL,
+	`ThreadFieldNameLengthMin` INT NOT NULL, 
+	`ThreadFieldNameLengthMax` INT NOT NULL, 
+
+	`ReplyFieldEmailAvailability` BIT NOT NULL,
+	`ReplyFieldEmailRequirement` BIT NOT NULL,
+	`ReplyFieldEmailLengthMin` INT NOT NULL, 
+	`ReplyFieldEmailLengthMax` INT NOT NULL, 
+	`ThreadFieldEmailAvailability` BIT NOT NULL,
+	`ThreadFieldEmailRequirement` BIT NOT NULL,
+	`ThreadFieldEmailLengthMin` INT NOT NULL, 
+	`ThreadFieldEmailLengthMax` INT NOT NULL, 
+
+	`ReplyFieldSubjectAvailability` BIT NOT NULL,
+	`ReplyFieldSubjectRequirement` BIT NOT NULL,
+	`ReplyFieldSubjectLengthMin` INT NOT NULL, 
+	`ReplyFieldSubjectLengthMax` INT NOT NULL, 
+	`ThreadFieldSubjectAvailability` BIT NOT NULL,
+	`ThreadFieldSubjectRequirement` BIT NOT NULL,
+	`ThreadFieldSubjectLengthMin` INT NOT NULL, 
+	`ThreadFieldSubjectLengthMax` INT NOT NULL, 
+
+	`ReplyFieldMessageAvailability` BIT NOT NULL,
+	`ReplyFieldMessageRequirement` BIT NOT NULL,
+	`ReplyFieldMessageLengthMin` INT NOT NULL, 
+	`ReplyFieldMessageLengthMax` INT NOT NULL, 
+	`ReplyFieldMessageLineMax` INT NOT NULL, 
+	`ReplyFieldMessageLinkMax` INT NOT NULL, 
+	`ReplyFieldMessageMentionMax` INT NOT NULL, 
+	`ThreadFieldMessageAvailability` BIT NOT NULL,
+	`ThreadFieldMessageRequirement` BIT NOT NULL,
+	`ThreadFieldMessageLengthMin` INT NOT NULL, 
+	`ThreadFieldMessageLengthMax` INT NOT NULL, 
+	`ThreadFieldMessageLineMax` INT NOT NULL, 
+	`ThreadFieldMessageLinkMax` INT NOT NULL, 
+	`ThreadFieldMessageMentionMax` INT NOT NULL, 
+
+	`ReplyFieldFileAvailability` BIT NOT NULL,
+	`ReplyFieldFileRequirement` BIT NOT NULL,
+	`ReplyFieldFileSizeMin` BIGINT NOT NULL, 
+	`ReplyFieldFileSizeMax` BIGINT NOT NULL, 
+	`ReplyFieldFileOriginality` BIT NOT NULL,
+	`ReplyFieldFileTypeCollection` TEXT NOT NULL,
+	`ReplyFieldFileImageWidthMin` INT NOT NULL, 
+	`ReplyFieldFileImageWidthMax` INT NOT NULL, 
+	`ReplyFieldFileImageHeightMin` INT NOT NULL, 
+	`ReplyFieldFileImageHeightMax` INT NOT NULL, 
+	`ReplyFieldFileVideoWidthMin` INT NOT NULL, 
+	`ReplyFieldFileVideoWidthMax` INT NOT NULL, 
+	`ReplyFieldFileVideoHeightMin` INT NOT NULL, 
+	`ReplyFieldFileVideoHeightMax` INT NOT NULL, 
+	`ReplyFieldFileVideoDurationMin` INT NOT NULL, 
+	`ReplyFieldFileVideoDurationMax` INT NOT NULL, 
+	`ReplyFieldFileAudioDurationMin` INT NOT NULL, 
+	`ReplyFieldFileAudioDurationMax` INT NOT NULL, 
+	`ReplyFilePreviewWidthMax` INT NOT NULL, 
+	`ReplyFilePreviewHeightMax` INT NOT NULL, 
+	`ThreadFieldFileAvailability` BIT NOT NULL,
+	`ThreadFieldFileRequirement` BIT NOT NULL,
+	`ThreadFieldFileSizeMin` BIGINT NOT NULL, 
+	`ThreadFieldFileSizeMax` BIGINT NOT NULL, 
+	`ThreadFieldFileOriginality` BIT NOT NULL,
+	`ThreadFieldFileTypeCollection` TEXT NOT NULL,
+	`ThreadFieldFileImageWidthMin` INT NOT NULL, 
+	`ThreadFieldFileImageWidthMax` INT NOT NULL, 
+	`ThreadFieldFileImageHeightMin` INT NOT NULL, 
+	`ThreadFieldFileImageHeightMax` INT NOT NULL, 
+	`ThreadFieldFileVideoWidthMin` INT NOT NULL, 
+	`ThreadFieldFileVideoWidthMax` INT NOT NULL, 
+	`ThreadFieldFileVideoHeightMin` INT NOT NULL, 
+	`ThreadFieldFileVideoHeightMax` INT NOT NULL, 
+	`ThreadFieldFileVideoDurationMin` INT NOT NULL, 
+	`ThreadFieldFileVideoDurationMax` INT NOT NULL, 
+	`ThreadFieldFileAudioDurationMin` INT NOT NULL, 
+	`ThreadFieldFileAudioDurationMax` INT NOT NULL, 
+	`ThreadFilePreviewWidthMax` INT NOT NULL, 
+	`ThreadFilePreviewHeightMax` INT NOT NULL, 
+
+	`ThreadFieldOptionSpoilerAvailability` BIT NOT NULL,
+	`ThreadFieldOptionSageAvailability` BIT NOT NULL,
+	`ThreadFieldOptionUserIdAvailability` BIT NOT NULL,
+	`ThreadFieldOptionCountryAvailability` BIT NOT NULL,
+
+	`ReplyFieldOptionSpoilerAvailability` BIT NOT NULL,
+	`ReplyFieldOptionSageAvailability` BIT NOT NULL,
+
+	`ReplyFieldPasswordAvailability` BIT NOT NULL,
+	`ReplyFieldPasswordRequirement` BIT NOT NULL,
+	`ReplyFieldPasswordLengthMin` INT NOT NULL, 
+	`ReplyFieldPasswordLengthMax` INT NOT NULL, 
+	`ThreadFieldPasswordAvailability` BIT NOT NULL,
+	`ThreadFieldPasswordRequirement` BIT NOT NULL,
+	`ThreadFieldPasswordLengthMin` INT NOT NULL, 
+	`ThreadFieldPasswordLengthMax` INT NOT NULL, 
+	
+	`ReplyTimeMin` INT NOT NULL, 
+	`ThreadTimeMin` INT NOT NULL, 
+
+	`ReplyDeleteAvailability` BIT NOT NULL,
+	`ReplyDeleteTimeMin` INT NOT NULL, 
+	`ReplyDeleteTimeMax` INT NOT NULL, 
+	`ThreadDeleteAvailability` BIT NOT NULL,
+	`ThreadDeleteTimeMin` INT NOT NULL, 
+	`ThreadDeleteTimeMax` INT NOT NULL, 
+
+	`ReplyFileDeleteAvailability` BIT NOT NULL,
+	`ReplyFileDeleteTimeMin` INT NOT NULL, 
+	`ReplyFileDeleteTimeMax` INT NOT NULL, 
+	`ThreadFileDeleteAvailability` BIT NOT NULL,
+	`ThreadFileDeleteTimeMin` INT NOT NULL, 
+	`ThreadFileDeleteTimeMax` INT NOT NULL, 
+	
+	`ReportBoardAvailability` BIT NOT NULL,
+	`ReportBoardLengthMin` INT NOT NULL, 
+	`ReportBoardLengthMax` INT NOT NULL, 
+	`ReportBoardIpMax` INT NOT NULL, 
+	`ReportBoardTimeMin` INT NOT NULL, 
+	
+	`CountryIpVersion4BlockAvailability` BIT NOT NULL,
+	`CountryIpVersion4BlockCollection` TEXT NOT NULL,
+	`CountryIpVersion4ExclusionIpNumberCollection` TEXT NOT NULL,
+
+	`CountryIpVersion6BlockAvailability` BIT NOT NULL,
+	`CountryIpVersion6BlockCollection` TEXT NOT NULL,
+	`CountryIpVersion6ExclusionIpNumberCollection` TEXT NOT NULL,
+
+	`BadIpVersion4BlockAvailability` BIT NOT NULL,
+	`BadIpVersion4BlockExclusionIpNumberCollection` TEXT NOT NULL,
+
+	`BadIpVersion6BlockAvailability` BIT NOT NULL,
+	`BadIpVersion6BlockExclusionIpNumberCollection` TEXT NOT NULL,
+
+	`DnsBlockListIpVersion4Availability` BIT NOT NULL,
+	`DnsBlockListIpVersion4Cache` BIT NOT NULL,
+	`DnsBlockListIpVersion4Collection` TEXT NOT NULL,
+	`DnsBlockListIpVersion4ExclusionIpNumberCollection` TEXT NOT NULL,
+
+	`DnsBlockListIpVersion6Availability` BIT NOT NULL,
+	`DnsBlockListIpVersion6Cache` BIT NOT NULL,
+	`DnsBlockListIpVersion6Collection` TEXT NOT NULL,
+	`DnsBlockListIpVersion6ExclusionIpNumberCollection` TEXT NOT NULL,
+
+	`ApiBlockListIpVersion4Availability` BIT NOT NULL,
+	`ApiBlockListIpVersion4Cache` BIT NOT NULL,
+	`ApiBlockListIpVersion4Collection` TEXT NOT NULL,
+	`ApiBlockListIpVersion4ExclusionIpNumberCollection` TEXT NOT NULL,
+
+	`ApiBlockListIpVersion6Availability` BIT NOT NULL,
+	`ApiBlockListIpVersion6Cache` BIT NOT NULL,
+	`ApiBlockListIpVersion6Collection` TEXT NOT NULL,
+	`ApiBlockListIpVersion6ExclusionIpNumberCollection` TEXT NOT NULL,
+
+	`FieldVerificationType` INT NOT NULL,
+
+	`VerificationPublicKey` TEXT NOT NULL,
+	`VerificationSecretKey` TEXT NOT NULL,
+
+	`ReplyFieldVerificationMode` INT NOT NULL,
+	`ReplyFieldVerificationLocalTime` INT NOT NULL, 
+	`ThreadFieldVerificationMode` INT NOT NULL,
+	`ThreadFieldVerificationLocalTime` INT NOT NULL, 
+
+	`SynchronizationThreadAvailability` BIT NOT NULL,
+	`SynchronizationBoardAvailability` BIT NOT NULL,
+
+	`SearchAvailability` BIT NOT NULL,
+	`CatalogAvailability` BIT NOT NULL,
+	
+	`AnonymizationAvailability` BIT NOT NULL, 
+	`AnonymizationTimeMax` INT NOT NULL, 
+	
+	CONSTRAINT PK_Board PRIMARY KEY (`BoardId`)
+);
+
+CREATE TABLE `Authorization`
+(
+	`AuthorizationId` BINARY(16) NOT NULL, 
+
+	`AccountId` BINARY(16) NOT NULL, 
+	`BoardId` VARCHAR(128) NOT NULL,
+	
+	`Creation` DATETIME NOT NULL,
+
+	`Name` TEXT NOT NULL,
+
+	`PermissionReportRead` BIT NOT NULL,
+	`PermissionReportDelete` BIT NOT NULL,
+
+	`PermissionBanRead` BIT NOT NULL,
+	`PermissionBanCreate` BIT NOT NULL,
+	`PermissionBanUpdate` BIT NOT NULL,
+	`PermissionBanDelete` BIT NOT NULL,
+
+	`PermissionBanAppealRead` BIT NOT NULL,
+	`PermissionBanAppealAccept` BIT NOT NULL,
+	`PermissionBanAppealReject` BIT NOT NULL,
+
+	`PermissionIpRead` BIT NOT NULL,
+	`PermissionIpDeletePosts` BIT NOT NULL,
+
+	`PermissionPostEdit` BIT NOT NULL,
+	`PermissionPostDelete` BIT NOT NULL,
+	`PermissionPostDeleteFile` BIT NOT NULL,
+
+	`PermissionThreadReplyLock` BIT NOT NULL,
+	`PermissionThreadBumpLock` BIT NOT NULL,
+	`PermissionThreadExcessive` BIT NOT NULL,
+	`PermissionThreadPin` BIT NOT NULL,
+	`PermissionThreadCopy` BIT NOT NULL,
+
+	`PermissionAuthorizationRead` BIT NOT NULL,
+	`PermissionAuthorizationUpdate` BIT NOT NULL,
+	`PermissionAuthorizationDelete` BIT NOT NULL,
+
+	`PermissionInvitationRead` BIT NOT NULL,
+	`PermissionInvitationCreate` BIT NOT NULL,
+	`PermissionInvitationUpdate` BIT NOT NULL,
+	`PermissionInvitationDelete` BIT NOT NULL,
+
+	`PermissionBoardView` BIT NOT NULL,
+	`PermissionBoardUpdate` BIT NOT NULL,
+	`PermissionBoardDelete` BIT NOT NULL,
+	
+	CONSTRAINT PK_Authorization PRIMARY KEY (`AuthorizationId`),
+	CONSTRAINT FK_AuthorizationAccountId FOREIGN KEY (`AccountId`) REFERENCES Account (`AccountId`) ON DELETE CASCADE,
+	CONSTRAINT FK_AuthorizationBoardId FOREIGN KEY (`BoardId`) REFERENCES Board (`BoardId`) ON DELETE CASCADE
+);
+
+CREATE TABLE `Invitation`
+(
+	`InvitationId` BINARY(16) NOT NULL, 
+
+	`AccountId` BINARY(16) NOT NULL, 
+	`BoardId` VARCHAR(128) NOT NULL, 
+	
+	`Creation` DATETIME NOT NULL, 
+	`Message` TEXT NOT NULL,
+	
+	CONSTRAINT PK_Invitation PRIMARY KEY (`InvitationId`),
+	CONSTRAINT FK_InvitationAccountId FOREIGN KEY (`AccountId`) REFERENCES Account (`AccountId`) ON DELETE CASCADE,
+	CONSTRAINT FK_InvitationBoardId FOREIGN KEY (`BoardId`) REFERENCES Board (`BoardId`) ON DELETE CASCADE
+);
+
+CREATE TABLE `Ban`
+(
+	`BanId` BINARY(16) NOT NULL, 
+	
+	`BoardId` VARCHAR(128) NULL,
+
+	`Creation` DATETIME NOT NULL, 
+	`Expiration` DATETIME NULL, 
+	`Appeal` BIT NOT NULL, 
+	
+	`IpVersion` INT NOT NULL, 
+	`IpNumberFrom` CHAR(39) NOT NULL, 
+	`IpNumberTo` CHAR(39) NOT NULL, 
+	
+	`ExclusionIpNumberCollection` TEXT NOT NULL,
+	
+	`Reason` TEXT NOT NULL,
+	`Note` TEXT NOT NULL,
+	
+	CONSTRAINT PK_Ban PRIMARY KEY (`BanId`),
+	CONSTRAINT FK_BanBoardId FOREIGN KEY (`BoardId`) REFERENCES Board (`BoardId`) ON DELETE CASCADE
+);
+
+CREATE TABLE `BanAppeal`
+(
+	`BanAppealId` BINARY(16) NOT NULL, 
+	
+	`Creation` DATETIME NOT NULL, 
+	`IpVersion` INT NOT NULL, 
+	`IpNumber` CHAR(39) NOT NULL, 
+	`Message` TEXT NOT NULL,
+	
+	`BanId` BINARY(16) NOT NULL, 
+	
+	CONSTRAINT PK_BanAppeal PRIMARY KEY (`BanAppealId`),
+	CONSTRAINT FK_BanAppealBanId FOREIGN KEY (`BanId`) REFERENCES Ban (`BanId`) ON DELETE CASCADE
+);
+
+CREATE TABLE `Post`
+(
+	`BoardId` VARCHAR(128) NOT NULL, 
+	`PostId` INT NOT NULL, 
+	
+	`ThreadId` INT NULL, 
+	
+	`Creation` DATETIME NOT NULL,
+	
+	`Subject` TEXT NOT NULL,
+	`Email` TEXT NOT NULL,
+	`Name` TEXT NOT NULL,
+	`MessageRaw` TEXT NOT NULL,
+	`MessageStatic` TEXT NOT NULL,
+
+	`File` BIT NOT NULL,
+	`FileSpoiler` BIT NOT NULL,
+	`FileDeleted` BIT NOT NULL,
+	`FileNameOriginal` VARCHAR(256) NOT NULL,
+	`FileName` TEXT NOT NULL,
+	`FileMimeType` VARCHAR(256) NOT NULL,
+	`FileHash` BINARY(16) NOT NULL, 
+	`FileSize` BIGINT NOT NULL, 
+	`FileWidth` INT NOT NULL, 
+	`FileHeight` INT NOT NULL, 
+	`FileDuration` FLOAT NOT NULL, 
+
+	`FilePreview` BIT NOT NULL,
+	`FilePreviewName` TEXT NOT NULL,
+	`FilePreviewWidth` INT NOT NULL, 
+	`FilePreviewHeight` INT NOT NULL, 
+
+	`Password` TEXT NOT NULL,
+
+	`IpVersion` INT NOT NULL, 
+	`IpNumber` CHAR(39) NOT NULL,
+
+	`Country` TEXT NOT NULL,
+	`UserAgent` TEXT NOT NULL,
+
+	`UserId` TEXT NOT NULL,
+
+	`Sage` BIT NOT NULL,
+	`Pin` BIT NOT NULL,
+	`ReplyLock` BIT NOT NULL,
+	`BumpLock` BIT NOT NULL,
+	`Excessive` DATETIME NULL,
+
+	`ForceUserId` BIT NOT NULL,
+	`ForceCountry` BIT NOT NULL,
+	
+	`Bump` DATETIME NOT NULL, 
+	`ReplyCount` INT NOT NULL, 
+	
+	CONSTRAINT PK_Post PRIMARY KEY (`BoardId`, `PostId`),
+	CONSTRAINT FK_PostBoardIdThreadId FOREIGN KEY (`BoardId`, `ThreadId`) REFERENCES Post (`BoardId`, `PostId`) ON DELETE NO ACTION,
+	CONSTRAINT FK_PostBoardId FOREIGN KEY (`BoardId`) REFERENCES Board (`BoardId`) ON DELETE CASCADE
+);
+CREATE INDEX ThreadId_Index ON Post(ThreadId);
+CREATE INDEX Creation_Index ON Post(Creation);
+CREATE INDEX Bump_Index ON Post(Bump);
+CREATE INDEX FileHash_Index ON Post(FileHash);
+CREATE INDEX IpVersionIpNumber_Index ON Post(IpVersion,IpNumber);
+
+CREATE TABLE `PostIdentity`
+(
+	`BoardId` VARCHAR(128) NOT NULL,
+	`Number` INT NOT NULL,
+	
+	CONSTRAINT PK_PostIdentity PRIMARY KEY (`BoardId`),
+	CONSTRAINT FK_PostIdentityBoardId FOREIGN KEY (`BoardId`) REFERENCES Board (`BoardId`) ON DELETE CASCADE
+);
+
+CREATE TABLE `PostMention`
+(
+	`OutcomingBoardId` VARCHAR(128) NOT NULL,
+	`OutcomingPostId` INT NOT NULL,
+	`OutcomingThreadId` INT NULL,
+	
+	`IncomingBoardId` VARCHAR(128) NOT NULL,
+	`IncomingPostId` INT NOT NULL,
+	`IncomingThreadId` INT NULL,
+	
+	`Active` BIT NOT NULL, 
+	
+	CONSTRAINT PK_PostMention PRIMARY KEY (`OutcomingBoardId`, `OutcomingPostId`, `IncomingBoardId`, `IncomingPostId`),
+	CONSTRAINT FK_PostMentionOutcomingOutcomingBoardIdPostId FOREIGN KEY (`OutcomingBoardId`, `OutcomingPostId`) REFERENCES Post (`BoardId`, `PostId`) ON DELETE CASCADE
+);
+CREATE INDEX OutcomingThreadId_Index ON PostMention(OutcomingThreadId);
+CREATE INDEX IncomingThreadId_Index ON PostMention(IncomingThreadId);
+CREATE INDEX Active_Index ON PostMention(Active);
+
+CREATE TABLE `Report`
+(
+	`ReportId` BINARY(16) NOT NULL, 
+	
+	`BoardId` VARCHAR(128) NULL, 
+	
+	`Creation` DATETIME NOT NULL, 
+	
+	`ReferenceBoardId` VARCHAR(128) NOT NULL, 
+	`ReferencePostId` INT NOT NULL, 
+	
+	`IpVersion` INT NOT NULL, 
+	`IpNumber` CHAR(39) NOT NULL,
+	
+	`Reason` TEXT NOT NULL,
+	
+	CONSTRAINT PK_Report PRIMARY KEY (`ReportId`),
+	CONSTRAINT FK_ReportBoardId FOREIGN KEY (`ReferenceBoardId`) REFERENCES Board (`BoardId`) ON DELETE CASCADE
+);
+
+CREATE TABLE `Verification`
+(
+	`VerificationId` BINARY(16) NOT NULL, 
+	
+	`BoardId` VARCHAR(128) NULL, 
+	
+	`IpVersion` INT NOT NULL, 
+	`IpNumber` CHAR(39) NOT NULL, 
+	
+	`Creation` DATETIME NOT NULL, 
+	`Expiration` DATETIME NOT NULL, 
+	
+	CONSTRAINT PK_Verification PRIMARY KEY (`VerificationId`),
+	CONSTRAINT FK_VerificationBoardId FOREIGN KEY (`BoardId`) REFERENCES Board (`BoardId`) ON DELETE CASCADE
+);
+
+CREATE TABLE `Configuration`
+(
+	`Key` VARCHAR(128) NOT NULL,
+	
+	`Value` TEXT NULL,
+	`Type` INT NOT NULL, 
+	
+	CONSTRAINT PK_Configuration PRIMARY KEY (`Key`)
+);
+
+
+INSERT INTO `Account` (`AccountId`, `Creation`, `Type`, `Active`, `Password`) VALUES (0x00000000000000000000000000000000, CURRENT_TIMESTAMP, 1, 1, 'AAAAAQAAJxAAAAAQC9kNGpBSolsb/5d4WmWlJ0xXnmx3k+DwITr2BFWoJNajDoy/GSPQsegWi4y8Cq4P');
+
+INSERT INTO `Configuration` (`Key`, `Value`, `Type`) VALUES ('ReportSystemAvailability', 'false', 1);
+INSERT INTO `Configuration` (`Key`, `Value`, `Type`) VALUES ('ReportSystemLengthMin', '6', 3);
+INSERT INTO `Configuration` (`Key`, `Value`, `Type`) VALUES ('ReportSystemLengthMax', '64', 3);
+INSERT INTO `Configuration` (`Key`, `Value`, `Type`) VALUES ('ReportSystemIpMax', '10', 3);
+INSERT INTO `Configuration` (`Key`, `Value`, `Type`) VALUES ('ReportSystemTimeMin', '60', 3);
+INSERT INTO `Configuration` (`Key`, `Value`, `Type`) VALUES ('InvitationLengthMin', '8', 3);
+INSERT INTO `Configuration` (`Key`, `Value`, `Type`) VALUES ('InvitationLengthMax', '256', 3);
+INSERT INTO `Configuration` (`Key`, `Value`, `Type`) VALUES ('InvitationBoardMax', '10', 3);
+INSERT INTO `Configuration` (`Key`, `Value`, `Type`) VALUES ('OverviewDescription', 'Overview description', 2);
+
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'Error', 'Error');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'Delete', 'Burn');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'Post', 'Post');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'File', 'File');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ReplyOmitted', 'reply omitted');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ReplyExpanded', 'reply expanded');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'RepliesOmitted', 'replies omitted');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'RepliesExpanded', 'replies expanded');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'Hide', 'Hide');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'Show', 'Show');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'NewThread', 'New thread');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'Reply', 'Reply');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'Thread', 'Thread');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ReplyIn', 'Reply in');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'Curb', 'Curb');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'Uncurb', 'Uncurb');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'Options', 'Options');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'FileDeleted', 'File deleted');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'Report', 'Report');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'Yes', 'Yes');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'No', 'No');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'Name', 'Name');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'Subject', 'Subject');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'Email', 'Email');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'Password', 'Password');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'Message', 'Message');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'Captcha', 'Captcha');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'Requirement', 'Requirement');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'HidePreview', 'Hide file');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'UnhidePreview', 'Unhide file');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'LongContentOmitted', 'Long content omitted');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'LongContentExpanded', 'Long content expanded');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'Sage', 'Sage');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'Spoiler', 'Spoiler');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'Country', 'Country');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'UserId', 'User ID');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'Submit', 'Submit');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'Ban', 'Ban');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'YourIpAddressIsNotBanned', 'Your IP address {0} is not banned.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'YourIpAddressIsBannedOnForTheFollowingReason', 'Your IP address {0} is banned on {1} for the following reason:');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'YourIpAddressIsBannedOnAllBoardsForTheFollowingReason', 'Your IP address {0} is banned on all boards for the following reason:');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'BanWasCreatedOnUtcAndWillExpireOnUtc', 'Ban was created on {0} (UTC) and will expire on {1} (UTC).');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'BanWasCreatedOnUtcAndWillNeverExpire', 'Ban was created on {0} (UTC) and will never expire.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'YouCanAppealForTheBanEnterJustificationBelow', 'You can appeal for the ban. Enter justification below:');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'YouAlreadyAppealedAppeal', 'You already appealed. Appeal:');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'YouCanNotAppealForThisBan', 'You can not appeal for this ban.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'Search', 'Search');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'PostId', 'Post ID');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ThreadId', 'Thread ID');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'Type', 'Type');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'Order', 'Order');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'All', 'All');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'With', 'With');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'Without', 'Without');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'Oldest', 'Oldest');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'Latest', 'Latest');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'Watch', 'Watch');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'Unwatch', 'Unwatch');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorNotFound', 'Not found.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorForbidden', 'Forbidden.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorUnauthorized', 'Unauthorized.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorBadRequest', 'Bad request.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorCsrf', 'Invalid CSRF.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorPassword', 'Invalid password.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorPostAvailability', 'Creating a post is not available.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorCreatePost', 'An error has occurred during creating a post.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorThreadTimeMin', 'You need to wait minimum time to create another thread.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorReplyTimeMin', 'You need to wait minimum time to create another reply.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorReplyNotFoundThread', 'Not found thread for reply.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorReplyThreadReplyLock', 'You can not reply in locked thread.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorReplyThreadExcessive', 'You can not reply in excessive thread.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorCountryIpVersion4Block', 'Your IP address is from blacklisted country.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorBadIpVersion4Block', 'Your IP address is blacklisted.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorDnsBlockListIpVersion4', 'Your IP address is blacklisted.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorApiBlockListIpVersion4', 'Your IP address is blacklisted.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorCountryIpVersion6Block', 'Your IP address is from blacklisted country.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorBadIpVersion6Block', 'Your IP address is blacklisted.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorDnsBlockListIpVersion6', 'Your IP address is blacklisted.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorApiBlockListIpVersion6', 'Your IP address is blacklisted.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorBan', 'Your IP address is banned.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorVerification', 'Invalid verification.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorBanAppealAvailability', 'Ban appeal is not available.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorBanAppealMessageLengthMin', 'Ban appeal message is too short.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorBanAppealMessageLengthMax', 'Ban appeal message is too long.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorReportBoardAvailability', 'Board report is not available.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorReportBoardReasonLengthMin', 'Board report reason is too short.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorReportBoardReasonLengthMax', 'Board report reason is too long.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorReportBoardIpMax', 'You exceeded maximum board reports per IP.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorReportBoardTimeMin', 'You need to wait minimum time to create another board report.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorReportSystemAvailability', 'System report is not available.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorReportSystemReasonLengthMin', 'System report reason is too short.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorReportSystemReasonLengthMax', 'System report reason is too long.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorReportSystemIpMax', 'You exceeded maximum system reports per IP address.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorReportSystemTimeMin', 'You need to wait minimum time to create another system report.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorNotFoundDeleteFile', 'Not found file to delete.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorThreadDeleteAvailability', 'Deleting thread is not available.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorThreadDeleteTimeMin', 'You need to wait minimum time to delete thread.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorThreadDeleteTimeMax', 'You exceeded maximum time to delete thread.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorThreadFileDeleteAvailability', 'Deleting thread file is not available.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorThreadFileDeleteTimeMin', 'You need to wait minimum time to delete thread file.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorThreadFileDeleteTimeMax', 'You exceeded maximum time to delete thread file.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorReplyDeleteAvailability', 'Deleting reply is not available.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorReplyDeleteTimeMin', 'You need to wait minimum time to delete reply.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorReplyDeleteTimeMax', 'You exceeded maximum time to delete reply.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorReplyFileDeleteAvailability', 'Deleting reply file is not available.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorReplyFileDeleteTimeMin', 'You need to wait minimum time to delete reply file.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorReplyFileDeleteTimeMax', 'You exceeded maximum time to delete reply file.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorThreadFieldNameAvailability', 'Thread name is not available.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorThreadFieldNameRequirement', 'Thread name is required.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorThreadFieldNameLengthMin', 'Thread name is too short.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorThreadFieldNameLengthMax', 'Thread name is too long.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorThreadFieldEmailAvailability', 'Thread email is not available.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorThreadFieldEmailRequirement', 'Thread email is required.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorThreadFieldEmailLengthMin', 'Thread email is too short.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorThreadFieldEmailLengthMax', 'Thread email is too long.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorThreadFieldSubjectAvailability', 'Thread subject is not available.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorThreadFieldSubjectRequirement', 'Thread subject is required.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorThreadFieldSubjectLengthMin', 'Thread subject is too short.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorThreadFieldSubjectLengthMax', 'Thread subject is too long.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorThreadFieldPasswordAvailability', 'Thread password is not available.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorThreadFieldPasswordRequirement', 'Thread password is required.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorThreadFieldPasswordLengthMin', 'Thread password is too short.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorThreadFieldPasswordLengthMax', 'Thread password is too long.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorThreadFieldMessageAvailability', 'Thread message is not available.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorThreadFieldMessageRequirement', 'Thread message is required.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorThreadFieldMessageLengthMin', 'Thread message is too short.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorThreadFieldMessageLengthMax', 'Thread message is too long.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorThreadFieldMessageLinesMax', 'Thread message exceeded maximum lines.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorThreadFieldMessageLinkMax', 'Thread message exceeded maximum links.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorThreadFieldMessageMentionMax', 'Thread message exceeded maximum mentions.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorThreadFieldFileAvailability', 'Thread file is not available.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorThreadFieldFileRequirement', 'Thread file is required.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorThreadFieldFileOriginality', 'Thread file is not original.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorThreadFieldFileSizeMin', 'Thread file size is too small.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorThreadFieldFileSizeMax', 'Thread file size is too big.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorThreadFieldFileNameLengthMin', 'Thread file name is too short.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorThreadFieldFileNameLengthMax', 'Thread file name is too long.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorThreadFieldFileType', 'Thread file is not allowed type.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorThreadFieldFile', 'Thread file is invalid.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorThreadFieldFileImageWidthMin', 'Thread image file width is too small.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorThreadFieldFileImageWidthMax', 'Thread image file width is too big.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorThreadFieldFileImageHeightMin', 'Thread image file height is too small.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorThreadFieldFileImageHeightMax', 'Thread image file height is too big.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorThreadFieldFileVideoDurationMin', 'Thread video file duration is too short.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorThreadFieldFileVideoDurationMax', 'Thread video file duration is too long.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorThreadFieldFileVideoWidthMin', 'Thread video file width is too small.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorThreadFieldFileVideoWidthMax', 'Thread video file width is too big.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorThreadFieldFileVideoHeightMin', 'Thread video file height is too small.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorThreadFieldFileVideoHeightMax', 'Thread video file height is too big.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorThreadFieldFileAudioDurationMin', 'Thread audio file duration is too short.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorThreadFieldFileAudioDurationMax', 'Thread audio file duration is too long.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorReplyFieldNameAvailability', 'Reply name is not available.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorReplyFieldNameRequirement', 'Reply name is required.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorReplyFieldNameLengthMin', 'Reply name is too short.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorReplyFieldNameLengthMax', 'Reply name is too long.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorReplyFieldEmailAvailability', 'Reply email is not available.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorReplyFieldEmailRequirement', 'Reply email is required.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorReplyFieldEmailLengthMin', 'Reply email is too short.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorReplyFieldEmailLengthMax', 'Reply email is too long.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorReplyFieldSubjectAvailability', 'Reply subject is not available.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorReplyFieldSubjectRequirement', 'Reply subject is required.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorReplyFieldSubjectLengthMin', 'Reply subject is too short.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorReplyFieldSubjectLengthMax', 'Reply subject is too long.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorReplyFieldPasswordAvailability', 'Reply password is not available.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorReplyFieldPasswordRequirement', 'Reply password is required.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorReplyFieldPasswordLengthMin', 'Reply password is too short.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorReplyFieldPasswordLengthMax', 'Reply password is too long.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorReplyFieldMessageAvailability', 'Reply message is not available.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorReplyFieldMessageRequirement', 'Reply message is required.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorReplyFieldMessageLengthMin', 'Reply message is too short.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorReplyFieldMessageLengthMax', 'Reply message is too long.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorReplyFieldMessageLinesMax', 'Reply message exceeded maximum lines.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorReplyFieldMessageLinkMax', 'Reply message exceeded maximum links.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorReplyFieldMessageMentionMax', 'Reply message exceeded maximum mentions.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorReplyFieldFileAvailability', 'Reply file is not available.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorReplyFieldFileRequirement', 'Reply file is required.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorReplyFieldFileOriginality', 'Reply file is not original.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorReplyFieldFileSizeMin', 'Reply file size is too small.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorReplyFieldFileSizeMax', 'Reply file size is too big.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorReplyFieldFileNameLengthMin', 'Reply file name is too short.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorReplyFieldFileNameLengthMax', 'Reply file name is too long.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorReplyFieldFileType', 'Reply file is not allowed type.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorReplyFieldFile', 'Reply file is invalid.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorReplyFieldFileImageWidthMin', 'Reply image file width is too small.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorReplyFieldFileImageWidthMax', 'Reply image file width is too big.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorReplyFieldFileImageHeightMin', 'Reply image file height is too small.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorReplyFieldFileImageHeightMax', 'Reply image file height is too big.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorReplyFieldFileVideoDurationMin', 'Reply video file duration is too short.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorReplyFieldFileVideoDurationMax', 'Reply video file duration is too long.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorReplyFieldFileVideoWidthMin', 'Reply video file width is too small.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorReplyFieldFileVideoWidthMax', 'Reply video file width is too big.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorReplyFieldFileVideoHeightMin', 'Reply video file height is too small.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorReplyFieldFileVideoHeightMax', 'Reply video file height is too big.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorReplyFieldFileAudioDurationMin', 'Reply audio file duration is too short.');
+INSERT INTO `Translation` (`Language`, `Key`, `Value`) VALUES ('en', 'ErrorReplyFieldFileAudioDurationMax', 'Reply audio file duration is too long.');

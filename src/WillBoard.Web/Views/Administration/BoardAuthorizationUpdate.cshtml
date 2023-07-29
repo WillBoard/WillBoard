@@ -1,0 +1,214 @@
+﻿@using Microsoft.AspNetCore.Routing
+@using WillBoard.Application.Administration.Commands.BoardAuthorizationUpdate
+@using WillBoard.Application.Administration.Queries.BoardAuthorizationUpdate
+@using WillBoard.Core.Entities
+@using WillBoard.Core.Managers
+@using WillBoard.Web.Services
+@using WillBoard.Core.Extensions
+@inject LinkGenerator _linkGenerator
+@inject ViewService _viewService
+@inject AccountManager _accountManager
+@model BoardAuthorizationUpdateViewModel
+@{
+    Layout = "~/Views/Shared/_AdministrationLayout.cshtml";
+}
+
+<main>
+    <article>
+        <header>Board - Authorization - Update</header>
+        <section>
+            <form method="post">
+                <input type="hidden" name="csrf" value="@ViewData["csrf"]" autocomplete="off">
+                <input type="hidden" name="boardId" value="@Model.Authorization.BoardId" autocomplete="off">
+                <input type="hidden" name="authorizationId" value="@Model.Authorization.AuthorizationId" autocomplete="off">
+                <table>
+                    <tbody>
+                        <tr>
+                            <th>@nameof(Authorization.Name)</th>
+                            <td>
+                                <input type="text" name="@nameof(BoardAuthorizationUpdateCommand.Name)" value="@Model.Authorization.Name">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardAuthorizationUpdateCommand.PermissionReportRead)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardAuthorizationUpdateCommand.PermissionReportRead)" value="true" @(Model.Authorization.PermissionReportRead ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardAuthorizationUpdateCommand.PermissionReportDelete)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardAuthorizationUpdateCommand.PermissionReportDelete)" value="true" @(Model.Authorization.PermissionReportDelete ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardAuthorizationUpdateCommand.PermissionBanRead)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardAuthorizationUpdateCommand.PermissionBanRead)" value="true" @(Model.Authorization.PermissionBanRead ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardAuthorizationUpdateCommand.PermissionBanCreate)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardAuthorizationUpdateCommand.PermissionBanCreate)" value="true" @(Model.Authorization.PermissionBanCreate ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardAuthorizationUpdateCommand.PermissionBanUpdate)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardAuthorizationUpdateCommand.PermissionBanUpdate)" value="true" @(Model.Authorization.PermissionBanUpdate ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardAuthorizationUpdateCommand.PermissionBanDelete)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardAuthorizationUpdateCommand.PermissionBanDelete)" value="true" @(Model.Authorization.PermissionBanDelete ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardAuthorizationUpdateCommand.PermissionBanAppealRead)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardAuthorizationUpdateCommand.PermissionBanAppealRead)" value="true" @(Model.Authorization.PermissionBanAppealRead ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardAuthorizationUpdateCommand.PermissionBanAppealAccept)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardAuthorizationUpdateCommand.PermissionBanAppealAccept)" value="true" @(Model.Authorization.PermissionBanAppealAccept ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardAuthorizationUpdateCommand.PermissionBanAppealReject)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardAuthorizationUpdateCommand.PermissionBanAppealReject)" value="true" @(Model.Authorization.PermissionBanAppealReject ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardAuthorizationUpdateCommand.PermissionIpRead)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardAuthorizationUpdateCommand.PermissionIpRead)" value="true" @(Model.Authorization.PermissionIpRead ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardAuthorizationUpdateCommand.PermissionIpDeletePosts)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardAuthorizationUpdateCommand.PermissionIpDeletePosts)" value="true" @(Model.Authorization.PermissionIpDeletePosts ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardAuthorizationUpdateCommand.PermissionPostEdit)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardAuthorizationUpdateCommand.PermissionPostEdit)" value="true" @(Model.Authorization.PermissionPostEdit ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardAuthorizationUpdateCommand.PermissionPostDelete)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardAuthorizationUpdateCommand.PermissionPostDelete)" value="true" @(Model.Authorization.PermissionPostDelete ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardAuthorizationUpdateCommand.PermissionPostDeleteFile)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardAuthorizationUpdateCommand.PermissionPostDeleteFile)" value="true" @(Model.Authorization.PermissionPostDeleteFile ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardAuthorizationUpdateCommand.PermissionThreadReplyLock)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardAuthorizationUpdateCommand.PermissionThreadReplyLock)" value="true" @(Model.Authorization.PermissionThreadReplyLock ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardAuthorizationUpdateCommand.PermissionThreadBumpLock)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardAuthorizationUpdateCommand.PermissionThreadBumpLock)" value="true" @(Model.Authorization.PermissionThreadBumpLock ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardAuthorizationUpdateCommand.PermissionThreadExcessive)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardAuthorizationUpdateCommand.PermissionThreadExcessive)" value="true" @(Model.Authorization.PermissionThreadExcessive ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardAuthorizationUpdateCommand.PermissionThreadPin)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardAuthorizationUpdateCommand.PermissionThreadPin)" value="true" @(Model.Authorization.PermissionThreadPin ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardAuthorizationUpdateCommand.PermissionThreadCopy)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardAuthorizationUpdateCommand.PermissionThreadCopy)" value="true" @(Model.Authorization.PermissionThreadCopy ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardAuthorizationUpdateCommand.PermissionAuthorizationRead)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardAuthorizationUpdateCommand.PermissionAuthorizationRead)" value="true" @(Model.Authorization.PermissionAuthorizationRead ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardAuthorizationUpdateCommand.PermissionAuthorizationUpdate)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardAuthorizationUpdateCommand.PermissionAuthorizationUpdate)" value="true" @(Model.Authorization.PermissionAuthorizationUpdate ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardAuthorizationUpdateCommand.PermissionAuthorizationDelete)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardAuthorizationUpdateCommand.PermissionAuthorizationDelete)" value="true" @(Model.Authorization.PermissionAuthorizationDelete ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardAuthorizationUpdateCommand.PermissionInvitationRead)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardAuthorizationUpdateCommand.PermissionInvitationRead)" value="true" @(Model.Authorization.PermissionInvitationRead ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardAuthorizationUpdateCommand.PermissionInvitationCreate)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardAuthorizationUpdateCommand.PermissionInvitationCreate)" value="true" @(Model.Authorization.PermissionInvitationCreate ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardAuthorizationUpdateCommand.PermissionInvitationUpdate)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardAuthorizationUpdateCommand.PermissionInvitationUpdate)" value="true" @(Model.Authorization.PermissionInvitationUpdate ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardAuthorizationUpdateCommand.PermissionInvitationDelete)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardAuthorizationUpdateCommand.PermissionInvitationDelete)" value="true" @(Model.Authorization.PermissionInvitationDelete ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardAuthorizationUpdateCommand.PermissionBoardView)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardAuthorizationUpdateCommand.PermissionBoardView)" value="true" @(Model.Authorization.PermissionBoardView ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardAuthorizationUpdateCommand.PermissionBoardUpdate)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardAuthorizationUpdateCommand.PermissionBoardUpdate)" value="true" @(Model.Authorization.PermissionBoardUpdate ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardAuthorizationUpdateCommand.PermissionBoardDelete)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardAuthorizationUpdateCommand.PermissionBoardDelete)" value="true" @(Model.Authorization.PermissionBoardDelete ? "checked" : "") />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>
+                    <button type="submit">Update @Model.Authorization.AuthorizationId</button>
+                </p>
+            </form>
+        </section>
+    </article>
+</main>

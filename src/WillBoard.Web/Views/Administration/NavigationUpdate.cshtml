@@ -1,0 +1,65 @@
+﻿@using Microsoft.AspNetCore.Routing
+@using WillBoard.Application.Administration.Commands.NavigationUpdate
+@using WillBoard.Application.Administration.Queries.NavigationUpdate
+@using WillBoard.Core.Entities
+@using WillBoard.Core.Enums
+@using WillBoard.Core.Managers
+@using WillBoard.Web.Services
+@using WillBoard.Core.Extensions
+@using WillBoard.Core.Utilities
+@inject LinkGenerator _linkGenerator
+@inject ViewService _viewService
+@inject AccountManager _accountManager
+@model NavigationUpdateViewModel
+@{
+    Layout = "~/Views/Shared/_AdministrationLayout.cshtml";
+}
+
+<main>
+    <article>
+        <header>Navigation - Update</header>
+        <section>
+            <form method="post">
+                <input type="hidden" name="csrf" value="@ViewData["csrf"]" autocomplete="off">
+                <input type="hidden" name="@nameof(NavigationUpdateCommand.NavigationId)" value="@Model.Navigation.NavigationId" autocomplete="off">
+                <table>
+                    <tbody>
+                        <tr>
+                            <th>@nameof(NavigationUpdateCommand.Priority)</th>
+                            <td>
+                                <input type="number" name="@nameof(NavigationUpdateCommand.Priority)" value="@Model.Navigation.Priority" required>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(NavigationUpdateCommand.Icon)</th>
+                            <td>
+                                <input type="text" name="@nameof(NavigationUpdateCommand.Icon)" value="@Model.Navigation.Icon" required>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(NavigationUpdateCommand.Name)</th>
+                            <td>
+                                <input type="text" name="@nameof(NavigationUpdateCommand.Name)" value="@Model.Navigation.Name" required>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(NavigationUpdateCommand.Url)</th>
+                            <td>
+                                <input type="text" name="@nameof(NavigationUpdateCommand.Url)" value="@Model.Navigation.Url" required>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(NavigationUpdateCommand.NewTab)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(NavigationUpdateCommand.NewTab)" value="true" @(Model.Navigation.Tab ? "checked" : "")>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>
+                    <button type="submit">Update @Model.Navigation.NavigationId</button>
+                </p>
+            </form>
+        </section>
+    </article>
+</main>

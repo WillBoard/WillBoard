@@ -1,0 +1,31 @@
+﻿@using Microsoft.AspNetCore.Routing
+@using WillBoard.Application.Administration.Commands.BoardPostDelete
+@using WillBoard.Application.Administration.Queries.BoardPostDelete
+@using WillBoard.Core.Managers
+@using WillBoard.Web.Services
+@using WillBoard.Core.Extensions
+@inject LinkGenerator _linkGenerator
+@inject ViewService _viewService
+@inject AccountManager _accountManager
+@model BoardPostDeleteViewModel
+@{
+    Layout = "~/Views/Shared/_AdministrationLayout.cshtml";
+}
+
+<main>
+    <article>
+        <header>Board - Post - Delete</header>
+        <section>
+
+            <form method="post">
+                <input type="hidden" name="csrf" value="@ViewData["csrf"]" autocomplete="off">
+                <input type="hidden" name="@nameof(BoardPostDeleteCommand.BoardId)" value="@Model.Post.BoardId" autocomplete="off">
+                <input type="hidden" name="@nameof(BoardPostDeleteCommand.PostId)" value="@Model.Post.PostId" autocomplete="off">
+                <p>
+                    <button type="submit">Delete @Model.Post.BoardId/@Model.Post.PostId post</button>
+                </p>
+            </form>
+
+        </section>
+    </article>
+</main>

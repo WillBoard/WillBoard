@@ -1,0 +1,411 @@
+﻿@font-face {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url(../font/roboto-regular.ttf);
+}
+
+@font-face {
+    font-family: 'Roboto';
+    font-style: italic;
+    font-weight: 400;
+    font-display: swap;
+    src: url(../font/roboto-italic.ttf);
+}
+
+@font-face {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url(../font/roboto-medium.ttf);
+}
+
+@font-face {
+    font-family: 'Roboto';
+    font-style: italic;
+    font-weight: 700;
+    font-display: swap;
+    src: url(../font/roboto-medium-italic.ttf);
+}
+
+@font-face {
+    font-family: 'Cascadia Mono';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url(../font/cascadia-mono.ttf);
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-size: 13px;
+    font-family: 'Roboto', sans-serif;
+    background-color: #f9f9f9;
+}
+
+a {
+    color: inherit;
+}
+
+body > sup {
+    display: block;
+    width: 0;
+    height: 0;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+    grid-area: top;
+}
+
+body > sub {
+    display: block;
+    width: 0;
+    height: 0;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+    grid-area: bottom;
+}
+
+main {
+    padding: 56px 16px 16px 336px;
+    display: grid;
+    row-gap: 16px;
+    column-gap: 16px;
+    justify-content: stretch;
+}
+
+body > nav {
+    background-color: #1b1b1b;
+    color: #fff;
+    width: 100%;
+    position: fixed;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    box-sizing: border-box;
+    top: 0;
+    line-height: 40px;
+}
+
+    body > nav > a {
+        color: inherit;
+        line-height: inherit;
+        text-decoration: none;
+        font-size: 13px;
+        margin: 0 8px;
+        padding: 0 8px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+
+    body > nav > input[type=checkbox][id=navigation] {
+        display: none;
+    }
+
+    body > nav > label {
+        cursor: pointer;
+        display: inline-block;
+    }
+
+    body > nav > section.navigation {
+        position: fixed;
+        /* background-color: #e6e6e6;*/
+        background-color: #f3f3f3;
+        color: #000;
+        left: 0;
+        top: 0;
+        padding-top: 0px;
+        min-width: 320px;
+        max-width: 320px;
+        margin-top: 40px;
+        max-height: calc(100% - 39px);
+        height: 100%;
+        box-sizing: border-box;
+        overflow-y: auto;
+        overflow-x: hidden;
+        display: none;
+        padding: 0;
+        user-select: none;
+        overflow-y: scroll;
+        border-right: 1px solid #e5e5e5;
+    }
+
+nav > section.navigation > h3 {
+    margin: 0;
+    padding: 0 16px;
+    font-size: 14px;
+    font-weight: normal;
+    color: #5c5c5c;
+}
+
+nav > section.navigation ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+    nav > section.navigation ul li {
+        width: 100%;
+        box-sizing: border-box;
+        position: relative;
+    }
+
+        nav > section.navigation ul li a,
+        nav > section.navigation ul li label {
+            display: flex;
+            font-size: 13px;
+            padding-left: 16px;
+            padding-right: 16px;
+            text-decoration: none;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+            nav > section.navigation ul li a:hover,
+            nav > section.navigation ul li label:hover {
+                background-color: #eaeaea;
+                cursor: pointer;
+            }
+
+            nav > section.navigation ul li label:after {
+                content: "↓";
+                position: absolute;
+                right: 16px;
+            }
+
+        nav > section.navigation ul li ul li a {
+            padding-left: 32px;
+        }
+
+nav > section.navigation > ul > li > input[type=checkbox][id|=board] {
+    display: none;
+}
+
+nav > section.navigation > ul > li > ul {
+    display: none;
+}
+
+nav > section.navigation > ul > li > input[type=checkbox][id|=board]:checked ~ ul {
+    display: inline-block;
+}
+
+nav > section.navigation > ul > li > input[type=checkbox][id|=board]:checked ~ label:after {
+    content: "↑";
+}
+
+body > nav > input[type=checkbox][id=navigation]:checked ~ section.navigation {
+    display: inline-block;
+}
+
+body > nav > input[type=checkbox][id=navigation] ~ section.navigation {
+    display: inline-block;
+}
+
+body > nav label {
+    padding: 0 8px;
+    display: none;
+}
+
+    body > nav label:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+
+body > nav > aside {
+    display: flex;
+    margin-left: auto;
+}
+
+article {
+    border-radius: 8px;
+    padding: 0;
+    border: 1px solid #eaeaea;
+    font-size: 13px;
+    line-height: 18px;
+    background-color: #fdfdfd;
+}
+
+    article header {
+        margin: 0;
+        padding: 16px;
+        color: #1a1a1a;
+        border-bottom: 1px solid #eaeaea;
+        font-size: 14px;
+        line-height: 20px;
+        font-weight: normal;
+        font-weight: 700;
+        /* background-color: #fff;*/
+    }
+
+    article footer {
+        margin: 0;
+        padding: 16px;
+        border-top: 1px solid #eaeaea;
+    }
+
+        article footer nav {
+            margin: 0;
+            padding: 0;
+        }
+
+            article footer nav a {
+                text-decoration: none;
+            }
+
+                article footer nav a:not([href]) {
+                    font-weight: bold;
+                }
+
+    article section {
+        padding: 16px;
+        display: grid;
+        row-gap: 16px;
+        column-gap: 16px;
+        justify-content: stretch;
+    }
+
+        article section form {
+            display: grid;
+            row-gap: 16px;
+            column-gap: 16px;
+            justify-content: stretch;
+        }
+
+        article section p {
+            margin: 0;
+            padding: 0;
+        }
+
+        article section h3 {
+            margin: 0;
+            padding: 0;
+            color: #1a1a1a;
+            font-size: 14px;
+            font-weight: normal;
+        }
+
+    article a {
+        text-decoration: underline;
+    }
+
+    article button {
+        margin: 0;
+        padding: 8px 16px;
+        border: 1px solid #e5e5e5;
+        background-color: #ffffff;
+        font-size: 13px;
+        line-height: 16px;
+        cursor: pointer;
+        user-select: none;
+        color: #000;
+        font-weight: bold;
+        outline: none;
+        height: 32px;
+        border-radius: 4px;
+        text-align: center;
+        display: inline-block;
+    }
+
+input[readonly] {
+    background-color: #e6e6e6;
+}
+
+article input,
+article select,
+article textarea {
+    box-sizing: border-box;
+    display: block;
+    border-radius: 4px;
+    border: 1px solid #e5e5e5;
+    font-family: 'Cascadia Mono', monospace;
+    outline: none;
+    font-size: 13px;
+    line-height: 18px;
+    display: inline-block;
+}
+
+    article input[type=text],
+    article input[type=number],
+    article input[type=password],
+    article select {
+        width: 100%;
+        min-height: 32px;
+        padding: 4px 8px;
+    }
+
+article textarea {
+    width: 100%;
+    max-width: 100%;
+    min-width: 100%;
+    height: 100%;
+    min-height: 80px;
+    padding: 4px 8px;
+    resize: vertical;
+    display: block;
+}
+
+article button:hover {
+    background-color: #e6e6e6;
+}
+
+article button:active {
+    background-color: #d3d3d3;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+td, th {
+    padding: 4px 8px 4px 8px;
+    color: #000;
+    border: 1px solid #e5e5e5;
+    vertical-align: middle;
+    position: relative;
+    word-break: break-word;
+}
+
+th {
+    background-color: #f3f3f3;
+    font-weight: normal;
+    padding: 8px 8px 8px 8px;
+    color: #5c5c5c;
+}
+
+table {
+    width: 100%;
+    margin: auto;
+    color: #000;
+}
+
+    table tr th {
+        width: 1%;
+        white-space: nowrap;
+    }
+
+td.link-action a {
+    display: block;
+}
+
+@media (max-width: 1024px) {
+    body > nav > label {
+        display: inline-block;
+    }
+
+    main {
+        padding: 56px 16px 16px 16px;
+    }
+
+    body > nav > input[type=checkbox][id=navigation] ~ section.navigation {
+        display: none;
+    }
+}

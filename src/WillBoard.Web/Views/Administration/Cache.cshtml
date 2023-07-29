@@ -1,0 +1,130 @@
+﻿@using Microsoft.AspNetCore.Routing
+@using WillBoard.Application.Administration.Queries.Cache
+@using WillBoard.Application.Administration.Commands.CacheClear
+@using WillBoard.Core.Entities
+@using WillBoard.Core.Managers
+@using WillBoard.Web.Services
+@using WillBoard.Core.Utilities
+@inject LinkGenerator _linkGenerator
+@inject ViewService _viewService
+@inject AccountManager _accountManager
+@model CacheViewModel
+@{
+    Layout = "~/Views/Shared/_AdministrationLayout.cshtml";
+}
+
+<main>
+    <article>
+        <header>Cache</header>
+        <section>
+            <form method="post" action="@_linkGenerator.GetPathByAction("CacheClear", "Administration")">
+                <input type="hidden" name="csrf" value="@ViewData["csrf"]" autocomplete="off">
+                <table>
+                    <tbody>
+                        <tr>
+                            <th>@nameof(CacheClearCommand.Account)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(CacheClearCommand.Account)" value="true">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(CacheClearCommand.Authentication)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(CacheClearCommand.Authentication)" value="true">
+                                <input type="text" name="@nameof(CacheClearCommand.AuthenticationAccountId)">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(CacheClearCommand.Authorization)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(CacheClearCommand.Authorization)" value="true">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(CacheClearCommand.BadIp)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(CacheClearCommand.BadIp)" value="true">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(CacheClearCommand.BanAppeal)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(CacheClearCommand.BanAppeal)" value="true">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(CacheClearCommand.Ban)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(CacheClearCommand.Ban)" value="true">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(CacheClearCommand.Board)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(CacheClearCommand.Board)" value="true">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(CacheClearCommand.Configuration)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(CacheClearCommand.Configuration)" value="true">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(CacheClearCommand.CountryIp)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(CacheClearCommand.CountryIp)" value="true">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(CacheClearCommand.Invitation)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(CacheClearCommand.Invitation)" value="true">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(CacheClearCommand.Navigation)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(CacheClearCommand.Navigation)" value="true">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(CacheClearCommand.Post)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(CacheClearCommand.Post)" value="true">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(CacheClearCommand.Report)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(CacheClearCommand.Report)" value="true">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(CacheClearCommand.Translation)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(CacheClearCommand.Translation)" value="true">
+                                <input type="text" name="@nameof(CacheClearCommand.TranslationLanguage)">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(CacheClearCommand.Verification)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(CacheClearCommand.Verification)" value="true">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(CacheClearCommand.BlockList)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(CacheClearCommand.BlockList)" value="true">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>
+                    <button type="submit">Clear</button>
+                </p>
+            </form>
+        </section>
+    </article>
+</main>

@@ -1,0 +1,51 @@
+﻿@using Microsoft.AspNetCore.Routing
+@using WillBoard.Application.Administration.Commands.ConfigurationUpdate
+@using WillBoard.Application.Administration.Queries.ConfigurationUpdate
+@using WillBoard.Core.Entities
+@using WillBoard.Core.Enums
+@using WillBoard.Core.Managers
+@using WillBoard.Web.Services
+@using WillBoard.Core.Extensions
+@using WillBoard.Core.Utilities
+@inject LinkGenerator _linkGenerator
+@inject ViewService _viewService
+@inject AccountManager _accountManager
+@model ConfigurationUpdateViewModel
+@{
+    Layout = "~/Views/Shared/_AdministrationLayout.cshtml";
+}
+
+<main>
+    <article>
+        <header>Configuration - Update</header>
+        <section>
+            <form method="post">
+                <input type="hidden" name="csrf" value="@ViewData["csrf"]" autocomplete="off">
+                <input type="hidden" name="@nameof(ConfigurationUpdateCommand.Key)" value="@Model.Configuration.Key" autocomplete="off">
+                <table>
+                    <tbody>
+                        <tr>
+                            <th>@nameof(ConfigurationUpdateCommand.Value)</th>
+                            <td>
+                                <textarea name="@nameof(ConfigurationUpdateCommand.Value)" required>@Model.Configuration.Value</textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(ConfigurationUpdateCommand.Type)</th>
+                            <td>
+                                <select name="@nameof(ConfigurationUpdateCommand.Type)" required>
+                                    <option value="@((int)ConfigurationType.Boolean)" @(Model.Configuration.Type == ConfigurationType.Boolean ? "selected" : "")>@ConfigurationType.Boolean</option>
+                                    <option value="@((int)ConfigurationType.String)" @(Model.Configuration.Type == ConfigurationType.String ? "selected" : "")>@ConfigurationType.String</option>
+                                    <option value="@((int)ConfigurationType.Integer)" @(Model.Configuration.Type == ConfigurationType.Integer ? "selected" : "")>@ConfigurationType.Integer</option>
+                                </select>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>
+                    <button type="submit">Update @Model.Configuration.Key</button>
+                </p>
+            </form>
+        </section>
+    </article>
+</main>

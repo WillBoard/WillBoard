@@ -1,0 +1,23 @@
+﻿@using WillBoard.Application.ViewModels
+@model ApplicationErrorViewModel
+@{
+    Layout = "~/Views/Shared/_ApplicationLayout.cshtml";
+}
+
+<main class="other">
+    <section>
+        <h1>Error @Model.Error.Status</h1>
+        @if (!string.IsNullOrEmpty(Model.Error.Message))
+        {
+            <p class="center">@Model.Error.Message</p>
+        }
+        @if (!string.IsNullOrEmpty(Model.Error.Message))
+        {
+            <p class="center"><small>(@Model.Error.Code)</small></p>
+        }
+    </section>
+</main>
+
+<footer>
+    @await Html.PartialAsync("~/Views/Shared/Footer/_ApplicationFooter.cshtml")
+</footer>

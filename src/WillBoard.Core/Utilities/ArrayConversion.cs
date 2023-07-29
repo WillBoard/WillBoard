@@ -1,0 +1,113 @@
+﻿using System;
+using System.Numerics;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using WillBoard.Core.Classes;
+using WillBoard.Core.Converters;
+
+namespace WillBoard.Core.Utilities
+{
+    public static class ArrayConversion
+    {
+        private static readonly JsonSerializerOptions JsonSerializerOptions = new JsonSerializerOptions()
+        {
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+            Converters =
+            {
+                new DateTimeJsonConverter(),
+                new BigIntegerJsonConverter()
+            }
+        };
+
+        public static string[] DeserializeString(string value)
+        {
+            if (value == null)
+            {
+                return Array.Empty<string>();
+            }
+
+            return JsonSerializer.Deserialize<string[]>(value, JsonSerializerOptions);
+        }
+
+        public static string SerializeString(string[] value)
+        {
+            return JsonSerializer.Serialize(value, JsonSerializerOptions);
+        }
+
+        public static BigInteger[] DeserializeBigInteger(string value)
+        {
+            if (value == null)
+            {
+                return Array.Empty<BigInteger>();
+            }
+
+            return JsonSerializer.Deserialize<BigInteger[]>(value, JsonSerializerOptions);
+        }
+
+        public static string SerializeBigInteger(BigInteger[] value)
+        {
+            return JsonSerializer.Serialize(value, JsonSerializerOptions);
+        }
+
+        public static UInt32[] DeserializeUInt32(string value)
+        {
+            if (value == null)
+            {
+                return Array.Empty<UInt32>();
+            }
+
+            return JsonSerializer.Deserialize<UInt32[]>(value, JsonSerializerOptions);
+        }
+
+        public static string SerializeUInt32(UInt32[] value)
+        {
+            return JsonSerializer.Serialize(value, JsonSerializerOptions);
+        }
+
+        public static BlockList[] DeserializeBlockList(string value)
+        {
+            if (value == null)
+            {
+                return Array.Empty<BlockList>();
+            }
+
+            return JsonSerializer.Deserialize<BlockList[]>(value, JsonSerializerOptions);
+        }
+
+        public static string SerializeBlockList(BlockList[] value)
+        {
+            return JsonSerializer.Serialize(value, JsonSerializerOptions);
+        }
+
+        public static CssTheme[] DeserializeCssTheme(string value)
+        {
+            if (value == null)
+            {
+                return Array.Empty<CssTheme>();
+            }
+
+            return JsonSerializer.Deserialize<CssTheme[]>(value, JsonSerializerOptions);
+        }
+
+        public static string SerializeCssTheme(CssTheme[] value)
+        {
+            return JsonSerializer.Serialize(value, JsonSerializerOptions);
+        }
+
+        public static MarkupCustom[] DeserializeMarkupCustom(string value)
+        {
+            if (value == null)
+            {
+                return Array.Empty<MarkupCustom>();
+            }
+
+            return JsonSerializer.Deserialize<MarkupCustom[]>(value, JsonSerializerOptions);
+        }
+
+        public static string SerializeMarkupCustom(MarkupCustom[] value)
+        {
+            return JsonSerializer.Serialize(value, JsonSerializerOptions);
+        }
+    }
+}

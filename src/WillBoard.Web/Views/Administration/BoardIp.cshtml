@@ -1,0 +1,81 @@
+﻿@using Microsoft.AspNetCore.Routing
+@using WillBoard.Application.Administration.Queries.BoardIp
+@using WillBoard.Core.Entities
+@using WillBoard.Web.Services
+@using WillBoard.Core.Extensions
+@using WillBoard.Core.Utilities
+@using WillBoard.Core.Managers
+@inject LinkGenerator _linkGenerator
+@inject ViewService _viewService
+@inject AccountManager _accountManager
+@model BoardIpViewModel
+@{
+    Layout = "~/Views/Shared/_AdministrationLayout.cshtml";
+}
+
+<main>
+    <article>
+        <header>Board - IP - Information</header>
+        <section>
+            <p>IP address: @IpConversion.IpNumberToIpAddressString(Model.IpVersion, Model.IpNumber)</p>
+            <p>IP version: @Model.IpVersion</p>
+            <p>IP number: @Model.IpNumber</p>
+            <p>DNS: @Model.Dns</p>
+            <p>Country: @Model.Country</p>
+        </section>
+    </article>
+    <article>
+        <header>Board - IP - Posts</header>
+        <section>
+            <table>
+                <tbody>
+                    <tr>
+                        <th>@nameof(Post.BoardId)</th>
+                        <th>@nameof(Post.ThreadId)</th>
+                        <th>@nameof(Post.PostId)</th>
+                        <th>@nameof(Post.UserAgent)</th>
+                        <th>@nameof(Post.Creation)</th>
+                        <th>@nameof(Post.Subject)</th>
+                        <th>@nameof(Post.Name)</th>
+                        <th>@nameof(Post.MessageDynamic)</th>
+                        <th>@nameof(Post.File)</th>
+                        <th>@nameof(Post.Password)</th>
+                        <th>Link action</th>
+                    </tr>
+                    @foreach (var post in Model.PostCollection)
+                    {
+                        <tr>
+                            <td><a href="@_linkGenerator.GetPathByAction("Board", "Administration", new { boardId = post.BoardId })">@post.BoardId</a></td>
+                            <td><a href="@_linkGenerator.GetPathByAction("BoardViewClassicThread", "Administration", new { boardId = post.BoardId, threadId = post.ThreadId == null ? post.PostId : post.ThreadId })">@(post.ThreadId == null ? post.PostId : post.ThreadId)</a></td>
+                            <td><a href="@_linkGenerator.GetPathByAction("BoardViewClassicThread", "Administration", new { boardId = post.BoardId, threadId = post.ThreadId == null ? post.PostId : post.ThreadId })@(post.ThreadId == null ? "" : $"#{post.PostId}")">@post.PostId</a></td>
+                            <td><p title="@post.UserAgent">@post.UserAgent.Substring(0, Math.Min(post.UserAgent.Length, 20))</p></td>
+                            <td>@post.Creation.ToRfc3339String()</td>
+                            <td>@post.Subject</td>
+                            <td>@post.Name</td>
+                            <td class="message">@Html.Raw(post.MessageDynamic)</td>
+                            <td class="file">
+                                @if (post.File)
+                                {
+                                    if (!post.FileDeleted)
+                                    {
+                                        <a class="file" title="@($@"{FormatUtility.FormatDataSize(post.FileSize)}{(post.FileWidth == 0 || post.FileHeight == 0 ? "" : $@" {post.FileWidth}x{post.FileHeight}")}{(post.FileDuration == 0 ? "" : $@" {post.FileDuration}s")} ""{post.FileNameOriginal}"" ({@post.FileMimeType})")" href="~/boards/@post.BoardId/source/@post.FileName">
+                                            <span>@post.FileNameOriginal.Substring(0, post.FileNameOriginal.LastIndexOf("."))</span><span>@post.FileNameOriginal.Substring(post.FileNameOriginal.LastIndexOf("."))</span>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a class="file">File deleted</a>
+                                    }
+                                }
+                            </td>
+                            <td>@post.Password</td>
+                            <td class="link-action">
+                                @await Html.PartialAsync("~/Views/Shared/Post/_AdministrationOptions.cshtml", post)
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </section>
+    </article>
+</main>

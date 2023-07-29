@@ -1,0 +1,53 @@
+﻿@using Microsoft.AspNetCore.Routing
+@using WillBoard.Application.Administration.Queries.Account
+@using WillBoard.Core.Entities
+@using WillBoard.Core.Enums
+@using WillBoard.Core.Managers
+@inject LinkGenerator _linkGenerator
+@inject AccountManager _accountManager
+@model AccountViewModel
+@{
+    Layout = "~/Views/Shared/_AdministrationLayout.cshtml";
+    var account = _accountManager.GetAccount();
+}
+
+<main>
+    <article>
+        <header>Account</header>
+        <section>
+            <table>
+                <tbody>
+                    <tr>
+                        <th>@nameof(Account.AccountId)</th>
+                        <th>@nameof(Account.Type)</th>
+                        <th>@nameof(Account.Active)</th>
+                        <th>Link action</th>
+                        <th>Quick action</th>
+                    </tr>
+                    <tr>
+                        <td>@Model.Account.AccountId</td>
+                        <td>@Model.Account.Type</td>
+                        <td>@Model.Account.Active</td>
+                        <td class="link-action">
+                            @if (account.Type == AccountType.Administrator)
+                            {
+                                <a href="@_linkGenerator.GetPathByAction("AccountUpdate", "Administration" , new { accountId = Model.Account.AccountId })">Update</a>
+                            }
+                            <a href="@_linkGenerator.GetPathByAction("AccountPasswordChange", "Administration" , new { accountId = Model.Account.AccountId })">Password - Change</a>
+                            <a href="@_linkGenerator.GetPathByAction("AccountAuthentications", "Administration" , new { accountId = Model.Account.AccountId })">Authentications</a>
+                            <a href="@_linkGenerator.GetPathByAction("AccountInvitations", "Administration" , new { accountId = Model.Account.AccountId })">Invitations</a>
+                        </td>
+                        <td>
+                            @if (account.AccountId == Model.Account.AccountId)
+                            {
+                                <form action="@_linkGenerator.GetPathByAction("Logout", "Administration")" method="post">
+                                    <button type="submit">Logout</button>
+                                </form>
+                            }
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </article>
+</main>

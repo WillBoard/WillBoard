@@ -1,0 +1,37 @@
+﻿@using Microsoft.AspNetCore.Routing;
+@using WillBoard.Application.Administration.Commands.BoardThreadBumpLock
+@using WillBoard.Web.Services;
+@using WillBoard.Core.Extensions;
+@inject LinkGenerator _linkGenerator
+@inject ViewService _viewService
+@inject WillBoard.Core.Managers.AccountManager _accountManager
+@model WillBoard.Application.Administration.Queries.BoardThreadBumpLock.BoardThreadBumpLockViewModel
+@{
+    Layout = "~/Views/Shared/_AdministrationLayout.cshtml";
+}
+
+<main>
+    <article>
+        <header>Board - Thread - Bump Lock</header>
+        <section>
+            <form method="post">
+                <input type="hidden" name="csrf" value="@ViewData["csrf"]" autocomplete="off">
+                <input type="hidden" name="@nameof(BoardThreadBumpLockCommand.BoardId)" value="@Model.Post.BoardId" autocomplete="off">
+                <input type="hidden" name="@nameof(BoardThreadBumpLockCommand.PostId)" value="@Model.Post.PostId" autocomplete="off">
+                <table>
+                    <tbody>
+                        <tr>
+                            <th>@nameof(BoardThreadBumpLockCommand.BumpLock)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardThreadBumpLockCommand.BumpLock)" value="true" @(Model.Post.BumpLock ? "checked" : "") />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>
+                    <button type="submit">Bump Lock @Model.Post.BoardId/@Model.Post.PostId</button>
+                </p>
+            </form>
+        </section>
+    </article>
+</main>

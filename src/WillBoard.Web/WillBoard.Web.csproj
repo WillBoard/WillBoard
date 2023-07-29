@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <RuntimeIdentifiers>win-x64;linux-x64;debian-x64</RuntimeIdentifiers>
+        <Nullable>disable</Nullable>
+        <ImplicitUsings>disable</ImplicitUsings>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\WillBoard.Core\WillBoard.Core.csproj" />
+        <ProjectReference Include="..\WillBoard.Application\WillBoard.Application.csproj" />
+        <ProjectReference Include="..\WillBoard.Infrastructure\WillBoard.Infrastructure.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="6.0.20" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Update="configuration.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <None Update="Assets\**">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
+
+</Project>

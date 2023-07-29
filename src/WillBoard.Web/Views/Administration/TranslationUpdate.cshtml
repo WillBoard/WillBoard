@@ -1,0 +1,42 @@
+﻿@using Microsoft.AspNetCore.Routing
+@using WillBoard.Application.Administration.Commands.TranslationUpdate
+@using WillBoard.Application.Administration.Queries.TranslationUpdate
+@using WillBoard.Core.Entities
+@using WillBoard.Core.Enums
+@using WillBoard.Core.Managers
+@using WillBoard.Web.Services
+@using WillBoard.Core.Extensions
+@using WillBoard.Core.Utilities
+@inject LinkGenerator _linkGenerator
+@inject ViewService _viewService
+@inject AccountManager _accountManager
+@model TranslationUpdateViewModel
+@{
+	Layout = "~/Views/Shared/_AdministrationLayout.cshtml";
+}
+
+<main>
+	<article>
+		<header>Translation - Update</header>
+		<section>
+			<form method="post">
+				<input type="hidden" name="csrf" value="@ViewData["csrf"]" autocomplete="off">
+				<input type="hidden" name="@nameof(TranslationUpdateCommand.Language)" value="@Model.Translation.Language" autocomplete="off">
+				<input type="hidden" name="@nameof(TranslationUpdateCommand.Key)" value="@Model.Translation.Key" autocomplete="off">
+				<table>
+					<tbody>
+						<tr>
+							<th>@nameof(TranslationUpdateCommand.Value)</th>
+							<td>
+								<textarea name="@nameof(TranslationUpdateCommand.Value)" required>@Model.Translation.Value</textarea>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<p>
+					<button type="submit">Update @Model.Translation.Language - @Model.Translation.Key</button>
+				</p>
+			</form>
+		</section>
+	</article>
+</main>

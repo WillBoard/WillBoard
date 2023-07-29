@@ -1,0 +1,39 @@
+﻿@using Microsoft.AspNetCore.Routing;
+@using WillBoard.Application.Administration.Commands.BoardThreadExcessive
+@using WillBoard.Application.Administration.Queries.BoardThreadExcessive
+@using WillBoard.Core.Managers
+@using WillBoard.Web.Services
+@using WillBoard.Core.Extensions
+@inject LinkGenerator _linkGenerator
+@inject ViewService _viewService
+@inject AccountManager _accountManager
+@model BoardThreadExcessiveViewModel
+@{
+    Layout = "~/Views/Shared/_AdministrationLayout.cshtml";
+}
+
+<main>
+    <article>
+        <header>Board - Thread - Excessive</header>
+        <section>
+            <form method="post">
+                <input type="hidden" name="csrf" value="@ViewData["csrf"]" autocomplete="off">
+                <input type="hidden" name="@nameof(BoardThreadExcessiveCommand.BoardId)" value="@Model.Post.BoardId" autocomplete="off">
+                <input type="hidden" name="@nameof(BoardThreadExcessiveCommand.PostId)" value="@Model.Post.PostId" autocomplete="off">
+                <table>
+                    <tbody>
+                        <tr>
+                            <th>@nameof(BoardThreadExcessiveCommand.Excessive)</th>
+                            <td>
+                                <input type="datetime-local" name="@nameof(BoardThreadExcessiveCommand.Excessive)" value="@Model.Post.Excessive?.ToIso8601String()" autocomplete="off">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>
+                    <button type="submit">Excessive @Model.Post.BoardId/@Model.Post.PostId</button>
+                </p>
+            </form>
+        </section>
+    </article>
+</main>

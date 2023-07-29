@@ -1,0 +1,109 @@
+﻿@using Microsoft.AspNetCore.Routing
+@using WillBoard.Application.ViewModels
+@using WillBoard.Core.Consts
+@using WillBoard.Core.Enums
+@using WillBoard.Core.Extensions
+@using WillBoard.Core.Interfaces.Services
+@using WillBoard.Core.Managers
+@using WillBoard.Core.Utilities
+@inject LinkGenerator _linkGenerator
+@inject AccountManager _accountManager
+@inject BoardManager _boardManager
+@inject ILocalizationService _localizationService
+@model ThreadViewModel
+@{
+    var board = _boardManager.GetBoard();
+    var permissionBoardView = _accountManager.CheckPermission(Model.Thread.BoardId, e => e.PermissionBoardView);
+    var report = await _localizationService.GetLocalizationAsync(board.Language, TranslationKey.Report);
+    var delete = await _localizationService.GetLocalizationAsync(board.Language, TranslationKey.Delete);
+    var reply = await _localizationService.GetLocalizationAsync(board.Language, TranslationKey.Reply);
+    var options = await _localizationService.GetLocalizationAsync(board.Language, TranslationKey.Options);
+    var replyOmitted = await _localizationService.GetLocalizationAsync(board.Language, TranslationKey.ReplyOmitted);
+    var repliesOmitted = await _localizationService.GetLocalizationAsync(board.Language, TranslationKey.RepliesOmitted);
+    var show = await _localizationService.GetLocalizationAsync(board.Language, TranslationKey.Show);
+}
+
+<article class="thread" data-boardid="@Model.Thread.BoardId" data-threadid="@Model.Thread.PostId" @(Model.Thread.Pin ? "data-pinned=true" : "") data-reply-count="@Model.Thread.ReplyCount">
+    <section class="thread" data-boardid="@Model.Thread.BoardId" data-postid="@Model.Thread.PostId" @(Model.BoardViewType == BoardViewType.ClassicThread ? $"id={Model.Thread.PostId}" : "")>
+        <div class="info">
+            <input type="checkbox" id="options-@(Model.Thread.BoardId + Model.Thread.PostId)">
+            <label for="options-@(Model.Thread.BoardId + Model.Thread.PostId)" title="@options"></label>
+            <aside class="options">
+                <a href="@_linkGenerator.GetPathByAction("Report", "Board", new { boardid = Model.Thread.BoardId, postid = Model.Thread.PostId })" target="_blank">@report</a>
+                <a href="@_linkGenerator.GetPathByAction("Delete", "Board", new { boardid = Model.Thread.BoardId, postid = Model.Thread.PostId })" target="_blank">@delete</a>
+            </aside>
+            @if (permissionBoardView)
+            {
+                <a title="@Model.Thread.UserAgent" href="@_linkGenerator.GetPathByAction("BoardIp", "Administration", new { boardId = Model.Thread.BoardId, ipVersion = (int)Model.Thread.IpVersion, ipNumber = Model.Thread.IpNumber })" class="ip">@IpConversion.IpNumberToIpAddressString(Model.Thread.IpVersion, Model.Thread.IpNumber)</a>
+                <input type="checkbox" id="administration-@(Model.Thread.BoardId + Model.Thread.PostId)">
+                <label for="administration-@(Model.Thread.BoardId + Model.Thread.PostId)"></label>
+                <aside class="administration">
+                    @await Html.PartialAsync("~/Views/Shared/Post/_AdministrationOptions.cshtml", Model.Thread)
+                </aside>
+            }
+            @if (!string.IsNullOrEmpty(Model.Thread.Subject))
+            {
+                <span class="subject">@Model.Thread.Subject</span>
+            }
+            <a class="name" @(string.IsNullOrEmpty(Model.Thread.Email) ? "" : $@"href=mailto:{Model.Thread.Email}")>@(string.IsNullOrEmpty(Model.Thread.Name) ? board.Anonymous : Model.Thread.Name)</a>
+            @if ((board.UserIdRequirement || Model.Thread.ForceUserId) && !string.IsNullOrEmpty(Model.Thread.UserId))
+            {
+                <span class="user-id">@Model.Thread.UserId</span>
+            }
+            @if ((board.CountryRequirement || Model.Thread.ForceCountry) && !string.IsNullOrEmpty(Model.Thread.Country))
+            {
+                <span class="country @Model.Thread.Country.ToLower()" title="@Model.Thread.Country"></span>
+            }
+            @await Html.PartialAsync("~/Views/Shared/Post/_FileInfo.cshtml", Model.Thread)
+            <time datetime="@Model.Thread.Creation.ToIso8601String()">@Model.Thread.CreationLocal.ToRfc3339String()</time>
+            <a href="@_linkGenerator.GetPathToClassicThread(Model.Thread.BoardId, Model.Thread.ThreadId, Model.Thread.PostId, AnchorType.Default, administration: permissionBoardView)">#</a>
+            <a class="reply" href="@_linkGenerator.GetPathToClassicThread(Model.Thread.BoardId, Model.Thread.ThreadId, Model.Thread.PostId, AnchorType.Reply, administration: permissionBoardView)">@Model.Thread.PostId</a>
+            <span class="reply-count icon-before">@Model.Thread.ReplyCount</span>
+            @await Html.PartialAsync("~/Views/Shared/Post/_ThreadIcons.cshtml", Model.Thread)
+            @if (Model.BoardViewType == BoardViewType.ClassicBoard)
+            {
+                <a class="button" href="@_linkGenerator.GetPathToClassicThread(Model.Thread.BoardId, Model.Thread.ThreadId, Model.Thread.PostId, AnchorType.None, administration: permissionBoardView)">@reply</a>
+            }
+            @if (Model.BoardViewType == BoardViewType.ClassicBoard && Model.Thread.ReplyCount > 50)
+            {
+                <a class="button last-replies" href="@_linkGenerator.GetPathToClassicThread(Model.Thread.BoardId, Model.Thread.ThreadId, Model.Thread.PostId, AnchorType.None, 50, permissionBoardView)">@reply (50)</a>
+            }
+            @if (Model.BoardViewType != BoardViewType.ClassicBoard)
+            {
+                @await Html.PartialAsync("~/Views/Shared/Post/_IncomingPostMentions.cshtml", Model.Thread)
+            }
+        </div>
+        <div class="content">
+            @await Html.PartialAsync("~/Views/Shared/Post/_FilePreview.cshtml", Model.Thread)
+            <div class="message">@Html.Raw(Model.Thread.MessageDynamic ?? "")</div>
+        </div>
+        @if (Model.BoardViewType == BoardViewType.ClassicBoard)
+        {
+            @if (Model.Thread.Pin)
+            {
+                @if (Model.Thread.ReplyCount - board.ThreadPinReplyPreviewMax > 0)
+                {
+                    <div class="replies-omitted"><span>@(Model.Thread.ReplyCount - board.ThreadPinReplyPreviewMax)</span><span>@(Model.Thread.ReplyCount - board.ThreadPinReplyPreviewMax > 1 ? repliesOmitted : replyOmitted).</span><a class="reply" href="@_linkGenerator.GetPathToClassicThread(Model.Thread.BoardId, Model.Thread.ThreadId, Model.Thread.PostId, AnchorType.None, administration: permissionBoardView)">@show</a></div>
+                }
+            }
+            else
+            {
+                @if (Model.Thread.ReplyCount - board.ThreadReplyPreviewMax > 0)
+                {
+                    <div class="replies-omitted"><span>@(Model.Thread.ReplyCount - board.ThreadReplyPreviewMax)</span><span>@(Model.Thread.ReplyCount - board.ThreadReplyPreviewMax > 1 ? repliesOmitted : replyOmitted).</span><a class="reply" href="@_linkGenerator.GetPathToClassicThread(Model.Thread.BoardId, Model.Thread.ThreadId, Model.Thread.PostId, AnchorType.None, administration: permissionBoardView)">@show</a></div>
+                }
+            }
+        }
+    </section>
+
+    @foreach (var postReply in Model.ReplyCollection)
+    {
+        @await Html.PartialAsync("~/Views/Shared/Main/_ClassicReply.cshtml", new WillBoard.Application.ViewModels.ReplyViewModel()
+        {
+            BoardViewType = Model.BoardViewType,
+            Title = Model.Title,
+            Thread = Model.Thread,
+            Reply = postReply
+        })
+    }
+</article>

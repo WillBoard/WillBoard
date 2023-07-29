@@ -1,0 +1,66 @@
+﻿@using Microsoft.AspNetCore.Routing
+@using WillBoard.Application.Administration.Queries.BoardAuthorizations
+@using WillBoard.Core.Entities
+@using WillBoard.Core.Extensions;
+@using WillBoard.Core.Managers
+@inject LinkGenerator _linkGenerator
+@inject AccountManager _accountManager
+@model BoardAuthorizationsViewModel
+@{
+    Layout = "~/Views/Shared/_AdministrationLayout.cshtml";
+}
+
+<main>
+    <article>
+        <header>Board - Authorizations</header>
+        <section>
+            <table>
+                <tbody>
+                    <tr>
+                        <th>@nameof(Authorization.AuthorizationId)</th>
+                        <th>@nameof(Authorization.Creation)</th>
+                        <th>@nameof(Authorization.BoardId)</th>
+                        <th>@nameof(Authorization.AccountId)</th>
+                        <th>@nameof(Authorization.Name)</th>
+                        <th>Link action</th>
+                    </tr>
+                    @foreach (var authorization in Model.AuthorizationCollection)
+                    {
+                        <tr>
+                            <td>@authorization.AuthorizationId</td>
+                            <td>@authorization.Creation.ToRfc3339String()</td>
+                            <td>@authorization.BoardId</td>
+                            <td>@authorization.AccountId</td>
+                            <td>@authorization.Name</td>
+                            <td class="link-action">
+                                @if (@_accountManager.CheckPermission(authorization.BoardId, e => e.PermissionAuthorizationUpdate))
+                                {
+                                    <a href="@_linkGenerator.GetPathByAction("BoardAuthorizationUpdate", "Administration", new { boardId = authorization.BoardId, authorizationId = authorization.AuthorizationId })">Update</a>
+                                }
+                                @if (@_accountManager.CheckPermission(authorization.BoardId, e => e.PermissionAuthorizationDelete))
+                                {
+                                    <a href="@_linkGenerator.GetPathByAction("BoardAuthorizationDelete", "Administration", new { boardId = authorization.BoardId, authorizationId = authorization.AuthorizationId })">Delete</a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </section>
+        <footer>
+            <nav>
+                @for (var i = 1; i <= Model.PageMax; i++)
+                {
+                    @if (i == Model.Page)
+                    {
+                        <a>@i</a>
+                    }
+                    else
+                    {
+                        <a href="@_linkGenerator.GetPathByAction("BoardAuthorizations", "Administration", new { page = i })">@i</a>
+                    }
+                }
+            </nav>
+        </footer>
+    </article>
+</main>

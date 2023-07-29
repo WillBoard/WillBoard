@@ -1,0 +1,46 @@
+﻿@using Microsoft.AspNetCore.Routing
+@using WillBoard.Application.Administration.Queries.Configurations
+@using WillBoard.Core.Entities
+@using WillBoard.Core.Managers
+@using WillBoard.Web.Services
+@using WillBoard.Core.Utilities
+@inject LinkGenerator _linkGenerator
+@inject ViewService _viewService
+@inject AccountManager _accountManager
+@model ConfigurationsViewModel
+@{
+    Layout = "~/Views/Shared/_AdministrationLayout.cshtml";
+}
+
+<main>
+    <article>
+        <header>Configurations</header>
+        <section>
+            <a href="@_linkGenerator.GetPathByAction("ConfigurationCreate", "Administration")">Create</a>
+        </section>
+        <section>
+            <table>
+                <tbody>
+                    <tr>
+                        <th>@nameof(Configuration.Key)</th>
+                        <th>@nameof(Configuration.Value)</th>
+                        <th>@nameof(Configuration.Type)</th>
+                        <th>Link action</th>
+                    </tr>
+                    @foreach (var configuration in Model.ConfigurationCollection)
+                    {
+                        <tr>
+                            <td>@configuration.Key</td>
+                            <td>@configuration.Value</td>
+                            <td>@configuration.Type</td>
+                            <td class="link-action">
+                                <a href="@_linkGenerator.GetPathByAction("ConfigurationUpdate", "Administration", new { key = configuration.Key })">Update</a>
+                                <a href="@_linkGenerator.GetPathByAction("ConfigurationDelete", "Administration", new { key = configuration.Key })">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </section>
+    </article>
+</main>

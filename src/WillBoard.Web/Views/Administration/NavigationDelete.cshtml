@@ -1,0 +1,27 @@
+﻿@using Microsoft.AspNetCore.Routing
+@using WillBoard.Application.Administration.Commands.NavigationDelete
+@using WillBoard.Application.Administration.Queries.NavigationDelete
+@using WillBoard.Core.Managers
+@using WillBoard.Web.Services
+@inject LinkGenerator _linkGenerator
+@inject ViewService _viewService
+@inject AccountManager _accountManager
+@model NavigationDeleteViewModel
+@{
+    Layout = "~/Views/Shared/_AdministrationLayout.cshtml";
+}
+
+<main>
+    <article>
+        <header>Navigation - Delete</header>
+        <section>
+            <form method="post">
+                <input type="hidden" name="csrf" value="@ViewData["csrf"]" autocomplete="off">
+                <input type="hidden" name="@nameof(NavigationDeleteCommand.NavigationId)" value="@Model.Navigation.NavigationId" autocomplete="off">
+                <p>
+                    <button type="submit">Delete @Model.Navigation.NavigationId</button>
+                </p>
+            </form>
+        </section>
+    </article>
+</main>

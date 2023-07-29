@@ -1,0 +1,63 @@
+﻿@using Microsoft.AspNetCore.Routing
+@using WillBoard.Application.Administration.Commands.BoardPostUpdate
+@using WillBoard.Application.Administration.Queries.BoardPostUpdate
+@using WillBoard.Core.Managers
+@using WillBoard.Web.Services
+@using WillBoard.Core.Extensions
+@inject LinkGenerator _linkGenerator
+@inject ViewService _viewService
+@inject AccountManager _accountManager
+@model BoardPostUpdateViewModel
+@{
+    Layout = "~/Views/Shared/_AdministrationLayout.cshtml";
+}
+
+<main>
+    <article>
+        <header>Board - Post - Update</header>
+        <section>
+            <form method="post">
+                <input type="hidden" name="csrf" value="@ViewData["csrf"]" autocomplete="off">
+                <input type="hidden" name="@nameof(BoardPostUpdateCommand.BoardId)" value="@Model.Post.BoardId" autocomplete="off">
+                <input type="hidden" name="@nameof(BoardPostUpdateCommand.PostId)" value="@Model.Post.PostId" autocomplete="off">
+                <table>
+                    <tbody>
+                        <tr>
+                            <th>@nameof(Model.Post.Subject)</th>
+                            <td>
+                                <input type="text" name="@nameof(BoardPostUpdateCommand.Subject)" value="@Model.Post.Subject">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(Model.Post.Name)</th>
+                            <td>
+                                <input type="text" name="@nameof(BoardPostUpdateCommand.Name)" value="@Model.Post.Name">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(Model.Post.Email)</th>
+                            <td>
+                                <input type="text" name="@nameof(BoardPostUpdateCommand.Email)" value="@Model.Post.Email">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(Model.Post.MessageRaw)</th>
+                            <td>
+                                <textarea name="@nameof(BoardPostUpdateCommand.Message)">@Model.Post.MessageRaw</textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(Model.Post.Password)</th>
+                            <td>
+                                <input type="text" name="@nameof(BoardPostUpdateCommand.Password)" value="@Model.Post.Password">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>
+                    <button type="submit">Update</button>
+                </p>
+            </form>
+        </section>
+    </article>
+</main>

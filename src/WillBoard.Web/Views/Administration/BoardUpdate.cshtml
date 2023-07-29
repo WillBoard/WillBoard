@@ -1,0 +1,1194 @@
+﻿@using Microsoft.AspNetCore.Routing;
+@using WillBoard.Application.Administration.Commands.BoardUpdate
+@using WillBoard.Application.Administration.Queries.BoardUpdate
+@using WillBoard.Core.Enums;
+@using WillBoard.Core.Managers
+@using WillBoard.Web.Services
+@using WillBoard.Core.Utilities
+@inject LinkGenerator _linkGenerator
+@inject ViewService _viewService
+@inject AccountManager _accountManager
+@model BoardUpdateViewModel
+@{
+    Layout = "~/Views/Shared/_AdministrationLayout.cshtml";
+}
+
+<main>
+    <article>
+        <header>Board - Update</header>
+        <section>
+            <form method="post">
+                <input type="hidden" name="csrf" value="@ViewData["csrf"]" autocomplete="off">
+                <h3>General</h3>
+                <table>
+                    <tbody>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.BoardId)</th>
+                            <td>
+                                <input type="text" name="@nameof(BoardUpdateCommand.BoardId)" value="@Model.Board.BoardId" readonly />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.Name)</th>
+                            <td>
+                                <input type="text" name="@nameof(BoardUpdateCommand.Name)" value="@Model.Board.Name" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.Availability)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardUpdateCommand.Availability)" value="true" @(Model.Board.Availability ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.Type)</th>
+                            <td>
+                                <select name="@nameof(BoardUpdateCommand.Type)">
+                                    <option value="0" @(Model.Board.Type == BoardType.Standard ? "selected" : "")>@BoardType.Standard</option>
+                                    <option value="1" @(Model.Board.Type == BoardType.Group ? "selected" : "")>@BoardType.Group</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                @nameof(BoardUpdateCommand.TypeGroupCollection)
+                                <code>button</code>
+                            </th>
+                            <td>
+                                <textarea name="@nameof(BoardUpdateCommand.TypeGroupCollection)">@ArrayConversion.SerializeString(Model.Board.TypeGroupCollection)</textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.Accessibility)</th>
+                            <td>
+                                <select name="@nameof(BoardUpdateCommand.Accessibility)">
+                                    <option value="0" @(Model.Board.Accessibility == BoardAccessibility.Public ? "selected" : "")>@BoardAccessibility.Public</option>
+                                    <option value="1" @(Model.Board.Accessibility == BoardAccessibility.Password ? "selected" : "")>@BoardAccessibility.Password</option>
+                                    <option value="2" @(Model.Board.Accessibility == BoardAccessibility.Ip ? "selected" : "")>@BoardAccessibility.Ip</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.AccessibilityPassword)</th>
+                            <td>
+                                <input type="text" name="@nameof(BoardUpdateCommand.AccessibilityPassword)" value="@Model.Board.AccessibilityPassword" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.AccessibilityIpVersion4NumberCollection)</th>
+                            <td>
+                                <textarea name="@nameof(BoardUpdateCommand.AccessibilityIpVersion4NumberCollection)">@ArrayConversion.SerializeUInt32(Model.Board.AccessibilityIpVersion4NumberCollection)</textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.AccessibilityIpVersion6NumberCollection)</th>
+                            <td>
+                                <textarea name="@nameof(BoardUpdateCommand.AccessibilityIpVersion6NumberCollection)">@ArrayConversion.SerializeBigInteger(Model.Board.AccessibilityIpVersion6NumberCollection)</textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.Visibility)</th>
+                            <td>
+                                <select name="@nameof(BoardUpdateCommand.Visibility)">
+                                    <option value="0" @(Model.Board.Visibility == BoardVisibility.Hidden ? "selected" : "")>@BoardVisibility.Hidden</option>
+                                    <option value="1" @(Model.Board.Visibility == BoardVisibility.Visible ? "selected" : "")>@BoardVisibility.Visible</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.Anonymous)</th>
+                            <td>
+                                <input type="text" name="@nameof(BoardUpdateCommand.Anonymous)" value="@Model.Board.Anonymous" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.Language)</th>
+                            <td>
+                                <input type="text" name="@nameof(BoardUpdateCommand.Language)" value="@Model.Board.Language" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.TimeZone)</th>
+                            <td>
+                                <select name="@nameof(BoardUpdateCommand.TimeZone)">
+                                    @foreach (TimeZoneInfo time in TimeZoneInfo.GetSystemTimeZones())
+                                    {
+                                        <option value="@time.Id" @(Model.Board.TimeZone == time.Id ? "selected" : "")>@time.Id (@time.BaseUtcOffset)</option>
+                                    }
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.OnlineCounterAvailability)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardUpdateCommand.OnlineCounterAvailability)" value="true" @(Model.Board.OnlineCounterAvailability ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.CssThemeCollection)</th>
+                            <td>
+                                <textarea name="@nameof(BoardUpdateCommand.CssThemeCollection)">@ArrayConversion.SerializeCssTheme(Model.Board.CssThemeCollection)</textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.CssInline)</th>
+                            <td>
+                                <textarea name="@nameof(BoardUpdateCommand.CssInline)">@Model.Board.CssInline</textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.CssExternalCollection)</th>
+                            <td>
+                                <textarea name="@nameof(BoardUpdateCommand.CssExternalCollection)">@ArrayConversion.SerializeString(Model.Board.CssExternalCollection)</textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.JsInline)</th>
+                            <td>
+                                <textarea name="@nameof(BoardUpdateCommand.JsInline)">@Model.Board.JsInline</textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.JsExternalCollection)</th>
+                            <td>
+                                <textarea name="@nameof(BoardUpdateCommand.JsExternalCollection)">@ArrayConversion.SerializeString(Model.Board.JsExternalCollection)</textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.InformationAside)</th>
+                            <td>
+                                <textarea name="@nameof(BoardUpdateCommand.InformationAside)">@Model.Board.InformationAside</textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.InformationHeader)</th>
+                            <td>
+                                <textarea name="@nameof(BoardUpdateCommand.InformationHeader)">@Model.Board.InformationHeader</textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.InformationFooter)</th>
+                            <td>
+                                <textarea name="@nameof(BoardUpdateCommand.InformationFooter)">@Model.Board.InformationFooter</textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.MarkupStaticCustomCollection)</th>
+                            <td>
+                                <textarea name="@nameof(BoardUpdateCommand.MarkupStaticCustomCollection)">@ArrayConversion.SerializeMarkupCustom(Model.Board.MarkupStaticCustomCollection)</textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.MarkupDynamicCustomCollection)</th>
+                            <td>
+                                <textarea name="@nameof(BoardUpdateCommand.MarkupDynamicCustomCollection)">@ArrayConversion.SerializeMarkupCustom(Model.Board.MarkupDynamicCustomCollection)</textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.UserIdRequirement)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardUpdateCommand.UserIdRequirement)" value="true" @(Model.Board.UserIdRequirement ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.CountryRequirement)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardUpdateCommand.CountryRequirement)" value="true" @(Model.Board.CountryRequirement ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.PageMax)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardUpdateCommand.PageMax)" value="@Model.Board.PageMax" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.PageThreadMax)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardUpdateCommand.PageThreadMax)" value="@Model.Board.PageThreadMax" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.PostAvailability)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardUpdateCommand.PostAvailability)" value="true" @(Model.Board.PostAvailability ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ThreadReplyPreviewMax)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardUpdateCommand.ThreadReplyPreviewMax)" value="@Model.Board.ThreadReplyPreviewMax" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ThreadPinReplyPreviewMax)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardUpdateCommand.ThreadPinReplyPreviewMax)" value="@Model.Board.ThreadPinReplyPreviewMax" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ThreadBumpLockReplyMax)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardUpdateCommand.ThreadBumpLockReplyMax)" value="@Model.Board.ThreadBumpLockReplyMax" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ThreadBumpLockTimeMax)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardUpdateCommand.ThreadBumpLockTimeMax)" value="@Model.Board.ThreadBumpLockTimeMax" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ThreadExcessiveTimeMax)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardUpdateCommand.ThreadExcessiveTimeMax)" value="@Model.Board.ThreadExcessiveTimeMax" />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <h3>Fields</h3>
+                <table>
+                    <tbody>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ReplyFieldNameAvailability)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardUpdateCommand.ReplyFieldNameAvailability)" value="true" @(Model.Board.ReplyFieldNameAvailability ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ReplyFieldNameRequirement)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardUpdateCommand.ReplyFieldNameRequirement)" value="true" @(Model.Board.ReplyFieldNameRequirement ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ReplyFieldNameLengthMin)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardUpdateCommand.ReplyFieldNameLengthMin)" value="@Model.Board.ReplyFieldNameLengthMin" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ReplyFieldNameLengthMax)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardUpdateCommand.ReplyFieldNameLengthMax)" value="@Model.Board.ReplyFieldNameLengthMax" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ThreadFieldNameAvailability)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardUpdateCommand.ThreadFieldNameAvailability)" value="true" @(Model.Board.ThreadFieldNameAvailability ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ThreadFieldNameRequirement)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardUpdateCommand.ThreadFieldNameRequirement)" value="true" @(Model.Board.ThreadFieldNameRequirement ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ThreadFieldNameLengthMin)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardUpdateCommand.ThreadFieldNameLengthMin)" value="@Model.Board.ThreadFieldNameLengthMin" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ThreadFieldNameLengthMax)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardUpdateCommand.ThreadFieldNameLengthMax)" value="@Model.Board.ThreadFieldNameLengthMax" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ReplyFieldEmailAvailability)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardUpdateCommand.ReplyFieldEmailAvailability)" value="true" @(Model.Board.ReplyFieldEmailAvailability ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ReplyFieldEmailRequirement)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardUpdateCommand.ReplyFieldEmailRequirement)" value="true" @(Model.Board.ReplyFieldEmailRequirement ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ReplyFieldEmailLengthMin)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardUpdateCommand.ReplyFieldEmailLengthMin)" value="@Model.Board.ReplyFieldEmailLengthMin" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ReplyFieldEmailLengthMax)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardUpdateCommand.ReplyFieldEmailLengthMax)" value="@Model.Board.ReplyFieldEmailLengthMax" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ThreadFieldEmailAvailability)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardUpdateCommand.ThreadFieldEmailAvailability)" value="true" @(Model.Board.ThreadFieldEmailAvailability ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ThreadFieldEmailRequirement)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardUpdateCommand.ThreadFieldEmailRequirement)" value="true" @(Model.Board.ThreadFieldEmailRequirement ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ThreadFieldEmailLengthMin)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardUpdateCommand.ThreadFieldEmailLengthMin)" value="@Model.Board.ThreadFieldEmailLengthMin" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ThreadFieldEmailLengthMax)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardUpdateCommand.ThreadFieldEmailLengthMax)" value="@Model.Board.ThreadFieldEmailLengthMax" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ReplyFieldSubjectAvailability)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardUpdateCommand.ReplyFieldSubjectAvailability)" value="true" @(Model.Board.ReplyFieldSubjectAvailability ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ReplyFieldSubjectRequirement)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardUpdateCommand.ReplyFieldSubjectRequirement)" value="true" @(Model.Board.ReplyFieldSubjectRequirement ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ReplyFieldSubjectLengthMin)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardUpdateCommand.ReplyFieldSubjectLengthMin)" value="@Model.Board.ReplyFieldSubjectLengthMin" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ReplyFieldSubjectLengthMax)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardUpdateCommand.ReplyFieldSubjectLengthMax)" value="@Model.Board.ReplyFieldSubjectLengthMax" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ThreadFieldSubjectAvailability)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardUpdateCommand.ThreadFieldSubjectAvailability)" value="true" @(Model.Board.ThreadFieldSubjectAvailability ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ThreadFieldSubjectRequirement)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardUpdateCommand.ThreadFieldSubjectRequirement)" value="true" @(Model.Board.ThreadFieldSubjectRequirement ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ThreadFieldSubjectLengthMin)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardUpdateCommand.ThreadFieldSubjectLengthMin)" value="@Model.Board.ThreadFieldSubjectLengthMin" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ThreadFieldSubjectLengthMax)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardUpdateCommand.ThreadFieldSubjectLengthMax)" value="@Model.Board.ThreadFieldSubjectLengthMax" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ReplyFieldMessageAvailability)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardUpdateCommand.ReplyFieldMessageAvailability)" value="true" @(Model.Board.ReplyFieldMessageAvailability ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ReplyFieldMessageRequirement)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardUpdateCommand.ReplyFieldMessageRequirement)" value="true" @(Model.Board.ReplyFieldMessageRequirement ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ReplyFieldMessageLengthMin)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardUpdateCommand.ReplyFieldMessageLengthMin)" value="@Model.Board.ReplyFieldMessageLengthMin" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ReplyFieldMessageLengthMax)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardUpdateCommand.ReplyFieldMessageLengthMax)" value="@Model.Board.ReplyFieldMessageLengthMax" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ReplyFieldMessageLineMax)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardUpdateCommand.ReplyFieldMessageLineMax)" value="@Model.Board.ReplyFieldMessageLineMax" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ReplyFieldMessageLinkMax)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardUpdateCommand.ReplyFieldMessageLinkMax)" value="@Model.Board.ReplyFieldMessageLinkMax" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ReplyFieldMessageMentionMax)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardUpdateCommand.ReplyFieldMessageMentionMax)" value="@Model.Board.ReplyFieldMessageMentionMax" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ThreadFieldMessageAvailability)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardUpdateCommand.ThreadFieldMessageAvailability)" value="true" @(Model.Board.ThreadFieldMessageAvailability ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ThreadFieldMessageRequirement)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardUpdateCommand.ThreadFieldMessageRequirement)" value="true" @(Model.Board.ThreadFieldMessageRequirement ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ThreadFieldMessageLengthMin)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardUpdateCommand.ThreadFieldMessageLengthMin)" value="@Model.Board.ThreadFieldMessageLengthMin" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ThreadFieldMessageLengthMax)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardUpdateCommand.ThreadFieldMessageLengthMax)" value="@Model.Board.ThreadFieldMessageLengthMax" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ThreadFieldMessageLineMax)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardUpdateCommand.ThreadFieldMessageLineMax)" value="@Model.Board.ThreadFieldMessageLineMax" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ThreadFieldMessageLinkMax)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardUpdateCommand.ThreadFieldMessageLinkMax)" value="@Model.Board.ThreadFieldMessageLinkMax" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ThreadFieldMessageMentionMax)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardUpdateCommand.ThreadFieldMessageMentionMax)" value="@Model.Board.ThreadFieldMessageMentionMax" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ReplyFieldFileAvailability)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardUpdateCommand.ReplyFieldFileAvailability)" value="true" @(Model.Board.ReplyFieldFileAvailability ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ReplyFieldFileRequirement)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardUpdateCommand.ReplyFieldFileRequirement)" value="true" @(Model.Board.ReplyFieldFileRequirement ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ReplyFieldFileSizeMin)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardUpdateCommand.ReplyFieldFileSizeMin)" value="@Model.Board.ReplyFieldFileSizeMin" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ReplyFieldFileSizeMax)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardUpdateCommand.ReplyFieldFileSizeMax)" value="@Model.Board.ReplyFieldFileSizeMax" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ReplyFieldFileOriginality)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardUpdateCommand.ReplyFieldFileOriginality)" value="true" @(Model.Board.ReplyFieldFileOriginality ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ReplyFieldFileTypeCollection)</th>
+                            <td>
+                                <textarea name="ReplyFieldFileTypeCollection">@ArrayConversion.SerializeString(Model.Board.ReplyFieldFileTypeCollection)</textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ReplyFieldFileImageWidthMin)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardUpdateCommand.ReplyFieldFileImageWidthMin)" value="@Model.Board.ReplyFieldFileImageWidthMin" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ReplyFieldFileImageWidthMax)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardUpdateCommand.ReplyFieldFileImageWidthMax)" value="@Model.Board.ReplyFieldFileImageWidthMax" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ReplyFieldFileImageHeightMin)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardUpdateCommand.ReplyFieldFileImageHeightMin)" value="@Model.Board.ReplyFieldFileImageHeightMin" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ReplyFieldFileImageHeightMax)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardUpdateCommand.ReplyFieldFileImageHeightMax)" value="@Model.Board.ReplyFieldFileImageHeightMax" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ReplyFieldFileVideoWidthMin)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardUpdateCommand.ReplyFieldFileVideoWidthMin)" value="@Model.Board.ReplyFieldFileVideoWidthMin" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ReplyFieldFileVideoWidthMax)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardUpdateCommand.ReplyFieldFileVideoWidthMax)" value="@Model.Board.ReplyFieldFileVideoWidthMax" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ReplyFieldFileVideoHeightMax)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardUpdateCommand.ReplyFieldFileVideoHeightMax)" value="@Model.Board.ReplyFieldFileVideoHeightMax" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ReplyFieldFileVideoHeightMin)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardUpdateCommand.ReplyFieldFileVideoHeightMin)" value="@Model.Board.ReplyFieldFileVideoHeightMin" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ReplyFieldFileVideoDurationMin)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardUpdateCommand.ReplyFieldFileVideoDurationMin)" value="@Model.Board.ReplyFieldFileVideoDurationMin" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ReplyFieldFileVideoDurationMax)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardUpdateCommand.ReplyFieldFileVideoDurationMax)" value="@Model.Board.ReplyFieldFileVideoDurationMax" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ReplyFieldFileAudioDurationMin)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardUpdateCommand.ReplyFieldFileAudioDurationMin)" value="@Model.Board.ReplyFieldFileAudioDurationMin" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ReplyFieldFileAudioDurationMax)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardUpdateCommand.ReplyFieldFileAudioDurationMax)" value="@Model.Board.ReplyFieldFileAudioDurationMax" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ReplyFilePreviewWidthMax)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardUpdateCommand.ReplyFilePreviewWidthMax)" value="@Model.Board.ReplyFilePreviewWidthMax" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ReplyFilePreviewHeightMax)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardUpdateCommand.ReplyFilePreviewHeightMax)" value="@Model.Board.ReplyFilePreviewHeightMax" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ThreadFieldFileAvailability)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardUpdateCommand.ThreadFieldFileAvailability)" value="true" @(Model.Board.ThreadFieldFileAvailability ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ThreadFieldFileRequirement)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardUpdateCommand.ThreadFieldFileRequirement)" value="true" @(Model.Board.ThreadFieldFileRequirement ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ThreadFieldFileSizeMin)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardUpdateCommand.ThreadFieldFileSizeMin)" value="@Model.Board.ThreadFieldFileSizeMin" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ThreadFieldFileSizeMax)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardUpdateCommand.ThreadFieldFileSizeMax)" value="@Model.Board.ThreadFieldFileSizeMax" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ThreadFieldFileOriginality)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardUpdateCommand.ThreadFieldFileOriginality)" value="true" @(Model.Board.ThreadFieldFileOriginality ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ThreadFieldFileTypeCollection)</th>
+                            <td>
+                                <textarea name="ThreadFieldFileTypeCollection">@ArrayConversion.SerializeString(Model.Board.ThreadFieldFileTypeCollection)</textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ThreadFieldFileImageWidthMin)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardUpdateCommand.ThreadFieldFileImageWidthMin)" value="@Model.Board.ThreadFieldFileImageWidthMin" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ThreadFieldFileImageWidthMax)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardUpdateCommand.ThreadFieldFileImageWidthMax)" value="@Model.Board.ThreadFieldFileImageWidthMax" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ThreadFieldFileImageHeightMin)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardUpdateCommand.ThreadFieldFileImageHeightMin)" value="@Model.Board.ThreadFieldFileImageHeightMin" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ThreadFieldFileImageHeightMax)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardUpdateCommand.ThreadFieldFileImageHeightMax)" value="@Model.Board.ThreadFieldFileImageHeightMax" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ThreadFieldFileVideoWidthMin)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardUpdateCommand.ThreadFieldFileVideoWidthMin)" value="@Model.Board.ThreadFieldFileVideoWidthMin" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ThreadFieldFileVideoWidthMax)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardUpdateCommand.ThreadFieldFileVideoWidthMax)" value="@Model.Board.ThreadFieldFileVideoWidthMax" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ThreadFieldFileVideoHeightMax)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardUpdateCommand.ThreadFieldFileVideoHeightMax)" value="@Model.Board.ThreadFieldFileVideoHeightMax" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ThreadFieldFileVideoHeightMin)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardUpdateCommand.ThreadFieldFileVideoHeightMin)" value="@Model.Board.ThreadFieldFileVideoHeightMin" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ThreadFieldFileVideoDurationMin)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardUpdateCommand.ThreadFieldFileVideoDurationMin)" value="@Model.Board.ThreadFieldFileVideoDurationMin" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ThreadFieldFileVideoDurationMax)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardUpdateCommand.ThreadFieldFileVideoDurationMax)" value="@Model.Board.ThreadFieldFileVideoDurationMax" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ThreadFieldFileAudioDurationMin)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardUpdateCommand.ThreadFieldFileAudioDurationMin)" value="@Model.Board.ThreadFieldFileAudioDurationMin" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ThreadFieldFileAudioDurationMax)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardUpdateCommand.ThreadFieldFileAudioDurationMax)" value="@Model.Board.ThreadFieldFileAudioDurationMax" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ThreadFilePreviewWidthMax)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardUpdateCommand.ThreadFilePreviewWidthMax)" value="@Model.Board.ThreadFilePreviewWidthMax" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ThreadFilePreviewHeightMax)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardUpdateCommand.ThreadFilePreviewHeightMax)" value="@Model.Board.ThreadFilePreviewHeightMax" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ReplyFieldOptionSpoilerAvailability)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardUpdateCommand.ReplyFieldOptionSpoilerAvailability)" value="true" @(Model.Board.ReplyFieldOptionSpoilerAvailability ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ReplyFieldOptionSageAvailability)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardUpdateCommand.ReplyFieldOptionSageAvailability)" value="true" @(Model.Board.ReplyFieldOptionSageAvailability ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ThreadFieldOptionSpoilerAvailability)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardUpdateCommand.ThreadFieldOptionSpoilerAvailability)" value="true" @(Model.Board.ThreadFieldOptionSpoilerAvailability ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ThreadFieldOptionSageAvailability)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardUpdateCommand.ThreadFieldOptionSageAvailability)" value="true" @(Model.Board.ThreadFieldOptionSageAvailability ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ThreadFieldOptionUserIdAvailability)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardUpdateCommand.ThreadFieldOptionUserIdAvailability)" value="true" @(Model.Board.ThreadFieldOptionUserIdAvailability ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ThreadFieldOptionCountryAvailability)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardUpdateCommand.ThreadFieldOptionCountryAvailability)" value="true" @(Model.Board.ThreadFieldOptionCountryAvailability ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ReplyFieldPasswordAvailability)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardUpdateCommand.ReplyFieldPasswordAvailability)" value="true" @(Model.Board.ReplyFieldPasswordAvailability ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ReplyFieldPasswordRequirement)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardUpdateCommand.ReplyFieldPasswordRequirement)" value="true" @(Model.Board.ReplyFieldPasswordRequirement ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ReplyFieldPasswordLengthMin)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardUpdateCommand.ReplyFieldPasswordLengthMin)" value="@Model.Board.ReplyFieldPasswordLengthMin" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ReplyFieldPasswordLengthMax)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardUpdateCommand.ReplyFieldPasswordLengthMax)" value="@Model.Board.ReplyFieldPasswordLengthMax" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ThreadFieldPasswordAvailability)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardUpdateCommand.ThreadFieldPasswordAvailability)" value="true" @(Model.Board.ThreadFieldPasswordAvailability ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ThreadFieldPasswordRequirement)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardUpdateCommand.ThreadFieldPasswordRequirement)" value="true" @(Model.Board.ThreadFieldPasswordRequirement ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ThreadFieldPasswordLengthMin)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardUpdateCommand.ThreadFieldPasswordLengthMin)" value="@Model.Board.ThreadFieldPasswordLengthMin" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ThreadFieldPasswordLengthMax)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardUpdateCommand.ThreadFieldPasswordLengthMax)" value="@Model.Board.ThreadFieldPasswordLengthMax" />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <h3>Actions</h3>
+                <table>
+                    <tbody>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ReplyTimeMin)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardUpdateCommand.ReplyTimeMin)" value="@Model.Board.ReplyTimeMin" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ThreadTimeMin)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardUpdateCommand.ThreadTimeMin)" value="@Model.Board.ThreadTimeMin" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ReplyDeleteAvailability)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardUpdateCommand.ReplyDeleteAvailability)" value="true" @(Model.Board.ReplyDeleteAvailability ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ReplyDeleteTimeMin)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardUpdateCommand.ReplyDeleteTimeMin)" value="@Model.Board.ReplyDeleteTimeMin" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ReplyDeleteTimeMax)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardUpdateCommand.ReplyDeleteTimeMax)" value="@Model.Board.ReplyDeleteTimeMax" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ThreadDeleteAvailability)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardUpdateCommand.ThreadDeleteAvailability)" value="true" @(Model.Board.ThreadDeleteAvailability ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ThreadDeleteTimeMin)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardUpdateCommand.ThreadDeleteTimeMin)" value="@Model.Board.ThreadDeleteTimeMin" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ThreadDeleteTimeMax)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardUpdateCommand.ThreadDeleteTimeMax)" value="@Model.Board.ThreadDeleteTimeMax" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ReplyFileDeleteAvailability)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardUpdateCommand.ReplyFileDeleteAvailability)" value="true" @(Model.Board.ReplyFileDeleteAvailability ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ReplyFileDeleteTimeMin)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardUpdateCommand.ReplyFileDeleteTimeMin)" value="@Model.Board.ReplyFileDeleteTimeMin" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ReplyFileDeleteTimeMax)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardUpdateCommand.ReplyFileDeleteTimeMax)" value="@Model.Board.ReplyFileDeleteTimeMax" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ThreadFileDeleteAvailability)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardUpdateCommand.ThreadFileDeleteAvailability)" value="true" @(Model.Board.ThreadFileDeleteAvailability ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ThreadFileDeleteTimeMin)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardUpdateCommand.ThreadFileDeleteTimeMin)" value="@Model.Board.ThreadFileDeleteTimeMin" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ThreadFileDeleteTimeMax)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardUpdateCommand.ThreadFileDeleteTimeMax)" value="@Model.Board.ThreadFileDeleteTimeMax" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ReportBoardAvailability)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardUpdateCommand.ReportBoardAvailability)" value="true" @(Model.Board.ReportBoardAvailability ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ReportBoardLengthMin)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardUpdateCommand.ReportBoardLengthMin)" value="@Model.Board.ReportBoardLengthMin" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ReportBoardLengthMax)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardUpdateCommand.ReportBoardLengthMax)" value="@Model.Board.ReportBoardLengthMax" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ReportBoardIpMax)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardUpdateCommand.ReportBoardIpMax)" value="@Model.Board.ReportBoardIpMax" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ReportBoardTimeMin)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardUpdateCommand.ReportBoardTimeMin)" value="@Model.Board.ReportBoardTimeMin" />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <h3>Security</h3>
+                <table>
+                    <tbody>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.CountryIpVersion4BlockAvailability)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardUpdateCommand.CountryIpVersion4BlockAvailability)" value="true" @(Model.Board.CountryIpVersion4BlockAvailability ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.CountryIpVersion4BlockCollection)</th>
+                            <td>
+                                <textarea name="@nameof(BoardUpdateCommand.CountryIpVersion4BlockCollection)">@ArrayConversion.SerializeString(Model.Board.CountryIpVersion4BlockCollection)</textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.CountryIpVersion4ExclusionIpNumberCollection)</th>
+                            <td>
+                                <textarea name="@nameof(BoardUpdateCommand.CountryIpVersion4ExclusionIpNumberCollection)">@ArrayConversion.SerializeUInt32(Model.Board.CountryIpVersion4ExclusionIpNumberCollection)</textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.CountryIpVersion6BlockAvailability)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardUpdateCommand.CountryIpVersion6BlockAvailability)" value="true" @(Model.Board.CountryIpVersion6BlockAvailability ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.CountryIpVersion6BlockCollection)</th>
+                            <td>
+                                <textarea name="@nameof(BoardUpdateCommand.CountryIpVersion6BlockCollection)">@ArrayConversion.SerializeString(Model.Board.CountryIpVersion6BlockCollection)</textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.CountryIpVersion6ExclusionIpNumberCollection)</th>
+                            <td>
+                                <textarea name="@nameof(BoardUpdateCommand.CountryIpVersion6ExclusionIpNumberCollection)">@ArrayConversion.SerializeBigInteger(Model.Board.CountryIpVersion6ExclusionIpNumberCollection)</textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.BadIpVersion4BlockAvailability)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardUpdateCommand.BadIpVersion4BlockAvailability)" value="true" @(Model.Board.BadIpVersion4BlockAvailability ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.BadIpVersion4BlockExclusionIpNumberCollection)</th>
+                            <td>
+                                <textarea name="@nameof(BoardUpdateCommand.BadIpVersion4BlockExclusionIpNumberCollection)">@ArrayConversion.SerializeUInt32(Model.Board.BadIpVersion4BlockExclusionIpNumberCollection)</textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.BadIpVersion6BlockAvailability)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardUpdateCommand.BadIpVersion6BlockAvailability)" value="true" @(Model.Board.BadIpVersion6BlockAvailability ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.BadIpVersion6BlockExclusionIpNumberCollection)</th>
+                            <td>
+                                <textarea name="@nameof(BoardUpdateCommand.BadIpVersion6BlockExclusionIpNumberCollection)">@ArrayConversion.SerializeBigInteger(Model.Board.BadIpVersion6BlockExclusionIpNumberCollection)</textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.DnsBlockListIpVersion4Availability)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardUpdateCommand.DnsBlockListIpVersion4Availability)" value="true" @(Model.Board.DnsBlockListIpVersion4Availability ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.DnsBlockListIpVersion4Cache)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardUpdateCommand.DnsBlockListIpVersion4Cache)" value="true" @(Model.Board.DnsBlockListIpVersion4Cache ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.DnsBlockListIpVersion4Collection)</th>
+                            <td>
+                                <textarea name="@nameof(BoardUpdateCommand.DnsBlockListIpVersion4Collection)">@ArrayConversion.SerializeBlockList(Model.Board.DnsBlockListIpVersion4Collection)</textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.DnsBlockListIpVersion4ExclusionIpNumberCollection)</th>
+                            <td>
+                                <textarea name="@nameof(BoardUpdateCommand.DnsBlockListIpVersion4ExclusionIpNumberCollection)">@ArrayConversion.SerializeUInt32(Model.Board.DnsBlockListIpVersion4ExclusionIpNumberCollection)</textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.DnsBlockListIpVersion6Availability)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardUpdateCommand.DnsBlockListIpVersion6Availability)" value="true" @(Model.Board.DnsBlockListIpVersion6Availability ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.DnsBlockListIpVersion6Cache)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardUpdateCommand.DnsBlockListIpVersion6Cache)" value="true" @(Model.Board.DnsBlockListIpVersion6Cache ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.DnsBlockListIpVersion6Collection)</th>
+                            <td>
+                                <textarea name="@nameof(BoardUpdateCommand.DnsBlockListIpVersion6Collection)">@ArrayConversion.SerializeBlockList(Model.Board.DnsBlockListIpVersion6Collection)</textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.DnsBlockListIpVersion6ExclusionIpNumberCollection)</th>
+                            <td>
+                                <textarea name="@nameof(BoardUpdateCommand.DnsBlockListIpVersion6ExclusionIpNumberCollection)">@ArrayConversion.SerializeBigInteger(Model.Board.DnsBlockListIpVersion6ExclusionIpNumberCollection)</textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ApiBlockListIpVersion4Availability)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardUpdateCommand.ApiBlockListIpVersion4Availability)" value="true" @(Model.Board.ApiBlockListIpVersion4Availability ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ApiBlockListIpVersion4Cache)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardUpdateCommand.ApiBlockListIpVersion4Cache)" value="true" @(Model.Board.ApiBlockListIpVersion4Cache ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ApiBlockListIpVersion4Collection)</th>
+                            <td>
+                                <textarea name="@nameof(BoardUpdateCommand.ApiBlockListIpVersion4Collection)">@ArrayConversion.SerializeBlockList(Model.Board.ApiBlockListIpVersion4Collection)</textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ApiBlockListIpVersion4ExclusionIpNumberCollection)</th>
+                            <td>
+                                <textarea name="@nameof(BoardUpdateCommand.ApiBlockListIpVersion4ExclusionIpNumberCollection)">@ArrayConversion.SerializeUInt32(Model.Board.ApiBlockListIpVersion4ExclusionIpNumberCollection)</textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ApiBlockListIpVersion6Availability)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardUpdateCommand.ApiBlockListIpVersion6Availability)" value="true" @(Model.Board.ApiBlockListIpVersion6Availability ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ApiBlockListIpVersion6Cache)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardUpdateCommand.ApiBlockListIpVersion6Cache)" value="true" @(Model.Board.ApiBlockListIpVersion6Cache ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ApiBlockListIpVersion6Collection)</th>
+                            <td>
+                                <textarea name="@nameof(BoardUpdateCommand.ApiBlockListIpVersion6Collection)">@ArrayConversion.SerializeBlockList(Model.Board.ApiBlockListIpVersion6Collection)</textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ApiBlockListIpVersion6ExclusionIpNumberCollection)</th>
+                            <td>
+                                <textarea name="@nameof(BoardUpdateCommand.ApiBlockListIpVersion6ExclusionIpNumberCollection)">@ArrayConversion.SerializeBigInteger(Model.Board.ApiBlockListIpVersion6ExclusionIpNumberCollection)</textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.FieldVerificationType)</th>
+                            <td>
+                                <select name="@nameof(BoardUpdateCommand.FieldVerificationType)">
+                                    <option value="0" @(Model.Board.FieldVerificationType == VerificationType.None ? "selected" : "")>@VerificationType.None</option>
+                                    <option value="1" @(Model.Board.FieldVerificationType == VerificationType.ClassicCaptcha ? "selected" : "")>@VerificationType.ClassicCaptcha</option>
+                                    <option value="2" @(Model.Board.FieldVerificationType == VerificationType.ReCaptcha ? "selected" : "")>@VerificationType.ReCaptcha</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.VerificationPublicKey)</th>
+                            <td>
+                                <input type="text" name="@nameof(BoardUpdateCommand.VerificationPublicKey)" value="@Model.Board.VerificationPublicKey" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.VerificationSecretKey)</th>
+                            <td>
+                                <input type="text" name="@nameof(BoardUpdateCommand.VerificationSecretKey)" value="@Model.Board.VerificationSecretKey" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ReplyFieldVerificationMode)</th>
+                            <td>
+                                <select name="@nameof(BoardUpdateCommand.ReplyFieldVerificationMode)">
+                                    <option value="0" @(Model.Board.ReplyFieldVerificationMode == VerificationMode.None ? "selected" : "")>@VerificationMode.None</option>
+                                    <option value="1" @(Model.Board.ReplyFieldVerificationMode == VerificationMode.Always ? "selected" : "")>@VerificationMode.Always</option>
+                                    <option value="2" @(Model.Board.ReplyFieldVerificationMode == VerificationMode.Local ? "selected" : "")>@VerificationMode.Local</option>
+                                    <option value="3" @(Model.Board.ReplyFieldVerificationMode == VerificationMode.Global ? "selected" : "")>@VerificationMode.Global</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ReplyFieldVerificationLocalTime)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardUpdateCommand.ReplyFieldVerificationLocalTime)" value="@Model.Board.ReplyFieldVerificationLocalTime" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ThreadFieldVerificationMode)</th>
+                            <td>
+                                <select name="@nameof(BoardUpdateCommand.ThreadFieldVerificationMode)">
+                                    <option value="0" @(Model.Board.ThreadFieldVerificationMode == VerificationMode.None ? "selected" : "")>@VerificationMode.None</option>
+                                    <option value="1" @(Model.Board.ThreadFieldVerificationMode == VerificationMode.Always ? "selected" : "")>@VerificationMode.Always</option>
+                                    <option value="2" @(Model.Board.ThreadFieldVerificationMode == VerificationMode.Local ? "selected" : "")>@VerificationMode.Local</option>
+                                    <option value="3" @(Model.Board.ThreadFieldVerificationMode == VerificationMode.Global ? "selected" : "")>@VerificationMode.Global</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.ThreadFieldVerificationLocalTime)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardUpdateCommand.ThreadFieldVerificationLocalTime)" value="@Model.Board.ThreadFieldVerificationLocalTime" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.AnonymizationAvailability)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardUpdateCommand.AnonymizationAvailability)" value="true" @(Model.Board.AnonymizationAvailability ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.AnonymizationTimeMax)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardUpdateCommand.AnonymizationTimeMax)" value="@Model.Board.AnonymizationTimeMax" />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <h3>Synchronizations</h3>
+                <table>
+                    <tbody>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.SynchronizationThreadAvailability)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardUpdateCommand.SynchronizationThreadAvailability)" value="true" @(Model.Board.SynchronizationThreadAvailability ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.SynchronizationBoardAvailability)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardUpdateCommand.SynchronizationBoardAvailability)" value="true" @(Model.Board.SynchronizationBoardAvailability ? "checked" : "") />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <h3>Pages</h3>
+                <table>
+                    <tbody>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.SearchAvailability)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardUpdateCommand.SearchAvailability)" value="true" @(Model.Board.SearchAvailability ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardUpdateCommand.CatalogAvailability)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardUpdateCommand.CatalogAvailability)" value="true" @(Model.Board.CatalogAvailability ? "checked" : "") />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>
+                    <button type="submit">Update @Model.Board.BoardId</button>
+                </p>
+            </form>
+        </section>
+    </article>
+</main>

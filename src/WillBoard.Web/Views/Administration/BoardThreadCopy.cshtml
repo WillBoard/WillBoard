@@ -1,0 +1,45 @@
+﻿@using Microsoft.AspNetCore.Routing;
+@using WillBoard.Application.Administration.Commands.BoardThreadCopy
+@using WillBoard.Application.Administration.Queries.BoardThreadCopy
+@using WillBoard.Core.Managers
+@using WillBoard.Web.Services
+@using WillBoard.Core.Extensions
+@inject LinkGenerator _linkGenerator
+@inject ViewService _viewService
+@inject AccountManager _accountManager
+@model BoardThreadCopyViewModel
+@{
+    Layout = "~/Views/Shared/_AdministrationLayout.cshtml";
+}
+
+<main>
+    <article>
+        <header>Board - Thread - Copy</header>
+        <section>
+            <form method="post">
+                <input type="hidden" name="csrf" value="@ViewData["csrf"]" autocomplete="off">
+                <input type="hidden" name="@nameof(BoardThreadCopyCommand.BoardId)" value="@Model.Post.BoardId" autocomplete="off">
+                <input type="hidden" name="@nameof(BoardThreadCopyCommand.PostId)" value="@Model.Post.PostId" autocomplete="off">
+                <table>
+                    <tbody>
+                        <tr>
+                            <th>@nameof(BoardThreadCopyCommand.DestinationBoardId)</th>
+                            <td>
+                                @foreach (var board in @Model.BoardCollection)
+                                {
+                                    if (_accountManager.CheckPermission(board.BoardId, e => e.PermissionThreadCopy) && Model.Post.BoardId != board.BoardId)
+                                    {
+                                        <label><input name="@nameof(BoardThreadCopyCommand.DestinationBoardId)" type="radio" value="@board.BoardId" />@board.BoardId</label>
+                                    }
+                                }
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>
+                    <button type="submit">Copy @Model.Post.BoardId/@Model.Post.PostId</button>
+                </p>
+            </form>
+        </section>
+    </article>
+</main>

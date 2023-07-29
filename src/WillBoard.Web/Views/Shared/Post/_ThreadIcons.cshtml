@@ -1,0 +1,24 @@
+﻿@using WillBoard.Core.Entities
+@using WillBoard.Core.Extensions
+@model Post
+
+@if (Model.ReplyLock)
+{
+    <span class="icon"></span>
+}
+@if (Model.Pin)
+{
+    <span class="icon"></span>
+}
+@if (Model.ForceCountry)
+{
+    <span class="icon"></span>
+}
+@if (Model.ForceUserId)
+{
+    <span class="icon"></span>
+}
+@if (Model.Excessive != null)
+{
+    <span title="@Model.Excessive.Value.ToRfc3339String() (UTC)" class="icon"></span>
+}

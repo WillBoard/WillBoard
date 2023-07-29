@@ -1,0 +1,32 @@
+﻿<header id="top" class="overview">
+	<audio src="/music/overview.flac" muted loop></audio>
+	<div class="controls">
+		<button class="icon"></button>
+	</div>
+	<script>
+		document.addEventListener("DOMContentLoaded", function (e) {
+			let audioButton = document.querySelector("header.overview .controls button");
+			audioButton.addEventListener("click", togglePlay);
+		});
+
+		function togglePlay(event) {
+			let audio = document.querySelector("header > audio");
+
+			if (audio.muted) {
+				audio.play();
+				audio.muted = false;
+				event.currentTarget.textContent = "";
+			}
+			else {
+				audio.pause();
+				audio.muted = true;
+				event.currentTarget.textContent = "";
+			}
+		};
+	</script>
+	<style>
+		body {
+			grid-template-rows: auto 1fr auto auto auto;
+		}
+	</style>
+</header>

@@ -1,0 +1,102 @@
+﻿@using Microsoft.AspNetCore.Routing
+@using WillBoard.Application.Administration.Queries.Boards
+@using WillBoard.Core.Enums
+@using WillBoard.Core.Managers
+@using WillBoard.Web.Services
+@inject LinkGenerator _linkGenerator
+@inject ViewService _viewService
+@inject AccountManager _accountManager
+@model BoardsViewModel
+@{
+    Layout = "~/Views/Shared/_AdministrationLayout.cshtml";
+    var account = _accountManager.GetAccount();
+}
+
+<main>
+    <article>
+        <header>Boards</header>
+        @if (account.Type == AccountType.Administrator)
+        {
+            <section>
+                <a href="@_linkGenerator.GetPathByAction("BoardCreate", "Administration")">Create</a>
+            </section>
+        }
+        <section>
+            <table>
+                <tbody>
+                    <tr>
+                        <th>BoardId</th>
+                        <th>Name</th>
+                        <th>Language</th>
+                        <th>Availability</th>
+                        <th>Type</th>
+                        <th>Accessibility</th>
+                        <th>Visibility</th>
+                        <th>Link action</th>
+                    </tr>
+                    @foreach (var board in Model.BoardCollection)
+                    {
+                        <tr>
+                            <td>@board.BoardId</td>
+                            <td>@board.Name</td>
+                            <td>@board.Language</td>
+                            <td>@board.Availability</td>
+                            <td>@board.Type</td>
+                            <td>@board.Accessibility</td>
+                            <td>@board.Visibility</td>
+                            <td class="link-action">
+                                @if (_accountManager.CheckPermission(board.BoardId, e => e.PermissionBoardView))
+                                {
+                                    <a href="@_linkGenerator.GetPathByAction("BoardViewClassic", "Administration", new { boardId = board.BoardId })">View</a>
+                                }
+                                @if (_accountManager.CheckPermission(board.BoardId, e => e.PermissionReportRead))
+                                {
+                                    <a href="@_linkGenerator.GetPathByAction("BoardReports", "Administration", new { boardId = board.BoardId })">Reports</a>
+                                }
+                                @if (_accountManager.CheckPermission(board.BoardId, e => e.PermissionBanRead))
+                                {
+                                    <a href="@_linkGenerator.GetPathByAction("BoardBans", "Administration", new { boardId = board.BoardId })">Bans</a>
+                                }
+                                @if (_accountManager.CheckPermission(board.BoardId, e => e.PermissionBanAppealRead))
+                                {
+                                    <a href="@_linkGenerator.GetPathByAction("BoardBanAppeals", "Administration", new { boardId = board.BoardId })">Appeals</a>
+                                }
+                                @if (_accountManager.CheckPermission(board.BoardId, e => e.PermissionAuthorizationRead))
+                                {
+                                    <a href="@_linkGenerator.GetPathByAction("BoardAuthorizations", "Administration", new { boardId = board.BoardId })">Authorizations</a>
+                                }
+                                @if (_accountManager.CheckPermission(board.BoardId, e => e.PermissionInvitationRead))
+                                {
+                                    <a href="@_linkGenerator.GetPathByAction("BoardInvitations", "Administration", new { boardId = board.BoardId })">Invitations</a>
+                                }
+                                @if (_accountManager.CheckPermission(board.BoardId, e => e.PermissionBoardUpdate))
+                                {
+                                    <a href="@_linkGenerator.GetPathByAction("BoardUpdate", "Administration", new { boardId = board.BoardId })">Update</a>
+                                }
+                                @if (_accountManager.CheckPermission(board.BoardId, e => e.PermissionBoardDelete))
+                                {
+                                    <a href="@_linkGenerator.GetPathByAction("BoardDelete", "Administration", new { boardId = board.BoardId })">Delete</a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </section>
+        <footer>
+            <nav>
+                @for (var i = 1; i <= Model.PageMax; i++)
+                {
+                    @if (i == Model.Page)
+                    {
+                        <a>@i</a>
+                    }
+                    else
+                    {
+                        <a href="@_linkGenerator.GetPathByAction("Boards", "Administration", new { page = i })">@i</a>
+                    }
+                }
+            </nav>
+        </footer>
+    </article>
+</main>

@@ -1,0 +1,16 @@
+﻿@using WillBoard.Application.ViewModels
+@model ApplicationViewModel
+
+<nav>
+    <input type="checkbox" id="navigation">
+    <label for="navigation" class="icon"></label>
+    <section class="navigation">
+        @await Html.PartialAsync("~/Views/Shared/Navigation/_ApplicationMenuQuick.cshtml", Model)
+        @await Html.PartialAsync("~/Views/Shared/Navigation/_ApplicationMenuBoards.cshtml")
+        @await Html.PartialAsync("~/Views/Shared/Navigation/_ApplicationMenuOther.cshtml")
+    </section>
+    <a>@Model.Title</a>
+    <aside>
+        @await Html.PartialAsync("~/Views/Shared/Navigation/_PanelSettings.cshtml", Model)
+    </aside>
+</nav>

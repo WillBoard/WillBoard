@@ -1,0 +1,90 @@
+﻿@using Microsoft.AspNetCore.Routing
+@using WillBoard.Application.Administration.Commands.BanAppealAccept
+@using WillBoard.Application.Administration.Commands.BanAppealReject
+@using WillBoard.Application.Administration.Queries.BanAppeals
+@using WillBoard.Core.Entities
+@using WillBoard.Core.Managers
+@using WillBoard.Core.Utilities;
+@using WillBoard.Web.Services
+@inject LinkGenerator _linkGenerator
+@inject ViewService _viewService
+@inject AccountManager _accountManager
+@model BanAppealsViewModel
+@{
+    Layout = "~/Views/Shared/_AdministrationLayout.cshtml";
+}
+
+<main>
+    <article>
+        <header>Ban Appeals</header>
+        <section>
+
+            <table>
+                <tbody>
+                    <tr>
+                        <th>@nameof(BanAppeal.BanAppealId)</th>
+                        <th>@nameof(BanAppeal.Creation)</th>
+                        <th>@nameof(BanAppeal.IpVersion)</th>
+                        <th>@nameof(BanAppeal.IpNumber)</th>
+                        <th>@nameof(BanAppeal.Message)</th>
+                        <th>@nameof(BanAppeal.BanId)</th>
+                        <th>Ban @nameof(Ban.Creation)</th>
+                        <th>Ban @nameof(Ban.Expiration)</th>
+                        <th>Ban @nameof(Ban.IpVersion)</th>
+                        <th>Ban @nameof(Ban.IpNumberFrom)</th>
+                        <th>Ban @nameof(Ban.IpNumberTo)</th>
+                        <th>Ban @nameof(Ban.Reason)</th>
+                        <th>Ban @nameof(Ban.Note)</th>
+                        <th>Quick action</th>
+                    </tr>
+                    @foreach (var banAppeal in Model.BanAppealCollection)
+                    {
+                        <tr>
+                            <td>@banAppeal.BanAppealId</td>
+                            <td>@banAppeal.Creation</td>
+                            <td>@banAppeal.IpVersion</td>
+                            <td><a href="@_linkGenerator.GetPathByAction("BoardIp", "Administration", new { boardId = banAppeal.Ban.BoardId, ipVersion = (int)banAppeal.IpVersion, ipNumber = banAppeal.IpNumber })">@banAppeal.IpNumber</a> (@IpConversion.IpNumberToIpAddressString(banAppeal.IpVersion, banAppeal.IpNumber))</td>
+                            <td>@banAppeal.Message</td>
+                            <td>@banAppeal.BanId</td>
+                            <td>@banAppeal.Ban.Creation</td>
+                            <td>@banAppeal.Ban.Expiration</td>
+                            <td>@banAppeal.Ban.IpVersion</td>
+                            <td>@banAppeal.Ban.IpNumberFrom (@IpConversion.IpNumberToIpAddressString(banAppeal.Ban.IpVersion, banAppeal.Ban.IpNumberFrom))</td>
+                            <td>@banAppeal.Ban.IpNumberTo (@IpConversion.IpNumberToIpAddressString(banAppeal.Ban.IpVersion, banAppeal.Ban.IpNumberTo))</td>
+                            <td>@banAppeal.Ban.Reason</td>
+                            <td>@banAppeal.Ban.Note</td>
+                            <td>
+                                <form action="@_linkGenerator.GetPathByAction("BanAppealAccept", "Administration", new { banAppealId = banAppeal.BanAppealId })" method="post">
+                                    <input type="hidden" name="csrf" value="@ViewData["csrf"]" autocomplete="off">
+                                    <input type="hidden" name="@nameof(BanAppealAcceptCommand.BanAppealId)" value="@banAppeal.BanAppealId" autocomplete="off">
+                                    <button type="submit">Accept</button>
+                                </form>
+                                <form action="@_linkGenerator.GetPathByAction("BanAppealReject", "Administration", new { banAppealId = banAppeal.BanAppealId })" method="post">
+                                    <input type="hidden" name="csrf" value="@ViewData["csrf"]" autocomplete="off">
+                                    <input type="hidden" name="@nameof(BanAppealRejectCommand.BanAppealId)" value="@banAppeal.BanAppealId" autocomplete="off">
+                                    <button type="submit">Reject</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+        </section>
+        <footer>
+            <nav>
+                @for (var i = 1; i <= Model.PageMax; i++)
+                {
+                    @if (i == Model.Page)
+                    {
+                        <a>@i</a>
+                    }
+                    else
+                    {
+                        <a href="@_linkGenerator.GetPathByAction("BanAppeals", "Administration", new { page = i })">@i</a>
+                    }
+                }
+            </nav>
+        </footer>
+    </article>
+</main>

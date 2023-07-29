@@ -1,0 +1,108 @@
+﻿:root {
+    --black: #000000;
+    --white: #ffffff;
+    --body-background: #121212;
+    --body-font: #a4a4a4;
+    --status-active: #2ecc71;
+    --status-inactive: #e81123;
+    /* Nav */
+    --nav-background: #0d0d0d;
+    --nav-font: #bcbcbc;
+    --nav-span-font: #bcbcbc;
+    --nav-background-hover: #1e1e1e;
+    --nav-background-active: #161616;
+    --nav-navigation-font: #a4a4a4;
+    --nav-navigation-h3-font: #bcbcbc;
+    /* Nav - Aside - Control */
+    --nav-aside-control-border: #000000;
+    --nav-aside-control-font: #bcbcbc;
+    --nav-aside-control-background: transparent;
+    --nav-aside-control-background-active: #000000;
+    --nav-aside-control-active: #000000;
+    --nav-aside-control-font-active: inherit;
+    /* Nav - Aside - Watcher */
+    --nav-aside-watcher-hyperlink-font-hover: #dddddd;
+    --nav-aside-watcher-hyperlink-background-hover: #1e1e1e;
+    /* Header - Overview */
+    --header-overview-background: #1b1b1b;
+    --header-overview-font: #bababa;
+    /* Header - Aside */
+    --header-aside-background: #1b1b1b;
+    --header-aside-font: #bababa;
+    /* Header - Post */
+    --header-post-shadow: rgba(0,0,0,.25);
+    --header-post-background: #262626;
+    --header-post-border: #000000;
+    --header-post-font: #a3a3a3;
+    --header-post-active: #1b1b1b;
+    --header-post-control-font: #bababa;
+    /* Thread */
+    --thread-background: #1b1b1b;
+    --thread-background-active: #111111;
+    --thread-border: #000000;
+    --thread-font: #a4a4a4;
+    --thread-info-background: #0d0d0d;
+    --thread-info-font: #bcbcbc;
+    --thread-info-time-font: #ddd;
+    --thread-info-border: #4f4f4f;
+    --thread-info-hyperlink-font-hover: #dddddd;
+    --thread-info-hyperlink-background-hover: #1e1e1e;
+    --thread-info-reply-count-font: #bcbcbc;
+    --thread-info-aside-border: #000000;
+    --thread-info-aside-background: #161616;
+    --thread-info-aside-label-background-hover: #1e1e1e;
+    --thread-info-aside-label-background-active: #161616;
+    --thread-info-aside-hyperlink-font: #a4a4a4;
+    --thread-info-aside-hyperlink-background-hover: #1e1e1e;
+    --thread-file-preview-background: #000000;
+    /* Reply */
+    --reply-background: #1b1b1b;
+    --reply-background-active: #111111;
+    --reply-border: #000000;
+    --reply-font: #bababa;
+    --reply-info-background: inherit;
+    --reply-info-font: #bcbcbc;
+    --reply-info-time-font: #ddd;
+    --reply-info-border: #4f4f4f;
+    --reply-info-hyperlink-font-hover: inherit;
+    --reply-info-hyperlink-background: inherit;
+    --reply-info-aside-background: #161616;
+    --reply-info-aside-border: #000000;
+    --reply-info-aside-label-background-hover: #1e1e1e;
+    --reply-info-aside-label-background-active: #161616;
+    --reply-info-aside-hyperlink-font: #a4a4a4;
+    --reply-info-aside-hyperlink-background-hover: #1e1e1e;
+    --reply-file-preview-background: #000000;
+    /* Footer */
+    --footer-border: #000000;
+    --footer-font: #bababa;
+    --footer-background: #0d0d0d;
+    --footer-nav-hyperlink-font: #c1c1c1;
+    --footer-nav-hyperlink-font-hover: #bababa;
+    --footer-nav-hyperlink-font-hover-inactive: #ffffff;
+    --footer-nav-hyperlink-background: #1e1e1e;
+    --footer-nav-hyperlink-background-inactive: transparent;
+    --footer-font-aside-font: #bababa;
+    /* Other - Section */
+    --other-section-border: #000000;
+    --other-section-background: #1b1b1b;
+    --other-section-color: #bababa;
+    --other-section-control-border: #000000;
+    --other-section-control-background: #0d0d0d;
+    --other-section-control-color: #bababa;
+    --other-section-control-border-disabled: #000000;
+    --other-section-control-background-disabled: #0d0d0d;
+    --other-section-control-color-disabled: #1b1b1b;
+    /* Message */
+    --message-code-background: #323232;
+    --message-blockquote-font: green;
+    --message-hyperlink-font: #ffffff;
+    --message-mark-background: #000000;
+    --message-mark-font: #000000;
+    --message-mark-background-hover: #000000;
+    --message-mark-font-hover: #ffffff;
+}
+
+section.thread > .info {
+    border-top: 1px solid var(--thread-info-border);
+}

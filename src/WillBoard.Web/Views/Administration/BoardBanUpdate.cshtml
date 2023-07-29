@@ -1,0 +1,88 @@
+﻿@using Microsoft.AspNetCore.Routing
+@using WillBoard.Application.Administration.Commands.BoardBanUpdate
+@using WillBoard.Application.Administration.Queries.BoardBanUpdate
+@using WillBoard.Core.Entities
+@using WillBoard.Core.Enums
+@using WillBoard.Core.Managers
+@using WillBoard.Web.Services
+@using WillBoard.Core.Extensions
+@using WillBoard.Core.Utilities
+@inject LinkGenerator _linkGenerator
+@inject ViewService _viewService
+@inject AccountManager _accountManager
+@model BoardBanUpdateViewModel
+@{
+    Layout = "~/Views/Shared/_AdministrationLayout.cshtml";
+}
+
+<main>
+    <article>
+        <header>Board - Ban - Update</header>
+        <section>
+            <form method="post">
+                <input type="hidden" name="csrf" value="@ViewData["csrf"]" autocomplete="off">
+                <input type="hidden" name="@nameof(BoardBanUpdateCommand.BoardId)" value="@Model.Ban.BoardId" autocomplete="off">
+                <input type="hidden" name="@nameof(BoardBanUpdateCommand.BanId)" value="@Model.Ban.BanId" autocomplete="off">
+                <table>
+                    <tbody>
+                        <tr>
+                            <th>@nameof(BoardBanUpdateCommand.IpVersion)</th>
+                            <td>
+                                <select name="@nameof(BoardBanUpdateCommand.IpVersion)" required>
+                                    <option value="@((int)IpVersion.None)" @(Model.Ban.IpVersion == IpVersion.None ? "selected" : "") disabled>@IpVersion.None</option>
+                                    <option value="@((int)IpVersion.IpVersion4)" @(Model.Ban.IpVersion == IpVersion.IpVersion4 ? "selected" : "")>@IpVersion.IpVersion4</option>
+                                    <option value="@((int)IpVersion.IpVersion6)" @(Model.Ban.IpVersion == IpVersion.IpVersion6 ? "selected" : "")>@IpVersion.IpVersion6</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardBanUpdateCommand.IpNumberFrom)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardBanUpdateCommand.IpNumberFrom)" value="@Model.Ban.IpNumberFrom" min="0" required>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardBanUpdateCommand.IpNumberTo)</th>
+                            <td>
+                                <input type="number" name="@nameof(BoardBanUpdateCommand.IpNumberTo)" value="@Model.Ban.IpNumberTo" min="0" required>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardBanUpdateCommand.ExclusionIpNumberCollection)</th>
+                            <td>
+                                <textarea name="@nameof(BoardBanUpdateCommand.ExclusionIpNumberCollection)">@ArrayConversion.SerializeBigInteger(Model.Ban.ExclusionIpNumberCollection)</textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardBanUpdateCommand.Expiration)</th>
+                            <td>
+                                <input type="datetime-local" name="@nameof(BoardBanUpdateCommand.Expiration)" value="@Model.Ban.Expiration?.ToIso8601String()">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardBanUpdateCommand.Appeal)</th>
+                            <td>
+                                <input type="checkbox" name="@nameof(BoardBanUpdateCommand.Appeal)" value="true" @(Model.Ban.Appeal ? "checked" : "") />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardBanUpdateCommand.Reason)</th>
+                            <td>
+                                <textarea name="@nameof(BoardBanUpdateCommand.Reason)">@Model.Ban.Reason</textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>@nameof(BoardBanUpdateCommand.Note)</th>
+                            <td>
+                                <textarea name="@nameof(BoardBanUpdateCommand.Note)">@Model.Ban.Note</textarea>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>
+                    <button type="submit">Update @Model.Ban.BanId</button>
+                </p>
+            </form>
+        </section>
+    </article>
+</main>

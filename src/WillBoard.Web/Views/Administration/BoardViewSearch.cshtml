@@ -1,0 +1,60 @@
+﻿@using WillBoard.Application.Administration.Queries.BoardViewSearch;
+@using WillBoard.Application.Board.Queries.Classic
+@using Microsoft.AspNetCore.Routing
+@using WillBoard.Application.Board.Queries.Search
+@using WillBoard.Application.ViewModels
+@using WillBoard.Core.Entities
+@using WillBoard.Core.Managers
+@inject BoardManager _boardManager
+@inject LinkGenerator _linkGenerator
+@model BoardViewSearchViewModel
+@{
+    Layout = "~/Views/Shared/_BoardLayout.cshtml";
+    var board = _boardManager.GetBoard();
+}
+
+<header>
+    @await Html.PartialAsync("~/Views/Shared/Header/_BoardInformation.cshtml", Model)
+    @await Html.PartialAsync("~/Views/Shared/Header/_FormSearch.cshtml", new FormSearchViewModel(){
+        PostId = Model.PostId,
+        ThreadId = Model.ThreadId,
+        Message = Model.Message,
+        File = Model.File,
+        Type = Model.Type,
+        Order = Model.Order
+    })
+</header>
+
+<main class="classic">
+    @foreach (var post in Model.SearchCollection)
+    {
+        if (post.IsThread())
+        {
+            @await Html.PartialAsync("~/Views/Shared/Main/_ClassicThread.cshtml", new ThreadViewModel()
+            {
+                BoardViewType = Model.BoardViewType,
+                Title = Model.Title,
+                Thread = post,
+                ReplyCollection = Array.Empty<Post>()
+            })
+        }
+
+        if(post.IsReply())
+        {
+            <article class="thread" data-boardid="@post.BoardId" data-threadid="@post.ThreadId">
+                @await Html.PartialAsync("~/Views/Shared/Main/_ClassicReply.cshtml", new ReplyViewModel()
+                {
+                    BoardViewType = Model.BoardViewType,
+                    Title = Model.Title,
+                    Thread = post,
+                    Reply = post
+                })
+            </article>
+        }
+    }
+</main>
+
+<footer>
+    @await Html.PartialAsync("~/Views/Shared/Footer/_BoardFooter.cshtml")
+    @await Html.PartialAsync("~/Views/Shared/Footer/_ApplicationFooter.cshtml")
+</footer>

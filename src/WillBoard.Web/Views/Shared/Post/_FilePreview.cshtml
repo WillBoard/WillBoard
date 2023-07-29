@@ -1,0 +1,25 @@
+﻿@using WillBoard.Core.Entities
+@using WillBoard.Core.Managers
+@inject BoardManager _boardManager
+@model Post
+@{
+    var board = _boardManager.GetBoard();
+    var filePreviewHeightMax = Model.IsThread() ? board.ThreadFilePreviewHeightMax : board.ReplyFilePreviewHeightMax;
+    var filePreviewWidthMax = Model.IsThread() ? board.ThreadFilePreviewWidthMax : board.ReplyFilePreviewWidthMax;
+}
+
+@if (Model.File && !Model.FileDeleted)
+{
+    <div class="file" data-mime="@Model.FileMimeType" data-spoiler="@(Model.FileSpoiler ? "true" : "false")">
+        <a href="/boards/@Model.BoardId/source/@Model.FileName">
+            @if (Model.FileSpoiler)
+            {
+                <img height="@(filePreviewHeightMax + "px")" width="@(filePreviewWidthMax + "px")" src="/img/spoiler.svg" data-preview-src="/boards/@Model.BoardId/preview/@Model.FilePreviewName" data-preview-height="@(Model.FilePreviewHeight + "px")" data-preview-width="@(Model.FilePreviewWidth + "px")" alt="">
+            }
+            else
+            {
+                <img height="@(Model.FilePreviewHeight + "px")" width="@(Model.FilePreviewWidth + "px")" src="/boards/@Model.BoardId/preview/@Model.FilePreviewName" alt="">
+            }
+        </a>
+    </div>
+}

@@ -1,0 +1,14 @@
+﻿@using WillBoard.Core.Entities
+@using WillBoard.Core.Interfaces.Caches
+@inject INavigationCache _navigationCache
+@{
+    var navigationCollection = await _navigationCache.GetCollectionAsync();
+}
+
+<h3><span class="icon"></span>Other</h3>
+<ul class="navigation-other">
+    @foreach (var item in navigationCollection)
+    {
+        <li><a href="@item.Url" target="@(item.Tab ? "_blank" : "_self")" rel="noopener noreferrer"><span class="icon">@item.Icon</span><span>@item.Name</span></a></li>
+    }
+</ul>

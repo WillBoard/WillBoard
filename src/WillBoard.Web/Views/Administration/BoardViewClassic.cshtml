@@ -1,0 +1,55 @@
+﻿@using WillBoard.Application.Administration.Queries.BoardViewClassic
+@using WillBoard.Application.ViewModels;
+@using WillBoard.Core.Interfaces.Services
+@using Microsoft.AspNetCore.Routing
+@using WillBoard.Core.Managers
+@inject BoardManager _boardManager
+@inject AccountManager _accountManager
+@inject LinkGenerator _linkGenerator
+@inject ILocalizationService _localizationService
+@model BoardViewClassicViewModel
+@{
+    Layout = "~/Views/Shared/_BoardLayout.cshtml";
+    var board = _boardManager.GetBoard();
+}
+
+<header>
+    @await Html.PartialAsync("~/Views/Shared/Header/_BoardInformation.cshtml", Model)
+    @await Html.PartialAsync("~/Views/Shared/Header/_FormPost.cshtml", new FormPostViewModel()
+    {
+        BoardViewType = Model.BoardViewType,
+        Verification = Model.Verification,
+        Title = Model.Title
+    })
+</header>
+
+<main class="classic">
+    @foreach (var post in Model.PostDictionary)
+    {
+        @await Html.PartialAsync("~/Views/Shared/Main/_ClassicThread.cshtml", new ThreadViewModel()
+        {
+            BoardViewType = Model.BoardViewType,
+            Title = Model.Title,
+            Thread = post.Key,
+            ReplyCollection = post.Value
+        })
+    }
+</main>
+
+<footer>
+    <nav>
+        @for (int i = 1; i <= Model.PageMax; i++)
+        {
+            if (i == Model.PageCurrent)
+            {
+                <a>@i</a>
+            }
+            else
+            {
+                <a href="@_linkGenerator.GetPathByAction("BoardViewClassic", "Administration", new { boardid = board.BoardId, page = i })">@i</a>
+            }
+        }
+    </nav>
+    @await Html.PartialAsync("~/Views/Shared/Footer/_BoardFooter.cshtml")
+    @await Html.PartialAsync("~/Views/Shared/Footer/_ApplicationFooter.cshtml")
+</footer>

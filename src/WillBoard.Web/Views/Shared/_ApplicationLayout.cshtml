@@ -1,0 +1,19 @@
+﻿@using WillBoard.Application.ViewModels
+@model ApplicationViewModel
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@Model.Title</title>
+    <link rel="icon" href="/favicon.png">
+    <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+    <sup id="top"></sup>
+    @await Html.PartialAsync("~/Views/Shared/Navigation/_ApplicationNavigation.cshtml", Model)
+    @RenderBody()
+    <sub id="bottom"></sub>
+</body>
+</html>
