@@ -1,4 +1,4 @@
-﻿using MySql.Data.MySqlClient;
+﻿using MySqlConnector;
 using System.Data;
 using WillBoard.Core.Interfaces.Repositories;
 using WillBoard.Core.Interfaces.Services;
