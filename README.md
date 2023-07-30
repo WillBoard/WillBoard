@@ -6,8 +6,8 @@
 
 > Less repeat - More unique
 
-WillBoard is open source anonymous forum engine with few main assumptions: 
-- Possibility to read and write posts without JavaScript 
+WillBoard is an open source anonymous forum engine with a few main assumptions: 
+- Ability to read and write posts without JavaScript 
 - Using only HTTP protocol (without WebSockets)
 
 ## Requirements
@@ -33,7 +33,7 @@ Project contains logic for accessing external resources such as database, cache,
 
 ### WillBoard.Web
 
-Startup project for an engine. Is responsible for handling requests and formatting an answers (eg. HTML, JSON).
+Startup project for the engine. Is responsible for handling requests and formatting answers (eg. HTML, JSON).
 
 ## Version
 
