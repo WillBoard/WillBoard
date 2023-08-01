@@ -476,7 +476,7 @@ namespace WillBoard.Web
 
             endpointRouteBuilder.MapControllerRoute(
                 name: "administration/banappeals/{page}",
-                pattern: "administration/anappeals/{page}",
+                pattern: "administration/banappeals/{page}",
                 defaults: new { controller = "Administration", action = "BanAppeals", page = 1 },
                 constraints: new { page = _int }
             ).WithMetadata(new EndpointResponse(EndpointContentType.HTML));
