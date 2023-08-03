@@ -45,7 +45,7 @@
                             <td>
                                 <select name="@nameof(BoardUpdateCommand.Type)">
                                     <option value="0" @(Model.Board.Type == BoardType.Standard ? "selected" : "")>@BoardType.Standard</option>
-                                    <option value="1" @(Model.Board.Type == BoardType.Group ? "selected" : "")>@BoardType.Group</option>
+                                    <option disabled value="1" @(Model.Board.Type == BoardType.Group ? "selected" : "")>@BoardType.Group</optio>
                                 </select>
                             </td>
                         </tr>
@@ -55,7 +55,7 @@
                                 <code>button</code>
                             </th>
                             <td>
-                                <textarea name="@nameof(BoardUpdateCommand.TypeGroupCollection)">@ArrayConversion.SerializeString(Model.Board.TypeGroupCollection)</textarea>
+                                <textarea disabled name="@nameof(BoardUpdateCommand.TypeGroupCollection)">@ArrayConversion.SerializeString(Model.Board.TypeGroupCollection)</textarea>
                             </td>
                         </tr>
                         <tr>
