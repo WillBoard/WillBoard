@@ -47,7 +47,7 @@
 							<td rowspan="2">@reportDictionary.Key.ReportId</td>
 							<td>@reportDictionary.Key.Creation.ToRfc3339String()</td>
 							<td>
-								<a href="@permissionBoardView ? @_linkGenerator.GetPathByAction(" BoardViewClassic", "Administration" , new { boardId = reportDictionary.Key.ReferenceBoardId }) : @_linkGenerator.GetPathByAction("Classic", "Board" , new { boardId = reportDictionary.Key.ReferenceBoardId })">@reportDictionary.Key.ReferenceBoardId</a>
+								<a href="@(permissionBoardView ? _linkGenerator.GetPathByAction("BoardViewClassic", "Administration", new { boardId = reportDictionary.Key.ReferenceBoardId }) : _linkGenerator.GetPathByAction("Classic", "Board" , new { boardId = reportDictionary.Key.ReferenceBoardId }))">@reportDictionary.Key.ReferenceBoardId</a>
 							</td>
 							<td>
 								@if (reportDictionary.Value != null)
