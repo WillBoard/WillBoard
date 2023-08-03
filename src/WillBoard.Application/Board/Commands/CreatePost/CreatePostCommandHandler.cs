@@ -190,7 +190,7 @@ namespace WillBoard.Application.Board.Commands.CreatePost
                 }
 
                 var globalBanCollection = await _banCache.GetSystemUnexpiredCollectionAsync(post.IpVersion, post.IpNumber);
-                if (globalBanCollection.Any(b => b.Expiration == null || b.Expiration > _dateTimeProvider.UtcNow))
+                if (globalBanCollection.Any(b => (b.Expiration == null || b.Expiration > _dateTimeProvider.UtcNow) && !b.ExclusionIpNumberCollection.Contains(post.IpNumber)))
                 {
                     return Result<CreatePostDataModel, InternalError>.ErrorResult(new InternalError(400, TranslationKey.ErrorBan));
                 }
