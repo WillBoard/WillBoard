@@ -104,7 +104,7 @@ namespace WillBoard.Application.Administration.Commands.BoardThreadCopy
                 copyReply.Creation = _dateTimeProvider.UtcNow;
                 copyReply.MessageStatic = _markupService.MarkupStaticCustomEncode(_markupService.MarkupStaticEncode(copyReply.MessageRaw), destinationBoard.MarkupStaticCustomCollection);
 
-                var copyReplyId = await _postService.CreateAsync(copyThread);
+                var copyReplyId = await _postService.CreateAsync(copyReply);
                 insertedPostIdCollection.Add(copyReplyId);
 
                 _storageService.CopyPreviewFile(reply.BoardId, reply.FilePreviewName, copyReply.BoardId, copyReply.FilePreviewName);
