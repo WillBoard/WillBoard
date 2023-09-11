@@ -62,239 +62,246 @@ namespace WillBoard.Infrastructure.Services
 
             if (post.FileMimeType == "image/jpeg" || post.FileMimeType == "image/png" || post.FileMimeType == "image/gif" || post.FileMimeType == "image/bmp")
             {
-                var bitmapInput = SKBitmap.Decode(file.OpenReadStream());
-
-                if (bitmapInput == null)
+                using (var streamInput = file.OpenReadStream())
                 {
-                    return Status<string>.ErrorStatus(post.IsThread() ? TranslationKey.ErrorThreadFieldFile : TranslationKey.ErrorReplyFieldFile);
-                }
+                    var dataInput = SKData.Create(streamInput);
+                    var imageInput = SKImage.FromEncodedData(dataInput);
 
-                if (post.IsThread())
-                {
-                    if (bitmapInput.Width < board.ThreadFieldFileImageWidthMin)
-                    {
-                        return Status<string>.ErrorStatus(TranslationKey.ErrorThreadFieldFileImageWidthMin);
-                    }
-                    if (bitmapInput.Width > board.ThreadFieldFileImageWidthMax)
-                    {
-                        return Status<string>.ErrorStatus(TranslationKey.ErrorThreadFieldFileImageWidthMax);
-                    }
-                    if (bitmapInput.Height < board.ThreadFieldFileImageHeightMin)
-                    {
-                        return Status<string>.ErrorStatus(TranslationKey.ErrorThreadFieldFileImageHeightMin);
-                    }
-                    if (bitmapInput.Height > board.ThreadFieldFileImageHeightMax)
-                    {
-                        return Status<string>.ErrorStatus(TranslationKey.ErrorThreadFieldFileImageHeightMax);
-                    }
-                }
-                else
-                {
-                    if (bitmapInput.Width < board.ReplyFieldFileImageWidthMin)
-                    {
-                        return Status<string>.ErrorStatus(TranslationKey.ErrorReplyFieldFileImageWidthMin);
-                    }
-                    if (bitmapInput.Width > board.ReplyFieldFileImageWidthMax)
-                    {
-                        return Status<string>.ErrorStatus(TranslationKey.ErrorReplyFieldFileImageWidthMax);
-                    }
-                    if (bitmapInput.Height < board.ReplyFieldFileImageHeightMin)
-                    {
-                        return Status<string>.ErrorStatus(TranslationKey.ErrorReplyFieldFileImageHeightMin);
-                    }
-                    if (bitmapInput.Height > board.ReplyFieldFileImageHeightMax)
-                    {
-                        return Status<string>.ErrorStatus(TranslationKey.ErrorReplyFieldFileImageHeightMax);
-                    }
-                }
-
-                post.FileWidth = bitmapInput.Width;
-                post.FileHeight = bitmapInput.Height;
-
-                CalculatePreviewDemensions(bitmapInput.Width, bitmapInput.Height, previewWidthMax, previewHeightMax, out int previewWidth, out int previewHeight);
-
-                post.FilePreviewWidth = previewWidth;
-                post.FilePreviewHeight = previewHeight;
-
-                var imageInfoOutput = new SKImageInfo(previewWidth, previewHeight, SKColorType.Rgba8888, SKAlphaType.Premul);
-                using (var imageOutput = SKImage.Create(imageInfoOutput))
-                {
-                    bool resized = bitmapInput.ScalePixels(imageOutput.PeekPixels(), SKFilterQuality.High);
-
-                    bitmapInput.Dispose();
-
-                    if (!resized)
+                    if (imageInput == null)
                     {
                         return Status<string>.ErrorStatus(post.IsThread() ? TranslationKey.ErrorThreadFieldFile : TranslationKey.ErrorReplyFieldFile);
                     }
 
-                    using (var dataOutput = imageOutput.Encode(SKEncodedImageFormat.Png, 100))
-                    using (var stream = File.OpenWrite(previewPath))
+                    if (post.IsThread())
                     {
-                        dataOutput.SaveTo(stream);
+                        if (imageInput.Width < board.ThreadFieldFileImageWidthMin)
+                        {
+                            return Status<string>.ErrorStatus(TranslationKey.ErrorThreadFieldFileImageWidthMin);
+                        }
+                        if (imageInput.Width > board.ThreadFieldFileImageWidthMax)
+                        {
+                            return Status<string>.ErrorStatus(TranslationKey.ErrorThreadFieldFileImageWidthMax);
+                        }
+                        if (imageInput.Height < board.ThreadFieldFileImageHeightMin)
+                        {
+                            return Status<string>.ErrorStatus(TranslationKey.ErrorThreadFieldFileImageHeightMin);
+                        }
+                        if (imageInput.Height > board.ThreadFieldFileImageHeightMax)
+                        {
+                            return Status<string>.ErrorStatus(TranslationKey.ErrorThreadFieldFileImageHeightMax);
+                        }
                     }
-                }
+                    else
+                    {
+                        if (imageInput.Width < board.ReplyFieldFileImageWidthMin)
+                        {
+                            return Status<string>.ErrorStatus(TranslationKey.ErrorReplyFieldFileImageWidthMin);
+                        }
+                        if (imageInput.Width > board.ReplyFieldFileImageWidthMax)
+                        {
+                            return Status<string>.ErrorStatus(TranslationKey.ErrorReplyFieldFileImageWidthMax);
+                        }
+                        if (imageInput.Height < board.ReplyFieldFileImageHeightMin)
+                        {
+                            return Status<string>.ErrorStatus(TranslationKey.ErrorReplyFieldFileImageHeightMin);
+                        }
+                        if (imageInput.Height > board.ReplyFieldFileImageHeightMax)
+                        {
+                            return Status<string>.ErrorStatus(TranslationKey.ErrorReplyFieldFileImageHeightMax);
+                        }
+                    }
 
-                using (var fileStream = new FileStream(sourcePath, FileMode.Create))
-                {
-                    file.CopyTo(fileStream);
-                }
+                    post.FileWidth = imageInput.Width;
+                    post.FileHeight = imageInput.Height;
 
-                return Status<string>.SuccessStatus();
+                    CalculatePreviewDemensions(imageInput.Width, imageInput.Height, previewWidthMax, previewHeightMax, out int previewWidth, out int previewHeight);
+
+                    post.FilePreviewWidth = previewWidth;
+                    post.FilePreviewHeight = previewHeight;
+
+                    var imageInfoOutput = new SKImageInfo(previewWidth, previewHeight, SKColorType.Rgba8888, SKAlphaType.Premul);
+                    using (var imageOutput = SKImage.Create(imageInfoOutput))
+                    {
+                        bool resized = imageInput.ScalePixels(imageOutput.PeekPixels(), SKFilterQuality.High);
+
+                        imageInput.Dispose();
+
+                        if (!resized)
+                        {
+                            return Status<string>.ErrorStatus(post.IsThread() ? TranslationKey.ErrorThreadFieldFile : TranslationKey.ErrorReplyFieldFile);
+                        }
+
+                        using (var dataOutput = imageOutput.Encode(SKEncodedImageFormat.Png, 100))
+                        using (var stream = File.OpenWrite(previewPath))
+                        {
+                            dataOutput.SaveTo(stream);
+                        }
+                    }
+
+                    using (var fileStream = new FileStream(sourcePath, FileMode.Create))
+                    {
+                        await file.CopyToAsync(fileStream);
+                    }
+
+                    return Status<string>.SuccessStatus();
+                }
             }
 
             if (post.FileMimeType == "video/webm" || post.FileMimeType == "audio/webm" || post.FileMimeType == "video/mp4" || post.FileMimeType == "audio/mpeg")
             {
-                var result = await _fftoolService.FFprobeAsync(file.OpenReadStream());
-
-                if (!result.Success)
+                using (var streamInput = file.OpenReadStream())
                 {
-                    return Status<string>.ErrorStatus(post.IsThread() ? TranslationKey.ErrorThreadFieldFile : TranslationKey.ErrorReplyFieldFile);
-                }
+                    var result = await _fftoolService.FFprobeAsync(streamInput);
 
-                if (result.Value.Format.Name != "matroska,webm" || result.Value.Format.Name != "mov,mp4,m4a,3gp,3g2,mj2")
-                {
-                    // Uncomment when want to limit to only one video stream per file
-                    //var videoCollection = result.Value.StreamCollection.Where(stream => stream.CodecType == FFinformationStreamCodecType.Video);
-                    //var videoCollectionCount = videoCollection.Count();
-                    //if (videoCollectionCount > 1)
-                    //{
-                    //    return Status<string>.ErrorStatus();
-                    //}
-
-                    var video = result.Value.StreamCollection.FirstOrDefault(stream => stream.CodecType == FFinformationStreamCodecType.Video);
-                    if (video != null)
+                    if (!result.Success)
                     {
-                        if (post.IsThread())
-                        {
-                            if (result.Value.Format.Duration < board.ThreadFieldFileVideoDurationMin)
-                            {
-                                return Status<string>.ErrorStatus(TranslationKey.ErrorThreadFieldFileVideoDurationMin);
-                            }
-                            if (result.Value.Format.Duration > board.ThreadFieldFileVideoDurationMax)
-                            {
-                                return Status<string>.ErrorStatus(TranslationKey.ErrorThreadFieldFileVideoDurationMax);
-                            }
-                            if (video.Width < board.ThreadFieldFileVideoWidthMin)
-                            {
-                                return Status<string>.ErrorStatus(TranslationKey.ErrorThreadFieldFileVideoWidthMin);
-                            }
-                            if (video.Width > board.ThreadFieldFileVideoWidthMax)
-                            {
-                                return Status<string>.ErrorStatus(TranslationKey.ErrorThreadFieldFileVideoWidthMax);
-                            }
-                            if (video.Height < board.ThreadFieldFileVideoHeightMin)
-                            {
-                                return Status<string>.ErrorStatus(TranslationKey.ErrorThreadFieldFileVideoHeightMin);
-                            }
-                            if (video.Height > board.ThreadFieldFileVideoHeightMax)
-                            {
-                                return Status<string>.ErrorStatus(TranslationKey.ErrorThreadFieldFileVideoHeightMax);
-                            }
-                        }
-                        else
-                        {
-                            if (result.Value.Format.Duration < board.ReplyFieldFileVideoDurationMin)
-                            {
-                                return Status<string>.ErrorStatus(TranslationKey.ErrorReplyFieldFileVideoDurationMin);
-                            }
-                            if (result.Value.Format.Duration > board.ReplyFieldFileVideoDurationMax)
-                            {
-                                return Status<string>.ErrorStatus(TranslationKey.ErrorReplyFieldFileVideoDurationMax);
-                            }
-                            if (video.Width < board.ReplyFieldFileVideoWidthMin)
-                            {
-                                return Status<string>.ErrorStatus(TranslationKey.ErrorReplyFieldFileVideoWidthMin);
-                            }
-                            if (video.Width > board.ReplyFieldFileVideoWidthMax)
-                            {
-                                return Status<string>.ErrorStatus(TranslationKey.ErrorReplyFieldFileVideoWidthMax);
-                            }
-                            if (video.Height < board.ReplyFieldFileVideoHeightMin)
-                            {
-                                return Status<string>.ErrorStatus(TranslationKey.ErrorReplyFieldFileVideoHeightMin);
-                            }
-                            if (video.Height > board.ReplyFieldFileVideoHeightMax)
-                            {
-                                return Status<string>.ErrorStatus(TranslationKey.ErrorReplyFieldFileVideoHeightMax);
-                            }
-                        }
-
-                        post.FileWidth = video.Width;
-                        post.FileHeight = video.Height;
-                        post.FileDuration = result.Value.Format.Duration;
-
-                        CalculatePreviewDemensions(video.Width, video.Height, previewWidthMax, previewHeightMax, out int previewWidth, out int previewHeight);
-
-                        post.FilePreviewWidth = previewWidth;
-                        post.FilePreviewHeight = previewHeight;
-
-                        var previewResult = await GeneratePreviewVideoAsync(file, previewPath, previewWidth, previewHeight);
-
-                        if (!previewResult)
-                        {
-                            return Status<string>.ErrorStatus(post.IsThread() ? TranslationKey.ErrorThreadFieldFile : TranslationKey.ErrorReplyFieldFile);
-                        }
-
-                        using (var stream = new FileStream(sourcePath, FileMode.Create))
-                        {
-                            file.CopyTo(stream);
-                        }
-
-                        return Status<string>.SuccessStatus();
+                        return Status<string>.ErrorStatus(post.IsThread() ? TranslationKey.ErrorThreadFieldFile : TranslationKey.ErrorReplyFieldFile);
                     }
-                }
 
-                if (result.Value.Format.Name != "matroska,webm" || result.Value.Format.Name != "mp3")
-                {
-                    var audio = result.Value.StreamCollection.FirstOrDefault(stream => stream.CodecType == FFinformationStreamCodecType.Audio);
-                    if (audio != null)
+                    if (result.Value.Format.Name != "matroska,webm" || result.Value.Format.Name != "mov,mp4,m4a,3gp,3g2,mj2")
                     {
-                        if (post.IsThread())
+                        // Uncomment when want to limit to only one video stream per file
+                        //var videoCollection = result.Value.StreamCollection.Where(stream => stream.CodecType == FFinformationStreamCodecType.Video);
+                        //var videoCollectionCount = videoCollection.Count();
+                        //if (videoCollectionCount > 1)
+                        //{
+                        //    return Status<string>.ErrorStatus();
+                        //}
+
+                        var video = result.Value.StreamCollection.FirstOrDefault(stream => stream.CodecType == FFinformationStreamCodecType.Video);
+                        if (video != null)
                         {
-                            if (result.Value.Format.Duration < board.ThreadFieldFileAudioDurationMin)
+                            if (post.IsThread())
                             {
-                                return Status<string>.ErrorStatus(TranslationKey.ErrorThreadFieldFileAudioDurationMin);
+                                if (result.Value.Format.Duration < board.ThreadFieldFileVideoDurationMin)
+                                {
+                                    return Status<string>.ErrorStatus(TranslationKey.ErrorThreadFieldFileVideoDurationMin);
+                                }
+                                if (result.Value.Format.Duration > board.ThreadFieldFileVideoDurationMax)
+                                {
+                                    return Status<string>.ErrorStatus(TranslationKey.ErrorThreadFieldFileVideoDurationMax);
+                                }
+                                if (video.Width < board.ThreadFieldFileVideoWidthMin)
+                                {
+                                    return Status<string>.ErrorStatus(TranslationKey.ErrorThreadFieldFileVideoWidthMin);
+                                }
+                                if (video.Width > board.ThreadFieldFileVideoWidthMax)
+                                {
+                                    return Status<string>.ErrorStatus(TranslationKey.ErrorThreadFieldFileVideoWidthMax);
+                                }
+                                if (video.Height < board.ThreadFieldFileVideoHeightMin)
+                                {
+                                    return Status<string>.ErrorStatus(TranslationKey.ErrorThreadFieldFileVideoHeightMin);
+                                }
+                                if (video.Height > board.ThreadFieldFileVideoHeightMax)
+                                {
+                                    return Status<string>.ErrorStatus(TranslationKey.ErrorThreadFieldFileVideoHeightMax);
+                                }
                             }
-                            if (result.Value.Format.Duration > board.ThreadFieldFileAudioDurationMax)
+                            else
                             {
-                                return Status<string>.ErrorStatus(TranslationKey.ErrorThreadFieldFileAudioDurationMax);
+                                if (result.Value.Format.Duration < board.ReplyFieldFileVideoDurationMin)
+                                {
+                                    return Status<string>.ErrorStatus(TranslationKey.ErrorReplyFieldFileVideoDurationMin);
+                                }
+                                if (result.Value.Format.Duration > board.ReplyFieldFileVideoDurationMax)
+                                {
+                                    return Status<string>.ErrorStatus(TranslationKey.ErrorReplyFieldFileVideoDurationMax);
+                                }
+                                if (video.Width < board.ReplyFieldFileVideoWidthMin)
+                                {
+                                    return Status<string>.ErrorStatus(TranslationKey.ErrorReplyFieldFileVideoWidthMin);
+                                }
+                                if (video.Width > board.ReplyFieldFileVideoWidthMax)
+                                {
+                                    return Status<string>.ErrorStatus(TranslationKey.ErrorReplyFieldFileVideoWidthMax);
+                                }
+                                if (video.Height < board.ReplyFieldFileVideoHeightMin)
+                                {
+                                    return Status<string>.ErrorStatus(TranslationKey.ErrorReplyFieldFileVideoHeightMin);
+                                }
+                                if (video.Height > board.ReplyFieldFileVideoHeightMax)
+                                {
+                                    return Status<string>.ErrorStatus(TranslationKey.ErrorReplyFieldFileVideoHeightMax);
+                                }
                             }
-                        }
-                        else
-                        {
-                            if (result.Value.Format.Duration < board.ReplyFieldFileAudioDurationMin)
+
+                            post.FileWidth = video.Width;
+                            post.FileHeight = video.Height;
+                            post.FileDuration = result.Value.Format.Duration;
+
+                            CalculatePreviewDemensions(video.Width, video.Height, previewWidthMax, previewHeightMax, out int previewWidth, out int previewHeight);
+
+                            post.FilePreviewWidth = previewWidth;
+                            post.FilePreviewHeight = previewHeight;
+
+                            var previewResult = await GeneratePreviewVideoAsync(file, previewPath, previewWidth, previewHeight);
+
+                            if (!previewResult)
                             {
-                                return Status<string>.ErrorStatus(TranslationKey.ErrorReplyFieldFileVideoDurationMin);
+                                return Status<string>.ErrorStatus(post.IsThread() ? TranslationKey.ErrorThreadFieldFile : TranslationKey.ErrorReplyFieldFile);
                             }
-                            if (result.Value.Format.Duration > board.ReplyFieldFileAudioDurationMax)
+
+                            using (var stream = new FileStream(sourcePath, FileMode.Create))
                             {
-                                return Status<string>.ErrorStatus(TranslationKey.ErrorReplyFieldFileAudioDurationMax);
+                                await file.CopyToAsync(stream);
                             }
+
+                            return Status<string>.SuccessStatus();
                         }
+                    }
 
-                        post.FilePreviewWidth = previewWidthMax;
-                        post.FilePreviewHeight = previewHeightMax;
-                        post.FileDuration = result.Value.Format.Duration;
-
-                        if (post.FileMimeType == "video/webm")
+                    if (result.Value.Format.Name != "matroska,webm" || result.Value.Format.Name != "mp3")
+                    {
+                        var audio = result.Value.StreamCollection.FirstOrDefault(stream => stream.CodecType == FFinformationStreamCodecType.Audio);
+                        if (audio != null)
                         {
-                            post.FileMimeType = "audio/webm";
+                            if (post.IsThread())
+                            {
+                                if (result.Value.Format.Duration < board.ThreadFieldFileAudioDurationMin)
+                                {
+                                    return Status<string>.ErrorStatus(TranslationKey.ErrorThreadFieldFileAudioDurationMin);
+                                }
+                                if (result.Value.Format.Duration > board.ThreadFieldFileAudioDurationMax)
+                                {
+                                    return Status<string>.ErrorStatus(TranslationKey.ErrorThreadFieldFileAudioDurationMax);
+                                }
+                            }
+                            else
+                            {
+                                if (result.Value.Format.Duration < board.ReplyFieldFileAudioDurationMin)
+                                {
+                                    return Status<string>.ErrorStatus(TranslationKey.ErrorReplyFieldFileVideoDurationMin);
+                                }
+                                if (result.Value.Format.Duration > board.ReplyFieldFileAudioDurationMax)
+                                {
+                                    return Status<string>.ErrorStatus(TranslationKey.ErrorReplyFieldFileAudioDurationMax);
+                                }
+                            }
+
+                            post.FilePreviewWidth = previewWidthMax;
+                            post.FilePreviewHeight = previewHeightMax;
+                            post.FileDuration = result.Value.Format.Duration;
+
+                            if (post.FileMimeType == "video/webm")
+                            {
+                                post.FileMimeType = "audio/webm";
+                            }
+
+                            var previewResult = await GeneratePreviewAudioAsync(file, previewPath, previewWidthMax, previewHeightMax);
+
+                            if (!previewResult)
+                            {
+                                return Status<string>.ErrorStatus(post.IsThread() ? TranslationKey.ErrorThreadFieldFile : TranslationKey.ErrorReplyFieldFile);
+                            }
+
+                            using (var stream = new FileStream(sourcePath, FileMode.Create))
+                            {
+                                await file.CopyToAsync(stream);
+                            }
+
+                            return Status<string>.SuccessStatus();
                         }
-
-                        var previewResult = await GeneratePreviewAudioAsync(file, previewPath, previewWidthMax, previewHeightMax);
-
-                        if (!previewResult)
-                        {
-                            return Status<string>.ErrorStatus(post.IsThread() ? TranslationKey.ErrorThreadFieldFile : TranslationKey.ErrorReplyFieldFile);
-                        }
-
-                        using (var stream = new FileStream(sourcePath, FileMode.Create))
-                        {
-                            file.CopyTo(stream);
-                        }
-
-                        return Status<string>.SuccessStatus();
                     }
                 }
             }
@@ -321,39 +328,43 @@ namespace WillBoard.Infrastructure.Services
 
         private async Task<bool> GeneratePreviewVideoAsync(IFormFile formFile, string previewPath, int previewWidthMax, int previewHeightMax)
         {
-            var inputStream = formFile.OpenReadStream();
-            var outputArgs = $"-loglevel error -vframes 1 -filter:v scale=\"{previewWidthMax}:{previewHeightMax}\" \"{previewPath}\"";
-
-            var result = await _fftoolService.FFmpegAsync(inputStream, outputArgs);
-
-            if (!result.Success)
+            using (var inputStream = formFile.OpenReadStream())
             {
-                _storageService.DeleteFile(previewPath);
-                return false;
-            }
+                var outputArgs = $"-loglevel error -vframes 1 -filter:v scale=\"{previewWidthMax}:{previewHeightMax}\" \"{previewPath}\"";
 
-            return true;
+                var result = await _fftoolService.FFmpegAsync(inputStream, outputArgs);
+
+                if (!result.Success)
+                {
+                    _storageService.DeleteFile(previewPath);
+                    return false;
+                }
+
+                return true;
+            }
         }
 
         private async Task<bool> GeneratePreviewAudioAsync(IFormFile formFile, string previewPath, int previewWidthMax, int previewHeightMax)
         {
-            var inputStream = formFile.OpenReadStream();
-            var outputArgs = $"-loglevel error -filter_complex \"aformat=channel_layouts=mono,showwavespic=s={previewWidthMax}x{previewHeightMax}:colors=000000\" -frames:v 1 \"{previewPath}\"";
-
-            var result = await _fftoolService.FFmpegAsync(inputStream, outputArgs);
-
-            if (!result.Success)
+            using (var inputStream = formFile.OpenReadStream())
             {
-                _storageService.DeleteFile(previewPath);
-                return false;
-            }
+                var outputArgs = $"-loglevel error -filter_complex \"aformat=channel_layouts=mono,showwavespic=s={previewWidthMax}x{previewHeightMax}:colors=000000\" -frames:v 1 \"{previewPath}\"";
 
-            return true;
+                var result = await _fftoolService.FFmpegAsync(inputStream, outputArgs);
+
+                if (!result.Success)
+                {
+                    _storageService.DeleteFile(previewPath);
+                    return false;
+                }
+
+                return true;
+            }
         }
 
         public string GetMimeType(in IFormFile formFile)
         {
-            using (Stream stream = formFile.OpenReadStream())
+            using (var stream = formFile.OpenReadStream())
             {
                 return GetMimeType(stream, formFile.FileName);
             }

@@ -22,7 +22,7 @@ namespace WillBoard.Core.Utilities
 
         public static string[] DeserializeString(string value)
         {
-            if (value == null)
+            if (string.IsNullOrEmpty(value))
             {
                 return Array.Empty<string>();
             }
@@ -37,7 +37,7 @@ namespace WillBoard.Core.Utilities
 
         public static BigInteger[] DeserializeBigInteger(string value)
         {
-            if (value == null)
+            if (string.IsNullOrEmpty(value))
             {
                 return Array.Empty<BigInteger>();
             }
@@ -52,7 +52,7 @@ namespace WillBoard.Core.Utilities
 
         public static UInt32[] DeserializeUInt32(string value)
         {
-            if (value == null)
+            if (string.IsNullOrEmpty(value))
             {
                 return Array.Empty<UInt32>();
             }
@@ -67,7 +67,7 @@ namespace WillBoard.Core.Utilities
 
         public static BlockList[] DeserializeBlockList(string value)
         {
-            if (value == null)
+            if (string.IsNullOrEmpty(value))
             {
                 return Array.Empty<BlockList>();
             }
@@ -82,7 +82,7 @@ namespace WillBoard.Core.Utilities
 
         public static CssTheme[] DeserializeCssTheme(string value)
         {
-            if (value == null)
+            if (string.IsNullOrEmpty(value))
             {
                 return Array.Empty<CssTheme>();
             }
@@ -97,7 +97,7 @@ namespace WillBoard.Core.Utilities
 
         public static MarkupCustom[] DeserializeMarkupCustom(string value)
         {
-            if (value == null)
+            if (string.IsNullOrEmpty(value))
             {
                 return Array.Empty<MarkupCustom>();
             }
