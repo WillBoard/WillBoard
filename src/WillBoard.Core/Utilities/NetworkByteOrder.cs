@@ -50,7 +50,7 @@ namespace WillBoard.Core.Utilities
         public static void WriteUuid(Span<byte> buffer, Guid value)
         {
             Span<byte> guidBytes = stackalloc byte[16];
-            MemoryMarshal.Write(guidBytes, ref value);
+            MemoryMarshal.Write(guidBytes, in value);
 
             if (BitConverter.IsLittleEndian)
             {
