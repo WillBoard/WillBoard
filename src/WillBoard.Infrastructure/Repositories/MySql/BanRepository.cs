@@ -1,7 +1,6 @@
 ﻿using Dapper;
 using System;
 using System.Collections.Generic;
-using System.Numerics;
 using System.Threading.Tasks;
 using WillBoard.Core.Entities;
 using WillBoard.Core.Enums;
@@ -43,7 +42,7 @@ namespace WillBoard.Infrastructure.Repositories.MySql
             }
         }
 
-        public async Task<IEnumerable<Ban>> ReadSystemUnexpiredCollectionAsync(IpVersion ipVersion, BigInteger ipNumber)
+        public async Task<IEnumerable<Ban>> ReadSystemUnexpiredCollectionAsync(IpVersion ipVersion, UInt128 ipNumber)
         {
             using (var dbConnection = _sqlConnectionService.Connection)
             {
@@ -87,7 +86,7 @@ namespace WillBoard.Infrastructure.Repositories.MySql
             }
         }
 
-        public async Task<IEnumerable<Ban>> ReadBoardUnexpiredCollectionAsync(string boardId, IpVersion ipVersion, BigInteger ipNumber)
+        public async Task<IEnumerable<Ban>> ReadBoardUnexpiredCollectionAsync(string boardId, IpVersion ipVersion, UInt128 ipNumber)
         {
             using (var dbConnection = _sqlConnectionService.Connection)
             {

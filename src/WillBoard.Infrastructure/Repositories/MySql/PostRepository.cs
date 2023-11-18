@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Numerics;
 using System.Threading.Tasks;
 using WillBoard.Core.Entities;
 using WillBoard.Core.Enums;
@@ -154,7 +153,7 @@ namespace WillBoard.Infrastructure.Repositories.MySql
             return post;
         }
 
-        public async Task<Post> ReadThreadLastByIpAsync(string boardId, IpVersion ipVersion, BigInteger ipNumber)
+        public async Task<Post> ReadThreadLastByIpAsync(string boardId, IpVersion ipVersion, UInt128 ipNumber)
         {
             using (var dbConnection = _sqlConnectionService.Connection)
             {
@@ -166,7 +165,7 @@ namespace WillBoard.Infrastructure.Repositories.MySql
             }
         }
 
-        public async Task<Post> ReadReplyLastByIpAsync(string boardId, IpVersion ipVersion, BigInteger ipNumber)
+        public async Task<Post> ReadReplyLastByIpAsync(string boardId, IpVersion ipVersion, UInt128 ipNumber)
         {
             using (var dbConnection = _sqlConnectionService.Connection)
             {
@@ -178,7 +177,7 @@ namespace WillBoard.Infrastructure.Repositories.MySql
             }
         }
 
-        public async Task<Post> ReadReplyLastByIpAndThreadIdAsync(string boardId, IpVersion ipVersion, BigInteger ipNumber)
+        public async Task<Post> ReadReplyLastByIpAndThreadIdAsync(string boardId, IpVersion ipVersion, UInt128 ipNumber)
         {
             using (var dbConnection = _sqlConnectionService.Connection)
             {
@@ -202,7 +201,7 @@ namespace WillBoard.Infrastructure.Repositories.MySql
             }
         }
 
-        public async Task<Post> ReadReplyUserIdAsync(string boardId, int threadId, IpVersion ipVersion, BigInteger ipNumber)
+        public async Task<Post> ReadReplyUserIdAsync(string boardId, int threadId, IpVersion ipVersion, UInt128 ipNumber)
         {
             using (var dbConnection = _sqlConnectionService.Connection)
             {

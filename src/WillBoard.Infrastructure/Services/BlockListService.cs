@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Numerics;
 using System.Threading.Tasks;
 using WillBoard.Core.Classes;
 using WillBoard.Core.Interfaces.Services;
@@ -23,7 +22,7 @@ namespace WillBoard.Infrastructure.Services
             _httpClientFactory = httpClientFactory;
         }
 
-        public async Task<bool> CheckDnsBlockListIpVersion4Async(uint ipNumber, IEnumerable<BlockList> blockListCollection)
+        public async Task<bool> CheckDnsBlockListIpVersion4Async(UInt32 ipNumber, IEnumerable<BlockList> blockListCollection)
         {
             var ipAddress = IpConversion.IpVersion4NumberToIpVersion4AddressString(ipNumber);
 
@@ -55,7 +54,7 @@ namespace WillBoard.Infrastructure.Services
             return false;
         }
 
-        public async Task<bool> CheckDnsBlockListIpVersion6Async(BigInteger ipNumber, IEnumerable<BlockList> blockListCollection)
+        public async Task<bool> CheckDnsBlockListIpVersion6Async(UInt128 ipNumber, IEnumerable<BlockList> blockListCollection)
         {
             var ipAddress = IpConversion.IpVersion6NumberToIpVersion6AddressString(ipNumber, false);
 
@@ -87,7 +86,7 @@ namespace WillBoard.Infrastructure.Services
             return false;
         }
 
-        public async Task<bool> CheckApiBlockListIpVersion4Async(uint ipNumber, IEnumerable<BlockList> blockListCollection)
+        public async Task<bool> CheckApiBlockListIpVersion4Async(UInt32 ipNumber, IEnumerable<BlockList> blockListCollection)
         {
             var ipAddress = IpConversion.IpVersion4NumberToIpVersion4AddressString(ipNumber);
 
@@ -119,7 +118,7 @@ namespace WillBoard.Infrastructure.Services
             return false;
         }
 
-        public async Task<bool> CheckApiBlockListIpVersion6Async(BigInteger ipNumber, IEnumerable<BlockList> blockListCollection)
+        public async Task<bool> CheckApiBlockListIpVersion6Async(UInt128 ipNumber, IEnumerable<BlockList> blockListCollection)
         {
             var ipAddress = IpConversion.IpVersion6NumberToIpVersion6AddressString(ipNumber, false);
 

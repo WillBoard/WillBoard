@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
-using System.Numerics;
 using System.Threading.Tasks;
 using WillBoard.Core.Entities;
 using WillBoard.Core.Enums;
@@ -12,7 +12,7 @@ namespace WillBoard.Core.Interfaces.Repositories
         Task CreateCollectionAsync(IEnumerable<CountryIp> countryIpCollection);
         Task CreateCollectionAsync(IEnumerable<CountryIp> countryIpCollection, IDbConnection dbConnection, IDbTransaction transaction);
 
-        Task<CountryIp> ReadAsync(IpVersion ipVersion, BigInteger ipNumber);
+        Task<CountryIp> ReadAsync(IpVersion ipVersion, UInt128 ipNumber);
 
         Task TruncateAsync();
         Task TruncateAsync(IDbConnection dbConnection, IDbTransaction transaction);

@@ -3,7 +3,6 @@ using Microsoft.Extensions.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
 using System.Threading.Tasks;
 using WillBoard.Core.Entities;
 using WillBoard.Core.Enums;
@@ -690,21 +689,21 @@ namespace WillBoard.Infrastructure.Caches.Memory
             return ((threadCount - 1) / board.PageThreadMax) + 1;
         }
 
-        public async Task<Post> GetAdaptedThreadLastByIpNumberAsync(Board board, IpVersion ipVersion, BigInteger ipNumber)
+        public async Task<Post> GetAdaptedThreadLastByIpNumberAsync(Board board, IpVersion ipVersion, UInt128 ipNumber)
         {
             var postCollection = await GetAdaptedCollectionAsync(board);
 
             return postCollection.Where(e => e.ThreadId == null && e.IpVersion == ipVersion && e.IpNumber == ipNumber).OrderByDescending(item => item.Creation).FirstOrDefault();
         }
 
-        public async Task<Post> GetAdaptedReplyLastByIpNumberAsync(Board board, IpVersion ipVersion, BigInteger ipNumber)
+        public async Task<Post> GetAdaptedReplyLastByIpNumberAsync(Board board, IpVersion ipVersion, UInt128 ipNumber)
         {
             var postCollection = await GetAdaptedCollectionAsync(board);
 
             return postCollection.Where(e => e.ThreadId != null && e.IpVersion == ipVersion && e.IpNumber == ipNumber).OrderByDescending(item => item.Creation).FirstOrDefault();
         }
 
-        public async Task<Post> GetAdaptedReplyUserIdAsync(Board board, int threadId, IpVersion ipVersion, BigInteger ipNumber)
+        public async Task<Post> GetAdaptedReplyUserIdAsync(Board board, int threadId, IpVersion ipVersion, UInt128 ipNumber)
         {
             var postCollection = await GetAdaptedCollectionAsync(board);
 

@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Primitives;
 using System;
 using System.Collections.Generic;
-using System.Numerics;
 using System.Threading.Tasks;
 using WillBoard.Core.Entities;
 using WillBoard.Core.Enums;
@@ -70,7 +69,7 @@ namespace WillBoard.Infrastructure.Caches.Memory
             _cancellationTokenManager.RemoveBanCancellationTokenSource("Cache_GetSystem");
         }
 
-        public async Task<IEnumerable<Ban>> GetSystemUnexpiredCollectionAsync(IpVersion ipVersion, BigInteger ipNumber)
+        public async Task<IEnumerable<Ban>> GetSystemUnexpiredCollectionAsync(IpVersion ipVersion, UInt128 ipNumber)
         {
             if (_memoryCache.TryGetValue($"{nameof(Ban)}_SystemUnexpiredCollection_{ipVersion}_{ipNumber}", out IEnumerable<Ban> banCollection))
             {
@@ -222,7 +221,7 @@ namespace WillBoard.Infrastructure.Caches.Memory
             _cancellationTokenManager.RemoveBanCancellationTokenSource($"Cache_GetBoard_{boardId}");
         }
 
-        public async Task<IEnumerable<Ban>> GetBoardUnexpiredCollectionAsync(string boardId, IpVersion ipVersion, BigInteger ipNumber)
+        public async Task<IEnumerable<Ban>> GetBoardUnexpiredCollectionAsync(string boardId, IpVersion ipVersion, UInt128 ipNumber)
         {
             if (_memoryCache.TryGetValue($"{nameof(Ban)}_BoardUnexpiredCollection_{boardId}_{ipVersion}_{ipNumber}", out IEnumerable<Ban> banCollection))
             {

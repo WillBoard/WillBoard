@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Linq;
-using System.Numerics;
 using WillBoard.Core.Enums;
 using WillBoard.Core.Interfaces.Providers;
 using WillBoard.Core.Interfaces.Services;
@@ -19,7 +18,7 @@ namespace WillBoard.Infrastructure.Services.Instance
             _dateTimeProvider = dateTimeProvider;
         }
 
-        public int CountAndAddOrUpdate(IpVersion ipVersion, BigInteger ipNumber)
+        public int CountAndAddOrUpdate(IpVersion ipVersion, UInt128 ipNumber)
         {
             AddOrUpdate(ipVersion, ipNumber);
 
@@ -36,7 +35,7 @@ namespace WillBoard.Infrastructure.Services.Instance
             return _visitorDictionary.Count;
         }
 
-        public void AddOrUpdate(IpVersion ipVersion, BigInteger ipNumber)
+        public void AddOrUpdate(IpVersion ipVersion, UInt128 ipNumber)
         {
             _visitorDictionary.AddOrUpdate($"{ipVersion}_{ipNumber}", _dateTimeProvider.UtcNow, (key, value) => _dateTimeProvider.UtcNow);
         }

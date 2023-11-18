@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Numerics;
 using WillBoard.Core.Classes;
 using WillBoard.Core.Enums;
 
@@ -18,7 +17,7 @@ namespace WillBoard.Core.Entities
         public BoardAccessibility Accessibility { get; set; }
         public string AccessibilityPassword { get; set; }
         public UInt32[] AccessibilityIpVersion4NumberCollection { get; set; }
-        public BigInteger[] AccessibilityIpVersion6NumberCollection { get; set; }
+        public UInt128[] AccessibilityIpVersion6NumberCollection { get; set; }
 
         public BoardVisibility Visibility { get; set; }
 
@@ -188,13 +187,13 @@ namespace WillBoard.Core.Entities
 
         public bool CountryIpVersion6BlockAvailability { get; set; }
         public string[] CountryIpVersion6BlockCollection { get; set; }
-        public BigInteger[] CountryIpVersion6ExclusionIpNumberCollection { get; set; }
+        public UInt128[] CountryIpVersion6ExclusionIpNumberCollection { get; set; }
 
         public bool BadIpVersion4BlockAvailability { get; set; }
         public UInt32[] BadIpVersion4BlockExclusionIpNumberCollection { get; set; }
 
         public bool BadIpVersion6BlockAvailability { get; set; }
-        public BigInteger[] BadIpVersion6BlockExclusionIpNumberCollection { get; set; }
+        public UInt128[] BadIpVersion6BlockExclusionIpNumberCollection { get; set; }
 
         public bool DnsBlockListIpVersion4Availability { get; set; }
         public bool DnsBlockListIpVersion4Cache { get; set; }
@@ -204,7 +203,7 @@ namespace WillBoard.Core.Entities
         public bool DnsBlockListIpVersion6Availability { get; set; }
         public bool DnsBlockListIpVersion6Cache { get; set; }
         public BlockList[] DnsBlockListIpVersion6Collection { get; set; }
-        public BigInteger[] DnsBlockListIpVersion6ExclusionIpNumberCollection { get; set; }
+        public UInt128[] DnsBlockListIpVersion6ExclusionIpNumberCollection { get; set; }
 
         public bool ApiBlockListIpVersion4Availability { get; set; }
         public bool ApiBlockListIpVersion4Cache { get; set; }
@@ -214,7 +213,7 @@ namespace WillBoard.Core.Entities
         public bool ApiBlockListIpVersion6Availability { get; set; }
         public bool ApiBlockListIpVersion6Cache { get; set; }
         public BlockList[] ApiBlockListIpVersion6Collection { get; set; }
-        public BigInteger[] ApiBlockListIpVersion6ExclusionIpNumberCollection { get; set; }
+        public UInt128[] ApiBlockListIpVersion6ExclusionIpNumberCollection { get; set; }
 
         public VerificationType FieldVerificationType { get; set; }
 
@@ -253,7 +252,7 @@ namespace WillBoard.Core.Entities
             Accessibility = BoardAccessibility.Public;
             AccessibilityPassword = "";
             AccessibilityIpVersion4NumberCollection = Array.Empty<UInt32>();
-            AccessibilityIpVersion6NumberCollection = Array.Empty<BigInteger>();
+            AccessibilityIpVersion6NumberCollection = Array.Empty<UInt128>();
 
             Visibility = BoardVisibility.Hidden;
 
@@ -437,13 +436,13 @@ namespace WillBoard.Core.Entities
 
             CountryIpVersion6BlockAvailability = false;
             CountryIpVersion6BlockCollection = Array.Empty<string>();
-            CountryIpVersion6ExclusionIpNumberCollection = Array.Empty<BigInteger>();
+            CountryIpVersion6ExclusionIpNumberCollection = Array.Empty<UInt128>();
 
             BadIpVersion4BlockAvailability = false;
             BadIpVersion4BlockExclusionIpNumberCollection = Array.Empty<UInt32>();
 
             BadIpVersion6BlockAvailability = false;
-            BadIpVersion6BlockExclusionIpNumberCollection = Array.Empty<BigInteger>();
+            BadIpVersion6BlockExclusionIpNumberCollection = Array.Empty<UInt128>();
 
             DnsBlockListIpVersion4Availability = false;
             DnsBlockListIpVersion4Collection = Array.Empty<BlockList>();
@@ -451,7 +450,7 @@ namespace WillBoard.Core.Entities
 
             DnsBlockListIpVersion6Availability = false;
             DnsBlockListIpVersion6Collection = Array.Empty<BlockList>();
-            DnsBlockListIpVersion6ExclusionIpNumberCollection = Array.Empty<BigInteger>();
+            DnsBlockListIpVersion6ExclusionIpNumberCollection = Array.Empty<UInt128>();
 
             ApiBlockListIpVersion4Availability = false;
             ApiBlockListIpVersion4Collection = Array.Empty<BlockList>();
@@ -459,7 +458,7 @@ namespace WillBoard.Core.Entities
 
             ApiBlockListIpVersion6Availability = false;
             ApiBlockListIpVersion6Collection = Array.Empty<BlockList>();
-            ApiBlockListIpVersion6ExclusionIpNumberCollection = Array.Empty<BigInteger>();
+            ApiBlockListIpVersion6ExclusionIpNumberCollection = Array.Empty<UInt128>();
 
             FieldVerificationType = VerificationType.None;
 

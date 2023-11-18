@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Http;
-using System.Numerics;
 using System.Threading.Tasks;
 using WillBoard.Core.Enums;
 using WillBoard.Core.Extensions;
@@ -28,7 +27,7 @@ namespace WillBoard.Web.Middlewares
             switch (ipVersion)
             {
                 case IpVersion.IpVersion4:
-                    ipManager.SetIpNumber((BigInteger)IpConversion.IpVersion4AddressToIpVersion4Number(ipAddress));
+                    ipManager.SetIpNumber(IpConversion.IpVersion4AddressToIpVersion4Number(ipAddress));
                     break;
 
                 case IpVersion.IpVersion6:

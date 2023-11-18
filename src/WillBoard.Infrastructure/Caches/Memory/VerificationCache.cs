@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Primitives;
 using System;
 using System.Collections.Generic;
-using System.Numerics;
 using System.Threading.Tasks;
 using WillBoard.Core.Entities;
 using WillBoard.Core.Enums;
@@ -27,7 +26,7 @@ namespace WillBoard.Infrastructure.Caches.Memory
             _cancellationTokenManager = cancellationTokenManager;
         }
 
-        public async Task<IEnumerable<Verification>> GetSystemUnexpiredCollectionAsync(IpVersion ipVersion, BigInteger ipNumber)
+        public async Task<IEnumerable<Verification>> GetSystemUnexpiredCollectionAsync(IpVersion ipVersion, UInt128 ipNumber)
         {
             if (_memoryCache.TryGetValue($"{nameof(Verification)}_SystemUnexpiredCollection_{ipVersion}_{ipNumber}", out IEnumerable<Verification> verificationCollection))
             {
@@ -60,7 +59,7 @@ namespace WillBoard.Infrastructure.Caches.Memory
             }
         }
 
-        public async Task RemoveSystemUnexpiredCollectionAsync(IpVersion ipVersion, BigInteger ipNumber)
+        public async Task RemoveSystemUnexpiredCollectionAsync(IpVersion ipVersion, UInt128 ipNumber)
         {
             _memoryCache.Remove($"{nameof(Verification)}_SystemUnexpiredCollection_{ipVersion}_{ipNumber}");
         }
@@ -70,7 +69,7 @@ namespace WillBoard.Infrastructure.Caches.Memory
             _cancellationTokenManager.RemoveVerificationCancellationTokenSource("Cache_GetSystemUnexpiredCollection");
         }
 
-        public async Task<IEnumerable<Verification>> GetBoardUnexpiredCollectionAsync(string boardId, IpVersion ipVersion, BigInteger ipNumber)
+        public async Task<IEnumerable<Verification>> GetBoardUnexpiredCollectionAsync(string boardId, IpVersion ipVersion, UInt128 ipNumber)
         {
             if (_memoryCache.TryGetValue($"{nameof(Verification)}_BoardUnexpiredCollection_{boardId}_{ipVersion}_{ipNumber}", out IEnumerable<Verification> verificationCollection))
             {
@@ -103,7 +102,7 @@ namespace WillBoard.Infrastructure.Caches.Memory
             }
         }
 
-        public async Task RemoveBoardUnexpiredCollectionAsync(string boardId, IpVersion ipVersion, BigInteger ipNumber)
+        public async Task RemoveBoardUnexpiredCollectionAsync(string boardId, IpVersion ipVersion, UInt128 ipNumber)
         {
             _memoryCache.Remove($"{nameof(Verification)}_BoardUnexpiredCollection_{boardId}_{ipVersion}_{ipNumber}");
         }

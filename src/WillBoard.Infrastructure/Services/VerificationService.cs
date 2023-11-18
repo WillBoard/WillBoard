@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Numerics;
 using System.Threading.Tasks;
 using WillBoard.Core.Entities;
 using WillBoard.Core.Enums;
@@ -28,7 +27,7 @@ namespace WillBoard.Infrastructure.Services
             _classicCaptchaService = classicCaptchaService;
         }
 
-        public async Task<bool> CheckAsync(bool thread, IpVersion ipVersion, BigInteger ipNumber, Board board)
+        public async Task<bool> CheckAsync(bool thread, IpVersion ipVersion, UInt128 ipNumber, Board board)
         {
             if (thread)
             {
@@ -108,7 +107,7 @@ namespace WillBoard.Infrastructure.Services
             return false;
         }
 
-        public async Task<bool> VerifyAsync(bool thread, IpVersion ipVersion, BigInteger ipNumber, Board board, string key, string value)
+        public async Task<bool> VerifyAsync(bool thread, IpVersion ipVersion, UInt128 ipNumber, Board board, string key, string value)
         {
             if ((board.ReplyFieldVerificationMode == VerificationMode.None && !thread) || (board.ThreadFieldVerificationMode == VerificationMode.None && thread))
             {

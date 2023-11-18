@@ -1,5 +1,5 @@
 ﻿using Dapper;
-using System.Numerics;
+using System;
 using System.Threading.Tasks;
 using WillBoard.Core.Entities;
 using WillBoard.Core.Enums;
@@ -16,12 +16,12 @@ namespace WillBoard.Infrastructure.Repositories.MySql
             _sqlConnectionService = sqlConnectionService;
         }
 
-        public async Task<BadIp> ReadAsync(IpVersion ipVersion, BigInteger ipNumber)
+        public async Task<BadIp> ReadAsync(IpVersion ipVersion, UInt128 ipNumber)
         {
             using (var dbConnection = _sqlConnectionService.Connection)
             {
                 // String interpolation is a workaround for converting parameter into a string.
-                // The problem still exists even when when DbType is set to VarNumeric in BigIntegerTypeHandler.
+                // The problem still exists even when when DbType is set to VarNumeric in UInt128TypeHandler.
                 var sql = $"SELECT * FROM `BadIp` WHERE `IpVersion` = @IpVersion AND `IpNumberFrom` <= {ipNumber} AND `IpNumberTo` >= {ipNumber} LIMIT 1;";
 
                 dbConnection.Open();

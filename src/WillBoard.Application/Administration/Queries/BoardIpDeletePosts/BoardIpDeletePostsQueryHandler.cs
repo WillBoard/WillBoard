@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using System.Numerics;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using WillBoard.Core.Consts;
@@ -36,7 +36,7 @@ namespace WillBoard.Application.Administration.Queries.BoardIpDeletePosts
                 return Result<BoardIpDeletePostsViewModel, InternalError>.ErrorResult(new InternalError(400, TranslationKey.ErrorInvalidIpVersion));
             }
 
-            if (!BigInteger.TryParse(request.IpNumber, out BigInteger bigInteger))
+            if (!UInt128.TryParse(request.IpNumber, out UInt128 ipNumber))
             {
                 return Result<BoardIpDeletePostsViewModel, InternalError>.ErrorResult(new InternalError(403, TranslationKey.ErrorInvalidIpNumber));
             }
@@ -50,7 +50,7 @@ namespace WillBoard.Application.Administration.Queries.BoardIpDeletePosts
             {
                 BoardId = board.BoardId,
                 IpVersion = request.IpVersion,
-                IpNumber = bigInteger
+                IpNumber = ipNumber
             };
 
             return Result<BoardIpDeletePostsViewModel, InternalError>.ValueResult(result);

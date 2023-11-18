@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Primitives;
 using System;
 using System.Collections.Generic;
-using System.Numerics;
 using System.Threading.Tasks;
 using WillBoard.Core.Classes;
 using WillBoard.Core.Interfaces.Caches;
@@ -26,7 +25,7 @@ namespace WillBoard.Infrastructure.Caches.Memory
             _cancellationTokenManager = cancellationTokenManager;
         }
 
-        public async Task<bool> GetBoardDnsBlockListIpVersion4Async(string boardId, uint ipNumber, IEnumerable<BlockList> blockListCollection)
+        public async Task<bool> GetBoardDnsBlockListIpVersion4Async(string boardId, UInt32 ipNumber, IEnumerable<BlockList> blockListCollection)
         {
             if (_memoryCache.TryGetValue($"{nameof(BlockList)}_BoardDnsBlockListIpVersion4_{boardId}_{ipNumber}", out bool blockListResult))
             {
@@ -59,7 +58,7 @@ namespace WillBoard.Infrastructure.Caches.Memory
             }
         }
 
-        public async Task RemoveBoardDnsBlockListIpVersion4Async(string boardId, uint ipNumber)
+        public async Task RemoveBoardDnsBlockListIpVersion4Async(string boardId, UInt32 ipNumber)
         {
             _memoryCache.Remove($"{nameof(BlockList)}_BoardDnsBlockListIpVersion4_{boardId}_{ipNumber}");
         }
@@ -69,7 +68,7 @@ namespace WillBoard.Infrastructure.Caches.Memory
             _cancellationTokenManager.RemoveBlockListCancellationTokenSource("Cache_GetBoardDnsBlockListIpVersion4");
         }
 
-        public async Task<bool> GetBoardDnsBlockListIpVersion6Async(string boardId, BigInteger ipNumber, IEnumerable<BlockList> blockListCollection)
+        public async Task<bool> GetBoardDnsBlockListIpVersion6Async(string boardId, UInt128 ipNumber, IEnumerable<BlockList> blockListCollection)
         {
             if (_memoryCache.TryGetValue($"{nameof(BlockList)}_BoardDnsBlockListIpVersion6_{boardId}_{ipNumber}", out bool blockListResult))
             {
@@ -102,7 +101,7 @@ namespace WillBoard.Infrastructure.Caches.Memory
             }
         }
 
-        public async Task RemoveBoardDnsBlockListIpVersion6Async(string boardId, BigInteger ipNumber)
+        public async Task RemoveBoardDnsBlockListIpVersion6Async(string boardId, UInt128 ipNumber)
         {
             _memoryCache.Remove($"{nameof(BlockList)}_BoardDnsBlockListIpVersion6_{boardId}_{ipNumber}");
         }
@@ -112,7 +111,7 @@ namespace WillBoard.Infrastructure.Caches.Memory
             _cancellationTokenManager.RemoveBlockListCancellationTokenSource("Cache_GetBoardDnsBlockListIpVersion6");
         }
 
-        public async Task<bool> GetBoardApiBlockListIpVersion4Async(string boardId, uint ipNumber, IEnumerable<BlockList> blockListCollection)
+        public async Task<bool> GetBoardApiBlockListIpVersion4Async(string boardId, UInt32 ipNumber, IEnumerable<BlockList> blockListCollection)
         {
             if (_memoryCache.TryGetValue($"{nameof(BlockList)}_BoardApiBlockListIpVersion4_{boardId}_{ipNumber}", out bool blockListResult))
             {
@@ -145,7 +144,7 @@ namespace WillBoard.Infrastructure.Caches.Memory
             }
         }
 
-        public async Task RemoveBoardApiBlockListIpVersion4Async(string boardId, uint ipNumber)
+        public async Task RemoveBoardApiBlockListIpVersion4Async(string boardId, UInt32 ipNumber)
         {
             _memoryCache.Remove($"{nameof(BlockList)}_BoardApiBlockListIpVersion4_{boardId}_{ipNumber}");
         }
@@ -155,7 +154,7 @@ namespace WillBoard.Infrastructure.Caches.Memory
             _cancellationTokenManager.RemoveBlockListCancellationTokenSource("Cache_GetBoardApiBlockListIpVersion4");
         }
 
-        public async Task<bool> GetBoardApiBlockListIpVersion6Async(string boardId, BigInteger ipNumber, IEnumerable<BlockList> blockListCollection)
+        public async Task<bool> GetBoardApiBlockListIpVersion6Async(string boardId, UInt128 ipNumber, IEnumerable<BlockList> blockListCollection)
         {
             if (_memoryCache.TryGetValue($"{nameof(BlockList)}_BoardApiBlockListIpVersion6_{boardId}_{ipNumber}", out bool blockListResult))
             {
@@ -188,7 +187,7 @@ namespace WillBoard.Infrastructure.Caches.Memory
             }
         }
 
-        public async Task RemoveBoardApiBlockListIpVersion6Async(string boardId, BigInteger ipNumber)
+        public async Task RemoveBoardApiBlockListIpVersion6Async(string boardId, UInt128 ipNumber)
         {
             _memoryCache.Remove($"{nameof(BlockList)}_BoardApiBlockListIpVersion6_{boardId}_{ipNumber}");
         }

@@ -50,7 +50,7 @@
                         <tr>
                             <th>@nameof(BoardBanUpdateCommand.ExclusionIpNumberCollection)</th>
                             <td>
-                                <textarea name="@nameof(BoardBanUpdateCommand.ExclusionIpNumberCollection)">@ArrayConversion.SerializeBigInteger(Model.Ban.ExclusionIpNumberCollection)</textarea>
+                                <textarea name="@nameof(BoardBanUpdateCommand.ExclusionIpNumberCollection)">@ArrayConversion.SerializeUInt128(Model.Ban.ExclusionIpNumberCollection)</textarea>
                             </td>
                         </tr>
                         <tr>

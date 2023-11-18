@@ -1,6 +1,6 @@
 ﻿using MediatR;
+using System;
 using System.Linq;
-using System.Numerics;
 using System.Threading;
 using System.Threading.Tasks;
 using WillBoard.Core.Consts;
@@ -43,7 +43,7 @@ namespace WillBoard.Application.Administration.Queries.BoardIp
                 return Result<BoardIpViewModel, InternalError>.ErrorResult(new InternalError(400, TranslationKey.ErrorInvalidIpVersion));
             }
 
-            if (!BigInteger.TryParse(request.IpNumber, out BigInteger bigInteger))
+            if (!UInt128.TryParse(request.IpNumber, out UInt128 ipNumber))
             {
                 return Result<BoardIpViewModel, InternalError>.ErrorResult(new InternalError(403, TranslationKey.ErrorInvalidIpNumber));
             }
@@ -55,18 +55,18 @@ namespace WillBoard.Application.Administration.Queries.BoardIp
 
             var postCollection = await _postCache.GetAdaptedCollectionAsync(board);
 
-            var ipPostCollection = postCollection.Where(e => e.IpVersion == request.IpVersion && e.IpNumber == bigInteger).OrderByDescending(e => e.PostId);
+            var ipPostCollection = postCollection.Where(e => e.IpVersion == request.IpVersion && e.IpNumber == ipNumber).OrderByDescending(e => e.PostId);
 
-            var ipAddress = IpConversion.IpNumberToIpAddress(request.IpVersion, bigInteger);
+            var ipAddress = IpConversion.IpNumberToIpAddress(request.IpVersion, ipNumber);
             var dns = await _ipService.GetDnsHostNameAsync(ipAddress);
 
-            var country = await _ipService.GetCountryIpAsync(request.IpVersion, bigInteger);
+            var country = await _ipService.GetCountryIpAsync(request.IpVersion, ipNumber);
 
             var result = new BoardIpViewModel()
             {
                 PostCollection = ipPostCollection,
                 IpVersion = request.IpVersion,
-                IpNumber = bigInteger,
+                IpNumber = ipNumber,
                 Dns = dns,
                 Country = country
             };

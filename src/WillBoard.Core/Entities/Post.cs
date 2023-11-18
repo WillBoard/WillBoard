@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Numerics;
 using WillBoard.Core.Enums;
 
 namespace WillBoard.Core.Entities
@@ -42,7 +41,7 @@ namespace WillBoard.Core.Entities
         public string Password { get; set; }
 
         public IpVersion IpVersion { get; set; }
-        public BigInteger IpNumber { get; set; }
+        public UInt128 IpNumber { get; set; }
 
         public string Country { get; set; }
         public string UserAgent { get; set; }

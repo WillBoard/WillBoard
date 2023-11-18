@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Numerics;
 using WillBoard.Core.Entities;
 using WillBoard.Core.Enums;
 
@@ -38,7 +37,7 @@ namespace WillBoard.Application.DataModels
         public int? FilePreviewHeight { get; set; }
 
         public IpVersion? IPVersion { get; set; }
-        public BigInteger? IPNumber { get; set; }
+        public UInt128? IPNumber { get; set; }
 
         public string Country { get; set; }
         public string UserAgent { get; set; }

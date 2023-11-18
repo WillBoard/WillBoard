@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using System.Numerics;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using WillBoard.Core.Consts;
@@ -28,12 +28,12 @@ namespace WillBoard.Application.Administration.Queries.BanCreate
                 return Result<BanCreateViewModel, InternalError>.ErrorResult(new InternalError(403, TranslationKey.ErrorForbidden));
             }
 
-            BigInteger.TryParse(request.IPNumber, out BigInteger bigInteger);
+            UInt128.TryParse(request.IPNumber, out UInt128 ipNumber);
 
             var result = new BanCreateViewModel()
             {
                 IPVersion = request.IPVersion,
-                IPNumber = bigInteger
+                IPNumber = ipNumber
             };
 
             return Result<BanCreateViewModel, InternalError>.ValueResult(result);

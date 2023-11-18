@@ -5,25 +5,23 @@ using WillBoard.Core.Enums;
 
 namespace WillBoard.Core.Utilities
 {
-    // Change BigInteger to UInt128 in future
-    // https://github.com/dotnet/runtime/issues/67151
     public static class IpConversion
     {
-        public static uint IpVersion4AddressToIpVersion4Number(IPAddress ipAddress)
+        public static UInt32 IpVersion4AddressToIpVersion4Number(IPAddress ipAddress)
         {
             Span<byte> ipAddressByteSpan = ipAddress.GetAddressBytes();
 
             return NetworkByteOrder.ReadUInt32(ipAddressByteSpan);
         }
 
-        public static BigInteger IpVersion6AddressToIpVersion6Number(IPAddress ipAddress)
+        public static UInt128 IpVersion6AddressToIpVersion6Number(IPAddress ipAddress)
         {
-            ReadOnlySpan<byte> ipAddressByteSpan = ipAddress.GetAddressBytes();
+            Span<byte> ipAddressByteSpan = ipAddress.GetAddressBytes();
 
-            return new BigInteger(ipAddressByteSpan, true, true);
+            return NetworkByteOrder.ReadUInt128(ipAddressByteSpan);
         }
 
-        public static IPAddress IpVersion4NumberToIpVersion4Address(uint ipNumber)
+        public static IPAddress IpVersion4NumberToIpVersion4Address(UInt32 ipNumber)
         {
             Span<byte> ipAddressByteSpan = stackalloc byte[4];
 
@@ -32,17 +30,13 @@ namespace WillBoard.Core.Utilities
             return new IPAddress(ipAddressByteSpan);
         }
 
-        public static IPAddress IpVersion6NumberToIpVersion6Address(BigInteger ipNumber)
+        public static IPAddress IpVersion6NumberToIpVersion6Address(UInt128 ipNumber)
         {
-            Span<byte> emptyIpAddressByteSpan = stackalloc byte[16];
-            ReadOnlySpan<byte> ipAddressByteSpan = ipNumber.ToByteArray(true, true);
+            Span<byte> ipAddressByteSpan = stackalloc byte[16];
 
-            for (int i = 0; i < ipAddressByteSpan.Length; i++)
-            {
-                emptyIpAddressByteSpan[15 - i] = ipAddressByteSpan[i];
-            }
+            NetworkByteOrder.WriteUInt128(ipAddressByteSpan, ipNumber);
 
-            return new IPAddress(emptyIpAddressByteSpan);
+            return new IPAddress(ipAddressByteSpan);
         }
 
         // IP Address = w.x.y.z
@@ -70,18 +64,18 @@ namespace WillBoard.Core.Utilities
         // where % is the modulus operator and int returns the integer part of the division.
         // NOTE: All parts need to be converted into hexadecimal to be part of the IPv6 address.
         // More about IPv6 address formats https://www.ibm.com/docs/en/i/7.2?topic=concepts-ipv6-address-formats
-        public static string IpVersion6NumberToIpVersion6AddressString(BigInteger ipNumber, bool omitLeadingZeros = true)
+        public static string IpVersion6NumberToIpVersion6AddressString(UInt128 ipNumber, bool omitLeadingZeros = true)
         {
             var format = omitLeadingZeros ? "X" : "X4";
             return ((int)((ipNumber / BigInteger.Pow(65536, 7)) % 65536)).ToString(format) + ":" + ((int)((ipNumber / BigInteger.Pow(65536, 6)) % 65536)).ToString(format) + ":" + ((int)((ipNumber / BigInteger.Pow(65536, 5)) % 65536)).ToString(format) + ":" + ((int)((ipNumber / BigInteger.Pow(65536, 4)) % 65536)).ToString(format) + ":" + ((int)((ipNumber / BigInteger.Pow(65536, 3)) % 65536)).ToString(format) + ":" + ((int)((ipNumber / BigInteger.Pow(65536, 2)) % 65536)).ToString(format) + ":" + ((int)((ipNumber / 65536) % 65536)).ToString(format) + ":" + ((int)(ipNumber % 65536)).ToString(format);
         }
 
-        public static IPAddress IpNumberToIpAddress(IpVersion ipVersion, BigInteger ipNumber)
+        public static IPAddress IpNumberToIpAddress(IpVersion ipVersion, UInt128 ipNumber)
         {
             switch (ipVersion)
             {
                 case IpVersion.IpVersion4:
-                    return IpVersion4NumberToIpVersion4Address((uint)ipNumber);
+                    return IpVersion4NumberToIpVersion4Address((UInt32)ipNumber);
 
                 case IpVersion.IpVersion6:
                     return IpVersion6NumberToIpVersion6Address(ipNumber);
@@ -91,12 +85,12 @@ namespace WillBoard.Core.Utilities
             }
         }
 
-        public static string IpNumberToIpAddressString(IpVersion ipVersion, BigInteger ipNumber)
+        public static string IpNumberToIpAddressString(IpVersion ipVersion, UInt128 ipNumber)
         {
             switch (ipVersion)
             {
                 case IpVersion.IpVersion4:
-                    return IpVersion4NumberToIpVersion4AddressString((uint)ipNumber);
+                    return IpVersion4NumberToIpVersion4AddressString((UInt32)ipNumber);
 
                 case IpVersion.IpVersion6:
                     return IpVersion6NumberToIpVersion6AddressString(ipNumber);

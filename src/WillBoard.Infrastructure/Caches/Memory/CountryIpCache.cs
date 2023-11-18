@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Primitives;
 using System;
-using System.Numerics;
 using System.Threading.Tasks;
 using WillBoard.Core.Entities;
 using WillBoard.Core.Enums;
@@ -26,7 +25,7 @@ namespace WillBoard.Infrastructure.Caches.Memory
             _cancellationTokenManager = cancellationTokenManager;
         }
 
-        public async Task<CountryIp> GetAsync(IpVersion ipVersion, BigInteger ipNumber)
+        public async Task<CountryIp> GetAsync(IpVersion ipVersion, UInt128 ipNumber)
         {
             if (_memoryCache.TryGetValue($"{nameof(CountryIp)}_{ipVersion}_{ipNumber}", out CountryIp countryIP))
             {
@@ -59,7 +58,7 @@ namespace WillBoard.Infrastructure.Caches.Memory
             }
         }
 
-        public async Task RemoveAsync(IpVersion ipVersion, BigInteger ipNumber)
+        public async Task RemoveAsync(IpVersion ipVersion, UInt128 ipNumber)
         {
             _memoryCache.Remove($"{nameof(CountryIp)}_{ipVersion}_{ipNumber}");
         }

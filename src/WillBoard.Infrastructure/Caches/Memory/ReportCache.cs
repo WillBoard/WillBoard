@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Primitives;
 using System;
 using System.Collections.Generic;
-using System.Numerics;
 using System.Threading.Tasks;
 using WillBoard.Core.Entities;
 using WillBoard.Core.Enums;
@@ -70,7 +69,7 @@ namespace WillBoard.Infrastructure.Caches.Memory
             _cancellationTokenManager.RemoveReportCancellationTokenSource("Cache_GetSystem");
         }
 
-        public async Task<IEnumerable<Report>> GetSystemIpCollectionAsync(IpVersion ipVersion, BigInteger ipNumber)
+        public async Task<IEnumerable<Report>> GetSystemIpCollectionAsync(IpVersion ipVersion, UInt128 ipNumber)
         {
             if (_memoryCache.TryGetValue($"{nameof(Report)}_SystemIpCollection_{ipVersion}_{ipNumber}", out IEnumerable<Report> reportCollection))
             {
@@ -103,7 +102,7 @@ namespace WillBoard.Infrastructure.Caches.Memory
             }
         }
 
-        public async Task RemoveSystemIpCollectionAsync(IpVersion ipVersion, BigInteger ipNumber)
+        public async Task RemoveSystemIpCollectionAsync(IpVersion ipVersion, UInt128 ipNumber)
         {
             _memoryCache.Remove($"{nameof(Report)}_SystemIpCollection_{ipVersion}_{ipNumber}");
         }
@@ -227,7 +226,7 @@ namespace WillBoard.Infrastructure.Caches.Memory
             _cancellationTokenManager.RemoveReportCancellationTokenSource($"Cache_GetBoard_{boardId}");
         }
 
-        public async Task<IEnumerable<Report>> GetBoardIpCollectionAsync(string boardId, IpVersion ipVersion, BigInteger ipNumber)
+        public async Task<IEnumerable<Report>> GetBoardIpCollectionAsync(string boardId, IpVersion ipVersion, UInt128 ipNumber)
         {
             if (_memoryCache.TryGetValue($"{nameof(Report)}_BoardIpCollection_{boardId}_{ipVersion}_{ipNumber}", out IEnumerable<Report> reportCollection))
             {
@@ -260,7 +259,7 @@ namespace WillBoard.Infrastructure.Caches.Memory
             }
         }
 
-        public async Task RemoveBoardIpCollectionAsync(string boardId, IpVersion ipVersion, BigInteger ipNumber)
+        public async Task RemoveBoardIpCollectionAsync(string boardId, IpVersion ipVersion, UInt128 ipNumber)
         {
             _memoryCache.Remove($"{nameof(Report)}_BoardIpCollection_{boardId}_{ipVersion}_{ipNumber}");
         }

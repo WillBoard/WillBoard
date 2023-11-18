@@ -47,7 +47,7 @@
                             <td>@ban.IpVersion</td>
                             <td>@ban.IpNumberFrom (@IpConversion.IpNumberToIpAddressString(ban.IpVersion, ban.IpNumberFrom))</td>
                             <td>@ban.IpNumberTo (@IpConversion.IpNumberToIpAddressString(ban.IpVersion, ban.IpNumberTo))</td>
-                            <td>@ArrayConversion.SerializeBigInteger(ban.ExclusionIpNumberCollection)</td>
+                            <td>@ArrayConversion.SerializeUInt128(ban.ExclusionIpNumberCollection)</td>
                             <td>@ban.Reason</td>
                             <td>@ban.Note</td>
                             <td class="link-action">

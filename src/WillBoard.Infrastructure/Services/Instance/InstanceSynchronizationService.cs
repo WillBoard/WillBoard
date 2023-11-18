@@ -2,7 +2,6 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
 using System.Threading;
 using WillBoard.Core.Classes;
 using WillBoard.Core.Enums;
@@ -89,7 +88,7 @@ namespace WillBoard.Infrastructure.Services.Instance
             }
         }
 
-        public SynchronizationSubscription<T> Subscribe<T>(IpVersion ipVersion, BigInteger ipNumber, params string[] synchronizationNameCollection) where T : class
+        public SynchronizationSubscription<T> Subscribe<T>(IpVersion ipVersion, UInt128 ipNumber, params string[] synchronizationNameCollection) where T : class
         {
             if (synchronizationNameCollection == null)
             {

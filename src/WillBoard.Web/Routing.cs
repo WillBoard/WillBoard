@@ -15,7 +15,7 @@ namespace WillBoard.Web
         private static CompositeRouteConstraint _int = new CompositeRouteConstraint(new IRouteConstraint[] { new IntRouteConstraint() });
         private static CompositeRouteConstraint _bool = new CompositeRouteConstraint(new IRouteConstraint[] { new BoolRouteConstraint() });
         private static CompositeRouteConstraint _guid = new CompositeRouteConstraint(new IRouteConstraint[] { new GuidRouteConstraint() });
-        private static CompositeRouteConstraint _bigInteger = new CompositeRouteConstraint(new IRouteConstraint[] { new RegexRouteConstraint("^[0-9]{1,40}$") });
+        private static CompositeRouteConstraint _uInt128 = new CompositeRouteConstraint(new IRouteConstraint[] { new RegexRouteConstraint("^[1-9][0-9]{1,38}$") });
 
         public static IEndpointRouteBuilder Generate(IEndpointRouteBuilder endpointRouteBuilder)
         {
@@ -409,14 +409,14 @@ namespace WillBoard.Web
                 name: "administration/board/{boardId}/ip/{ipVersion}/{ipNumber}",
                 pattern: "administration/board/{boardId}/ip/{ipVersion}/{ipNumber}",
                 defaults: new { controller = "Administration", action = "BoardIp" },
-                constraints: new { boardId = _boardId, ipVersion = _int, ipNumber = _bigInteger }
+                constraints: new { boardId = _boardId, ipVersion = _int, ipNumber = _uInt128 }
             ).WithMetadata(new EndpointResponse(EndpointContentType.HTML));
 
             endpointRouteBuilder.MapControllerRoute(
                 name: "administration/board/{boardId}/ip/{ipVersion}/{ipNumber}/delete-posts",
                 pattern: "administration/board/{boardId}/ip/{ipVersion}/{ipNumber}/delete-posts",
                 defaults: new { controller = "Administration", action = "BoardIpDeletePosts" },
-                constraints: new { boardId = _boardId, ipVersion = _int, ipNumber = _bigInteger }
+                constraints: new { boardId = _boardId, ipVersion = _int, ipNumber = _uInt128 }
             ).WithMetadata(new EndpointResponse(EndpointContentType.HTML));
 
             endpointRouteBuilder.MapControllerRoute(

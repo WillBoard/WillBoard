@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Numerics;
 using WillBoard.Core.Enums;
 
 namespace WillBoard.Core.Entities
@@ -9,7 +8,7 @@ namespace WillBoard.Core.Entities
         public Guid AuthenticationId { get; set; }
         public Guid AccountId { get; set; }
         public IpVersion IpVersion { get; set; }
-        public BigInteger IpNumber { get; set; }
+        public UInt128 IpNumber { get; set; }
         public DateTime Creation { get; set; }
         public DateTime Expiration { get; set; }
         public string Name { get; set; }

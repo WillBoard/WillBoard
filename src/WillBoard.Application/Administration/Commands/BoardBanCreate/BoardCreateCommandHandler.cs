@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using System;
-using System.Numerics;
 using System.Threading;
 using System.Threading.Tasks;
 using WillBoard.Core.Consts;
@@ -52,11 +51,6 @@ namespace WillBoard.Application.Administration.Commands.BoardBanCreate
                 return Status<InternalError>.ErrorStatus(new InternalError(400, TranslationKey.ErrorInvalidIpVersion));
             }
 
-            if (!BigInteger.TryParse(request.IpNumber, out BigInteger bigInteger))
-            {
-                return Status<InternalError>.ErrorStatus(new InternalError(403, TranslationKey.ErrorInvalidIpNumber));
-            }
-
             var ban = new Ban()
             {
                 BanId = Guid.NewGuid(),
@@ -67,19 +61,29 @@ namespace WillBoard.Application.Administration.Commands.BoardBanCreate
 
             if (ban.IpVersion == IpVersion.IpVersion4)
             {
-                var ipNumberRange = IpRange.IpVersion4NumberWithCidrToRange((uint)bigInteger, request.Cidr);
+                if (!UInt32.TryParse(request.IpNumber, out UInt32 ipNumber))
+                {
+                    return Status<InternalError>.ErrorStatus(new InternalError(403, TranslationKey.ErrorInvalidIpNumber));
+                }
+
+                var ipNumberRange = IpRange.IpVersion4NumberWithCidrToRange(ipNumber, request.Cidr);
                 ban.IpNumberFrom = ipNumberRange[0];
                 ban.IpNumberTo = ipNumberRange[1];
             }
 
             if (ban.IpVersion == IpVersion.IpVersion6)
             {
-                var ipNumberRange = IpRange.IpVersion6NumberWithCidrToRange(bigInteger, request.Cidr);
+                if (!UInt128.TryParse(request.IpNumber, out UInt128 ipNumber))
+                {
+                    return Status<InternalError>.ErrorStatus(new InternalError(403, TranslationKey.ErrorInvalidIpNumber));
+                }
+
+                var ipNumberRange = IpRange.IpVersion6NumberWithCidrToRange(ipNumber, request.Cidr);
                 ban.IpNumberFrom = ipNumberRange[0];
                 ban.IpNumberTo = ipNumberRange[1];
             }
 
-            ban.ExclusionIpNumberCollection = ArrayConversion.DeserializeBigInteger(request.ExclusionIpNumberCollection);
+            ban.ExclusionIpNumberCollection = ArrayConversion.DeserializeUInt128(request.ExclusionIpNumberCollection);
 
             ban.Expiration = request.Expiration;
             ban.Appeal = request.Appeal;

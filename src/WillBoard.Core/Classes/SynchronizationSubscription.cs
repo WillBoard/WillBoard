@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Numerics;
 using System.Threading;
 using System.Threading.Tasks;
 using WillBoard.Core.Enums;
@@ -13,7 +12,7 @@ namespace WillBoard.Core.Classes
         public Guid Id { get; set; }
         public DateTime Creation { get; set; }
         public IpVersion IpVersion { get; set; }
-        public BigInteger IpNumber { get; set; }
+        public UInt128 IpNumber { get; set; }
 
         public abstract void Notify(object data);
         public abstract void Dispose();

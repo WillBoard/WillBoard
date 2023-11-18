@@ -1,7 +1,7 @@
 ﻿using MediatR;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
 using System.Threading;
 using System.Threading.Tasks;
 using WillBoard.Core.Classes;
@@ -59,12 +59,12 @@ namespace WillBoard.Application.Administration.Commands.BoardIpDeletePosts
                 return Status<InternalError>.ErrorStatus(new InternalError(400, TranslationKey.ErrorInvalidIpVersion));
             }
 
-            if (!BigInteger.TryParse(request.IpNumber, out BigInteger bigInteger))
+            if (!UInt128.TryParse(request.IpNumber, out UInt128 ipNumber))
             {
                 return Status<InternalError>.ErrorStatus(new InternalError(403, TranslationKey.ErrorInvalidIpNumber));
             }
 
-            if (bigInteger == 0)
+            if (ipNumber == 0)
             {
                 return Status<InternalError>.ErrorStatus(new InternalError(403, TranslationKey.ErrorInvalidIpNumber));
             }
@@ -80,11 +80,11 @@ namespace WillBoard.Application.Administration.Commands.BoardIpDeletePosts
             {
                 var postCollection = await _postCache.GetAdaptedCollectionAsync(board);
 
-                var postDeleteThreadCollection = postCollection.Where(e => e.IpVersion == request.IpVersion && e.IpNumber == bigInteger && e.ThreadId == null);
+                var postDeleteThreadCollection = postCollection.Where(e => e.IpVersion == request.IpVersion && e.IpNumber == ipNumber && e.ThreadId == null);
 
                 postDeleteCollection.AddRange(postDeleteThreadCollection);
 
-                var postDeleteReplyCollection = postCollection.Where(e => e.IpVersion == request.IpVersion && e.IpNumber == bigInteger && e.ThreadId != null);
+                var postDeleteReplyCollection = postCollection.Where(e => e.IpVersion == request.IpVersion && e.IpNumber == ipNumber && e.ThreadId != null);
 
                 postDeleteCollection.AddRange(postDeleteReplyCollection);
 

@@ -16,7 +16,6 @@ namespace WillBoard.Infrastructure.Services
             Converters =
             {
                 new DateTimeJsonConverter(),
-                new BigIntegerJsonConverter()
             }
         };
 

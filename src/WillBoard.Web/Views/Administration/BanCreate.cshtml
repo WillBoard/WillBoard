@@ -1,5 +1,4 @@
 ﻿@using Microsoft.AspNetCore.Routing
-@using System.Numerics;
 @using WillBoard.Application.Administration.Commands.BanCreate
 @using WillBoard.Application.Administration.Queries.BanCreate
 @using WillBoard.Core.Entities
@@ -214,7 +213,7 @@
                         <tr>
                             <th>@nameof(BanCreateCommand.ExclusionIpNumberCollection)</th>
                             <td>
-                                <textarea name="@nameof(BanCreateCommand.ExclusionIpNumberCollection)">@ArrayConversion.SerializeBigInteger(Array.Empty<BigInteger>())</textarea>
+                                <textarea name="@nameof(BanCreateCommand.ExclusionIpNumberCollection)">@ArrayConversion.SerializeUInt128(Array.Empty<UInt128>())</textarea>
                             </td>
                         </tr>
                         <tr>

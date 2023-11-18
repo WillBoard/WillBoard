@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Net;
-using System.Numerics;
 using System.Threading.Tasks;
 using WillBoard.Core.Classes;
 using WillBoard.Core.Enums;
@@ -42,7 +41,7 @@ namespace WillBoard.Infrastructure.Services
             }
         }
 
-        public async Task<string> GetCountryIpAsync(IpVersion ipVersion, BigInteger ipNumber)
+        public async Task<string> GetCountryIpAsync(IpVersion ipVersion, UInt128 ipNumber)
         {
             var countryIp = await _countryIpCache.GetAsync(ipVersion, ipNumber);
             if (countryIp == null)
@@ -55,7 +54,7 @@ namespace WillBoard.Infrastructure.Services
             }
         }
 
-        public async Task<bool> GetBadIpAsync(IpVersion ipVersion, BigInteger ipNumber)
+        public async Task<bool> GetBadIpAsync(IpVersion ipVersion, UInt128 ipNumber)
         {
             var badIp = await _badIpCache.GetAsync(ipVersion, ipNumber);
             if (badIp == null)
@@ -68,7 +67,7 @@ namespace WillBoard.Infrastructure.Services
             }
         }
 
-        public async Task<bool> GetDnsBlockListIpVersion4Async(string boardId, uint ipNumber, IEnumerable<BlockList> blockListCollection, bool cache)
+        public async Task<bool> GetDnsBlockListIpVersion4Async(string boardId, UInt32 ipNumber, IEnumerable<BlockList> blockListCollection, bool cache)
         {
             if (cache)
             {
@@ -78,7 +77,7 @@ namespace WillBoard.Infrastructure.Services
             return await _blockListService.CheckDnsBlockListIpVersion4Async(ipNumber, blockListCollection);
         }
 
-        public async Task<bool> GetDnsBlockListIpVersion6Async(string boardId, BigInteger ipNumber, IEnumerable<BlockList> blockListCollection, bool cache)
+        public async Task<bool> GetDnsBlockListIpVersion6Async(string boardId, UInt128 ipNumber, IEnumerable<BlockList> blockListCollection, bool cache)
         {
             if (cache)
             {
@@ -88,7 +87,7 @@ namespace WillBoard.Infrastructure.Services
             return await _blockListService.CheckDnsBlockListIpVersion6Async(ipNumber, blockListCollection);
         }
 
-        public async Task<bool> GetApiBlockListIpVersion4Async(string boardId, uint ipNumber, IEnumerable<BlockList> blockListCollection, bool cache)
+        public async Task<bool> GetApiBlockListIpVersion4Async(string boardId, UInt32 ipNumber, IEnumerable<BlockList> blockListCollection, bool cache)
         {
             if (cache)
             {
@@ -98,7 +97,7 @@ namespace WillBoard.Infrastructure.Services
             return await _blockListService.CheckApiBlockListIpVersion4Async(ipNumber, blockListCollection);
         }
 
-        public async Task<bool> GetApiBlockListIpVersion6Async(string boardId, BigInteger ipNumber, IEnumerable<BlockList> blockListCollection, bool cache)
+        public async Task<bool> GetApiBlockListIpVersion6Async(string boardId, UInt128 ipNumber, IEnumerable<BlockList> blockListCollection, bool cache)
         {
             if (cache)
             {

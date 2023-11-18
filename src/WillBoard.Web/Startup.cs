@@ -35,10 +35,10 @@ namespace WillBoard.Web
             SqlMapper.RemoveTypeMap(typeof(Guid));
             SqlMapper.RemoveTypeMap(typeof(Guid?));
 
-            SqlMapper.AddTypeHandler(new BigIntegerTypeHandler());
+            SqlMapper.AddTypeHandler(new UInt128TypeHandler());
             SqlMapper.AddTypeHandler(new StringArrayTypeHandler());
             SqlMapper.AddTypeHandler(new UInt32ArrayTypeHandler());
-            SqlMapper.AddTypeHandler(new BigIntegerArrayTypeHandler());
+            SqlMapper.AddTypeHandler(new UInt128ArrayTypeHandler());
             SqlMapper.AddTypeHandler(new CssThemeArrayTypeHandler());
             SqlMapper.AddTypeHandler(new MarkupCustomArrayTypeHandler());
             SqlMapper.AddTypeHandler(new BlockListArrayTypeHandler());

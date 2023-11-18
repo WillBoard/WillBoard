@@ -1,4 +1,4 @@
-﻿using System.Numerics;
+﻿using System;
 using WillBoard.Application.ViewModels;
 using WillBoard.Core.Enums;
 
@@ -8,6 +8,6 @@ namespace WillBoard.Application.Administration.Queries.BoardIpDeletePosts
     {
         public string BoardId { get; set; }
         public IpVersion IpVersion { get; set; }
-        public BigInteger IpNumber { get; set; }
+        public UInt128 IpNumber { get; set; }
     }
 }

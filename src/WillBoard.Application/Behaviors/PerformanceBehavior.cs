@@ -17,20 +17,13 @@ namespace WillBoard.Application.Behaviors
 
         public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
         {
-            // From .NET 7 it can be changed to more memory efficient way (https://github.com/dotnet/runtime/issues/65858).
-            // var startTime = Stopwatch.GetTimestamp();
-            // var response = await next();
-            // var timeSpanElapsed = Stopwatch.GetElapsedTime(startTime);
-
-            var stopWatch = Stopwatch.StartNew();
-
-            stopWatch.Start();
+            var startTime = Stopwatch.GetTimestamp();
 
             var response = await next();
 
-            var timeSpanElapsed = stopWatch.Elapsed;
+            var timeSpanElapsed = Stopwatch.GetElapsedTime(startTime);
 
-            _logger.LogInformation("Handled {0}. The execution took: {1}.", typeof(TRequest).Name, timeSpanElapsed.ToString(@"mm\:ss\.fff"));
+            _logger.LogInformation("Handled {0}. The execution took: {1}.", typeof(TRequest).Name, timeSpanElapsed.ToString(@"mm\:ss\.ffffff"));
 
             return response;
         }

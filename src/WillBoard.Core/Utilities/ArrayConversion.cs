@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Numerics;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using WillBoard.Core.Classes;
@@ -16,7 +15,6 @@ namespace WillBoard.Core.Utilities
             Converters =
             {
                 new DateTimeJsonConverter(),
-                new BigIntegerJsonConverter()
             }
         };
 
@@ -31,21 +29,6 @@ namespace WillBoard.Core.Utilities
         }
 
         public static string SerializeString(string[] value)
-        {
-            return JsonSerializer.Serialize(value, JsonSerializerOptions);
-        }
-
-        public static BigInteger[] DeserializeBigInteger(string value)
-        {
-            if (string.IsNullOrEmpty(value))
-            {
-                return Array.Empty<BigInteger>();
-            }
-
-            return JsonSerializer.Deserialize<BigInteger[]>(value, JsonSerializerOptions);
-        }
-
-        public static string SerializeBigInteger(BigInteger[] value)
         {
             return JsonSerializer.Serialize(value, JsonSerializerOptions);
         }
@@ -73,6 +56,21 @@ namespace WillBoard.Core.Utilities
             }
 
             return JsonSerializer.Deserialize<BlockList[]>(value, JsonSerializerOptions);
+        }
+
+        public static UInt128[] DeserializeUInt128(string value)
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                return Array.Empty<UInt128>();
+            }
+
+            return JsonSerializer.Deserialize<UInt128[]>(value, JsonSerializerOptions);
+        }
+
+        public static string SerializeUInt128(UInt128[] value)
+        {
+            return JsonSerializer.Serialize(value, JsonSerializerOptions);
         }
 
         public static string SerializeBlockList(BlockList[] value)

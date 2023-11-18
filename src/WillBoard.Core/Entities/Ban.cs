@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Numerics;
 using WillBoard.Core.Enums;
 
 namespace WillBoard.Core.Entities
@@ -15,10 +14,10 @@ namespace WillBoard.Core.Entities
         public bool Appeal { get; set; }
 
         public IpVersion IpVersion { get; set; }
-        public BigInteger IpNumberFrom { get; set; }
-        public BigInteger IpNumberTo { get; set; }
+        public UInt128 IpNumberFrom { get; set; }
+        public UInt128 IpNumberTo { get; set; }
 
-        public BigInteger[] ExclusionIpNumberCollection { get; set; }
+        public UInt128[] ExclusionIpNumberCollection { get; set; }
 
         public string Reason { get; set; }
         public string Note { get; set; }

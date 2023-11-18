@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using System.Numerics;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using WillBoard.Core.Consts;
@@ -53,12 +53,12 @@ namespace WillBoard.Application.Administration.Commands.BoardBanUpdate
                 return Status<InternalError>.ErrorStatus(new InternalError(400, TranslationKey.ErrorInvalidIpVersion));
             }
 
-            if (!BigInteger.TryParse(request.IpNumberFrom, out BigInteger bigIntegerFrom))
+            if (!UInt128.TryParse(request.IpNumberFrom, out UInt128 ipNumberFrom))
             {
                 return Status<InternalError>.ErrorStatus(new InternalError(403, TranslationKey.ErrorInvalidIpNumberFrom));
             }
 
-            if (!BigInteger.TryParse(request.IpNumberTo, out BigInteger bigIntegerTo))
+            if (!UInt128.TryParse(request.IpNumberTo, out UInt128 ipNumberTo))
             {
                 return Status<InternalError>.ErrorStatus(new InternalError(403, TranslationKey.ErrorInvalidIpNumberTo));
             }
@@ -71,10 +71,10 @@ namespace WillBoard.Application.Administration.Commands.BoardBanUpdate
                 Appeal = request.Appeal,
 
                 IpVersion = request.IpVersion,
-                IpNumberFrom = bigIntegerFrom,
-                IpNumberTo = bigIntegerTo,
+                IpNumberFrom = ipNumberFrom,
+                IpNumberTo = ipNumberTo,
 
-                ExclusionIpNumberCollection = ArrayConversion.DeserializeBigInteger(request.ExclusionIpNumberCollection),
+                ExclusionIpNumberCollection = ArrayConversion.DeserializeUInt128(request.ExclusionIpNumberCollection),
 
                 Reason = request.Reason,
                 Note = request.Note

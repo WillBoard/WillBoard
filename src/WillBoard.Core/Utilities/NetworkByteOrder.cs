@@ -7,34 +7,44 @@ namespace WillBoard.Core.Utilities
     // Network Byte Order = Big Endian
     public static class NetworkByteOrder
     {
-        public static void WriteUInt16(Span<byte> buffer, ushort value)
+        public static void WriteUInt16(Span<byte> buffer, UInt16 value)
         {
             BinaryPrimitives.WriteUInt16BigEndian(buffer, value);
         }
 
-        public static ushort ReadUInt16(Span<byte> buffer)
+        public static UInt16 ReadUInt16(Span<byte> buffer)
         {
             return BinaryPrimitives.ReadUInt16BigEndian(buffer);
         }
 
-        public static void WriteUInt32(Span<byte> buffer, uint value)
+        public static void WriteUInt32(Span<byte> buffer, UInt32 value)
         {
             BinaryPrimitives.WriteUInt32BigEndian(buffer, value);
         }
 
-        public static uint ReadUInt32(Span<byte> buffer)
+        public static UInt32 ReadUInt32(Span<byte> buffer)
         {
             return BinaryPrimitives.ReadUInt32BigEndian(buffer);
         }
 
-        public static void WriteUInt64(Span<byte> buffer, ulong value)
+        public static void WriteUInt64(Span<byte> buffer, UInt32 value)
         {
             BinaryPrimitives.WriteUInt64BigEndian(buffer, value);
         }
 
-        public static ulong ReadUInt64(Span<byte> buffer)
+        public static UInt64 ReadUInt64(Span<byte> buffer)
         {
             return BinaryPrimitives.ReadUInt64BigEndian(buffer);
+        }
+
+        public static void WriteUInt128(Span<byte> buffer, UInt128 value)
+        {
+            BinaryPrimitives.WriteUInt128BigEndian(buffer, value);
+        }
+
+        public static UInt128 ReadUInt128(Span<byte> buffer)
+        {
+            return BinaryPrimitives.ReadUInt128BigEndian(buffer);
         }
 
         public static void WriteUuid(Span<byte> buffer, Guid value)

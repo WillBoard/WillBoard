@@ -1,32 +1,31 @@
-﻿using System.Globalization;
-using System.Numerics;
+﻿using System;
 
 namespace WillBoard.Core.Utilities
 {
     public static class IpRange
     {
-        public static uint[] IpVersion4NumberWithCidrToRange(uint ipNumber, byte cidr)
+        public static UInt32[] IpVersion4NumberWithCidrToRange(UInt32 ipNumber, byte cidr)
         {
-            byte maskbits = cidr;
-            uint mask = 0xffffffff;
-            mask <<= (32 - maskbits);
+            byte maskBits = cidr;
+            var mask = UInt32.MaxValue;
+            mask <<= (32 - maskBits);
 
-            uint ipNumberStart = ipNumber & mask;
-            uint ipNumberEnd = ipNumber | (mask ^ 0xffffffff);
+            UInt32 ipNumberStart = ipNumber & mask;
+            UInt32 ipNumberEnd = ipNumber | (mask ^ UInt32.MaxValue);
 
-            return new uint[] { ipNumberStart, ipNumberEnd };
+            return new UInt32[] { ipNumberStart, ipNumberEnd };
         }
 
-        public static BigInteger[] IpVersion6NumberWithCidrToRange(BigInteger ipNumber, byte cidr)
+        public static UInt128[] IpVersion6NumberWithCidrToRange(UInt128 ipNumber, byte cidr)
         {
-            byte maskbits = cidr;
-            BigInteger mask = BigInteger.Parse("00FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF", NumberStyles.HexNumber);
-            mask <<= (128 - maskbits);
+            byte maskBits = cidr;
+            var mask = UInt128.MaxValue;
+            mask <<= (128 - maskBits);
 
-            BigInteger ipNumberStart = ipNumber & mask;
-            BigInteger ipNumberEnd = ipNumber + ((new BigInteger(1) << (int)(128 - cidr)) - 1);
+            UInt128 ipNumberStart = ipNumber & mask;
+            UInt128 ipNumberEnd = ipNumber | (mask ^ UInt128.MaxValue);
 
-            return new BigInteger[] { ipNumberStart, ipNumberEnd };
+            return new UInt128[] { ipNumberStart, ipNumberEnd };
         }
     }
 }

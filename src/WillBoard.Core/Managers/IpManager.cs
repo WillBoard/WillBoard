@@ -1,5 +1,5 @@
-﻿using System.Net;
-using System.Numerics;
+﻿using System;
+using System.Net;
 using WillBoard.Core.Enums;
 
 namespace WillBoard.Core.Managers
@@ -7,7 +7,7 @@ namespace WillBoard.Core.Managers
     public class IpManager
     {
         private IpVersion _ipVersion;
-        private BigInteger _ipNumber;
+        private UInt128 _ipNumber;
         private IPAddress _ipAddress;
 
         public IpManager()
@@ -24,12 +24,12 @@ namespace WillBoard.Core.Managers
             return _ipVersion;
         }
 
-        public void SetIpNumber(BigInteger ipNumber)
+        public void SetIpNumber(UInt128 ipNumber)
         {
             _ipNumber = ipNumber;
         }
 
-        public BigInteger GetIpNumber()
+        public UInt128 GetIpNumber()
         {
             return _ipNumber;
         }

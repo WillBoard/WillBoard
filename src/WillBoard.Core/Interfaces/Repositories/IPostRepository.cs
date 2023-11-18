@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Numerics;
 using System.Threading.Tasks;
 using WillBoard.Core.Entities;
 using WillBoard.Core.Enums;
@@ -15,10 +14,10 @@ namespace WillBoard.Core.Interfaces.Repositories
 
         Task<Post> ReadAsync(string boardId, int postId);
         Task<Post> ReadAsync(string boardId, int postId, IDbConnection dbConnection, IDbTransaction transaction);
-        Task<Post> ReadThreadLastByIpAsync(string boardId, IpVersion ipVersion, BigInteger ipNumber);
-        Task<Post> ReadReplyLastByIpAsync(string boardId, IpVersion ipVersion, BigInteger ipNumber);
-        Task<Post> ReadReplyLastByIpAndThreadIdAsync(string boardId, IpVersion ipVersion, BigInteger ipNumber);
-        Task<Post> ReadReplyUserIdAsync(string boardId, int threadId, IpVersion ipVersion, BigInteger ipNumber);
+        Task<Post> ReadThreadLastByIpAsync(string boardId, IpVersion ipVersion, UInt128 ipNumber);
+        Task<Post> ReadReplyLastByIpAsync(string boardId, IpVersion ipVersion, UInt128 ipNumber);
+        Task<Post> ReadReplyLastByIpAndThreadIdAsync(string boardId, IpVersion ipVersion, UInt128 ipNumber);
+        Task<Post> ReadReplyUserIdAsync(string boardId, int threadId, IpVersion ipVersion, UInt128 ipNumber);
         Task<Post> ReadByFileHashAsync(string boardId, byte[] fileHash);
 
         Task<IEnumerable<Post>> ReadThreadReplyCollectionAsync(string boardId, int threadId);

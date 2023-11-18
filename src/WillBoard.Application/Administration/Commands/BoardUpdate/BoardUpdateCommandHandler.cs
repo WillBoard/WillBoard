@@ -53,7 +53,7 @@ namespace WillBoard.Application.Administration.Commands.BoardUpdate
                 Accessibility = request.Accessibility,
                 AccessibilityPassword = request.AccessibilityPassword,
                 AccessibilityIpVersion4NumberCollection = ArrayConversion.DeserializeUInt32(request.AccessibilityIpVersion4NumberCollection),
-                AccessibilityIpVersion6NumberCollection = ArrayConversion.DeserializeBigInteger(request.AccessibilityIpVersion6NumberCollection),
+                AccessibilityIpVersion6NumberCollection = ArrayConversion.DeserializeUInt128(request.AccessibilityIpVersion6NumberCollection),
 
                 Visibility = request.Visibility,
 
@@ -223,13 +223,13 @@ namespace WillBoard.Application.Administration.Commands.BoardUpdate
 
                 CountryIpVersion6BlockAvailability = request.CountryIpVersion6BlockAvailability,
                 CountryIpVersion6BlockCollection = ArrayConversion.DeserializeString(request.CountryIpVersion6BlockCollection),
-                CountryIpVersion6ExclusionIpNumberCollection = ArrayConversion.DeserializeBigInteger(request.CountryIpVersion6ExclusionIpNumberCollection),
+                CountryIpVersion6ExclusionIpNumberCollection = ArrayConversion.DeserializeUInt128(request.CountryIpVersion6ExclusionIpNumberCollection),
 
                 BadIpVersion4BlockAvailability = request.BadIpVersion4BlockAvailability,
                 BadIpVersion4BlockExclusionIpNumberCollection = ArrayConversion.DeserializeUInt32(request.BadIpVersion4BlockExclusionIpNumberCollection),
 
                 BadIpVersion6BlockAvailability = request.BadIpVersion6BlockAvailability,
-                BadIpVersion6BlockExclusionIpNumberCollection = ArrayConversion.DeserializeBigInteger(request.BadIpVersion6BlockExclusionIpNumberCollection),
+                BadIpVersion6BlockExclusionIpNumberCollection = ArrayConversion.DeserializeUInt128(request.BadIpVersion6BlockExclusionIpNumberCollection),
 
                 DnsBlockListIpVersion4Availability = request.DnsBlockListIpVersion4Availability,
                 DnsBlockListIpVersion4Cache = request.DnsBlockListIpVersion4Cache,
@@ -239,7 +239,7 @@ namespace WillBoard.Application.Administration.Commands.BoardUpdate
                 DnsBlockListIpVersion6Availability = request.DnsBlockListIpVersion6Availability,
                 DnsBlockListIpVersion6Cache = request.DnsBlockListIpVersion6Cache,
                 DnsBlockListIpVersion6Collection = ArrayConversion.DeserializeBlockList(request.DnsBlockListIpVersion6Collection),
-                DnsBlockListIpVersion6ExclusionIpNumberCollection = ArrayConversion.DeserializeBigInteger(request.DnsBlockListIpVersion6ExclusionIpNumberCollection),
+                DnsBlockListIpVersion6ExclusionIpNumberCollection = ArrayConversion.DeserializeUInt128(request.DnsBlockListIpVersion6ExclusionIpNumberCollection),
 
                 ApiBlockListIpVersion4Availability = request.ApiBlockListIpVersion4Availability,
                 ApiBlockListIpVersion4Cache = request.ApiBlockListIpVersion4Cache,
@@ -249,7 +249,7 @@ namespace WillBoard.Application.Administration.Commands.BoardUpdate
                 ApiBlockListIpVersion6Availability = request.ApiBlockListIpVersion6Availability,
                 ApiBlockListIpVersion6Cache = request.ApiBlockListIpVersion6Cache,
                 ApiBlockListIpVersion6Collection = ArrayConversion.DeserializeBlockList(request.ApiBlockListIpVersion6Collection),
-                ApiBlockListIpVersion6ExclusionIpNumberCollection = ArrayConversion.DeserializeBigInteger(request.ApiBlockListIpVersion6ExclusionIpNumberCollection),
+                ApiBlockListIpVersion6ExclusionIpNumberCollection = ArrayConversion.DeserializeUInt128(request.ApiBlockListIpVersion6ExclusionIpNumberCollection),
 
                 FieldVerificationType = request.FieldVerificationType,
 

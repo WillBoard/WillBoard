@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
 using System.IO;
-using System.Numerics;
 using System.Threading.Tasks;
 using System.Transactions;
 using WillBoard.Core.Entities;
@@ -27,7 +26,7 @@ namespace WillBoard.Tools.ImportCountryIp
     {
         public static async Task Main()
         {
-            SqlMapper.AddTypeHandler(new BigIntegerTypeHandler());
+            SqlMapper.AddTypeHandler(new UInt128TypeHandler());
 
             IHostEnvironment hostEnvironment = new HostingEnvironment
             {
@@ -73,8 +72,8 @@ namespace WillBoard.Tools.ImportCountryIp
                 {
                     var countryIp = new CountryIp();
                     countryIp.IpVersion = IpVersion.IpVersion4;
-                    countryIp.IpNumberFrom = BigInteger.Parse(csvCountryIp.From);
-                    countryIp.IpNumberTo = BigInteger.Parse(csvCountryIp.To);
+                    countryIp.IpNumberFrom = UInt128.Parse(csvCountryIp.From);
+                    countryIp.IpNumberTo = UInt128.Parse(csvCountryIp.To);
                     countryIp.CountryCode = csvCountryIp.Code;
 
                     countryIpCollection.Add(countryIp);
@@ -93,8 +92,8 @@ namespace WillBoard.Tools.ImportCountryIp
                 {
                     var countryIp = new CountryIp();
                     countryIp.IpVersion = IpVersion.IpVersion6;
-                    countryIp.IpNumberFrom = BigInteger.Parse(csvCountryIp.From);
-                    countryIp.IpNumberTo = BigInteger.Parse(csvCountryIp.To);
+                    countryIp.IpNumberFrom = UInt128.Parse(csvCountryIp.From);
+                    countryIp.IpNumberTo = UInt128.Parse(csvCountryIp.To);
                     countryIp.CountryCode = csvCountryIp.Code;
 
                     countryIpCollection.Add(countryIp);
