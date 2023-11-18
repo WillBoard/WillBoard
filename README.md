@@ -12,7 +12,7 @@ WillBoard is an open source anonymous forum engine with a few main assumptions:
 
 ## Requirements
 
-- [.NET 6.0](https://github.com/dotnet/core/blob/main/release-notes/8.0/README.md ".NET 8.0")
+- [.NET 8.0](https://github.com/dotnet/core/blob/main/release-notes/8.0/README.md ".NET 8.0")
 - [MariaDB](https://mariadb.org/download/ "MariaDB") server (minimum [10.6.0](https://mariadb.com/kb/en/select-offset-fetch/ "10.6.0")) 
 - [FFmpeg / FFprobe](https://ffmpeg.org/download.html "FFmpeg / FFprobe") (optional for audio/video processing)
 - [Windows](https://github.com/dotnet/core/blob/main/release-notes/8.0/supported-os.md#windows "Windows") or [Linux](https://github.com/dotnet/core/blob/main/release-notes/8.0/supported-os.md#linux "Linux") or [macOS](https://github.com/dotnet/core/blob/main/release-notes/8.0/supported-os.md#macos "macOS")
