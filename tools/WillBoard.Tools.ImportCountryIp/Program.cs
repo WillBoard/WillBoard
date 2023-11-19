@@ -120,8 +120,8 @@ namespace WillBoard.Tools.ImportCountryIp
                     catch (Exception exception)
                     {
                         transaction.Rollback();
-                        Console.WriteLine("Exception occured during transaction.");
-                        throw new TransactionException("Exception occured during transaction.", exception);
+                        Console.WriteLine("Exception occurred during transaction.");
+                        throw new TransactionException("Exception occurred during transaction.", exception);
                     }
                 }
             }

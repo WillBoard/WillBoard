@@ -272,7 +272,7 @@ namespace WillBoard.Application.Board.Commands.CreatePost
                     _storageService.DeleteSourceFile(post.BoardId, post.FileName);
                 }
 
-                _logger.LogCritical(exception, $"Exception occured during {0}.", nameof(CreatePostCommandHandler));
+                _logger.LogCritical(exception, $"Exception occurred during {0}.", nameof(CreatePostCommandHandler));
                 return Result<CreatePostDataModel, InternalError>.ErrorResult(new InternalError(400, TranslationKey.ErrorCreatePost));
             }
         }

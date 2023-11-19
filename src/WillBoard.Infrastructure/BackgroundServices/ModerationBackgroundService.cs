@@ -60,7 +60,7 @@ namespace WillBoard.Infrastructure.BackgroundServices
                 }
                 catch (Exception exception)
                 {
-                    _logger.LogError(exception, $"Exception occured during {nameof(ExecuteAsync)} in {nameof(ModerationBackgroundService)}.");
+                    _logger.LogError(exception, $"Exception occurred during {nameof(ExecuteAsync)} in {nameof(ModerationBackgroundService)}.");
                 }
             }
 

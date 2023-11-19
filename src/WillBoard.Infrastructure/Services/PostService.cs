@@ -88,7 +88,7 @@ namespace WillBoard.Infrastructure.Services
                     catch (Exception exception)
                     {
                         transaction.Rollback();
-                        throw new TransactionException("Exception occured during transaction.", exception);
+                        throw new TransactionException("Exception occurred during transaction.", exception);
                     }
                 }
             }
@@ -124,7 +124,7 @@ namespace WillBoard.Infrastructure.Services
                     catch (Exception exception)
                     {
                         transaction.Rollback();
-                        throw new TransactionException("Exception occured during transaction.", exception);
+                        throw new TransactionException("Exception occurred during transaction.", exception);
                     }
                 }
             }
@@ -153,7 +153,7 @@ namespace WillBoard.Infrastructure.Services
                     catch (Exception exception)
                     {
                         transaction.Rollback();
-                        throw new TransactionException("Exception occured during transaction.", exception);
+                        throw new TransactionException("Exception occurred during transaction.", exception);
                     }
                 }
             }

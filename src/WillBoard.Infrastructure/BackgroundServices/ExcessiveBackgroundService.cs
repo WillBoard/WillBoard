@@ -63,7 +63,7 @@ namespace WillBoard.Infrastructure.BackgroundServices
                 }
                 catch (Exception exception)
                 {
-                    _logger.LogError(exception, $"Exception occured during {nameof(ExecuteAsync)} in {nameof(ExcessiveBackgroundService)}.");
+                    _logger.LogError(exception, $"Exception occurred during {nameof(ExecuteAsync)} in {nameof(ExcessiveBackgroundService)}.");
                 }
             }
 
@@ -124,7 +124,7 @@ namespace WillBoard.Infrastructure.BackgroundServices
             }
             catch (Exception exception)
             {
-                _logger.LogError(exception, $"Exception occured during {nameof(DeleteExpiredExcessiveAsync)} of {board.BoardId} board.");
+                _logger.LogError(exception, $"Exception occurred during {nameof(DeleteExpiredExcessiveAsync)} of {board.BoardId} board.");
             }
         }
     }

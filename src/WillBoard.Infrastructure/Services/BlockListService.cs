@@ -47,7 +47,7 @@ namespace WillBoard.Infrastructure.Services
                 }
                 catch (Exception exception)
                 {
-                    _logger.LogWarning(exception, "Exception occured during {0} method with IP address {1} and host name {2}.", nameof(CheckDnsBlockListIpVersion4Async), ipAddress.ToString(), $"{dnsIp}.{blockList.Address}");
+                    _logger.LogWarning(exception, "Exception occurred during {0} method with IP address {1} and host name {2}.", nameof(CheckDnsBlockListIpVersion4Async), ipAddress.ToString(), $"{dnsIp}.{blockList.Address}");
                 }
             }
 
@@ -79,7 +79,7 @@ namespace WillBoard.Infrastructure.Services
                 }
                 catch (Exception exception)
                 {
-                    _logger.LogWarning(exception, "Exception occured during {0} method with IP address {1} and host name {2}.", nameof(CheckDnsBlockListIpVersion6Async), ipAddress, $"{dnsIp}.{blockList.Address}");
+                    _logger.LogWarning(exception, "Exception occurred during {0} method with IP address {1} and host name {2}.", nameof(CheckDnsBlockListIpVersion6Async), ipAddress, $"{dnsIp}.{blockList.Address}");
                 }
             }
 
@@ -111,7 +111,7 @@ namespace WillBoard.Infrastructure.Services
                 }
                 catch (Exception exception)
                 {
-                    _logger.LogWarning(exception, "Exception occured during {0} method with IP address {1}.", nameof(CheckApiBlockListIpVersion4Async), ipAddress);
+                    _logger.LogWarning(exception, "Exception occurred during {0} method with IP address {1}.", nameof(CheckApiBlockListIpVersion4Async), ipAddress);
                 }
             }
 
@@ -143,7 +143,7 @@ namespace WillBoard.Infrastructure.Services
                 }
                 catch (Exception exception)
                 {
-                    _logger.LogWarning(exception, "Exception occured during {0} method with IP address {1}.", nameof(CheckApiBlockListIpVersion6Async), ipAddress);
+                    _logger.LogWarning(exception, "Exception occurred during {0} method with IP address {1}.", nameof(CheckApiBlockListIpVersion6Async), ipAddress);
                 }
             }
 

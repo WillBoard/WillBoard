@@ -353,7 +353,7 @@ $@"<!doctype html>
                 }
                 catch (Exception exception)
                 {
-                    _logger.LogError(exception, $"Exception occured during {0} method.", nameof(SynchronizationAsync));
+                    _logger.LogError(exception, $"Exception occurred during {0} method.", nameof(SynchronizationAsync));
                     _synchronizationService.Unsubscribe(subscription);
                 }
             }

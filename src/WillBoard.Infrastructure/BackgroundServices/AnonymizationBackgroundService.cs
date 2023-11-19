@@ -66,7 +66,7 @@ namespace WillBoard.Infrastructure.BackgroundServices
                 }
                 catch (Exception exception)
                 {
-                    _logger.LogError(exception, $"Exception occured during {nameof(ExecuteAsync)} in {nameof(AnonymizationBackgroundService)}.");
+                    _logger.LogError(exception, $"Exception occurred during {nameof(ExecuteAsync)} in {nameof(AnonymizationBackgroundService)}.");
                 }
             }
 
@@ -91,7 +91,7 @@ namespace WillBoard.Infrastructure.BackgroundServices
             }
             catch (Exception exception)
             {
-                _logger.LogError(exception, $"Exception occured during {nameof(AnonymizeBoardAsync)} of {board.BoardId} board.");
+                _logger.LogError(exception, $"Exception occurred during {nameof(AnonymizeBoardAsync)} of {board.BoardId} board.");
             }
         }
     }

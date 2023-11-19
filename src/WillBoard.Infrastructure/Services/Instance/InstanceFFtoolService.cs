@@ -136,7 +136,7 @@ namespace WillBoard.Infrastructure.Services.Instance
                     }
                 };
 
-                bool isStarted;
+                var isStarted = false;
 
                 try
                 {
@@ -144,7 +144,7 @@ namespace WillBoard.Infrastructure.Services.Instance
                 }
                 catch (Exception exception)
                 {
-                    _logger.LogWarning(exception, "Exception occured during {0} method with {1}.", nameof(FFprocessAsync), fileName);
+                    _logger.LogWarning(exception, "Exception occurred during {0} method with {1}.", nameof(FFprocessAsync), fileName);
 
                     isStarted = false;
                 }
@@ -165,9 +165,10 @@ namespace WillBoard.Infrastructure.Services.Instance
                         byte[] buffer = new byte[1024];
                         int readSize = binaryReader.Read(buffer, 0, buffer.Length);
 
-                        while (readSize != 0)
+                        while (readSize != 0 && !process.HasExited)
                         {
                             binaryWriter.Write(buffer, 0, readSize);
+                            binaryWriter.Flush();
                             readSize = binaryReader.Read(buffer, 0, buffer.Length);
                         }
 
@@ -179,10 +180,10 @@ namespace WillBoard.Infrastructure.Services.Instance
                 }
                 catch (Exception exception)
                 {
-                    _logger.LogError(exception, "Exception occured during {0} method with {1}.", nameof(FFprocessAsync), fileName);
+                    _logger.LogError(exception, "Exception occurred during {0} method with {1}.", nameof(FFprocessAsync), fileName);
 
-                    // Linux produces "Broken Pipe" exception, but it seems working, when is ignored.
-                    // As long as the problem is not solved, the exception in Linux will be discarded.
+                    //Linux produces "Broken Pipe" exception, but it seems working, when is ignored.
+                    //As long as the problem is not solved, the exception in Linux will be discarded.
                     if (!RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
                     {
                         throw;

@@ -36,7 +36,7 @@ namespace WillBoard.Infrastructure.Services
             }
             catch (Exception exception)
             {
-                _logger.LogWarning(exception, "Exception occured during {0} method with IP address {1}.", nameof(GetDnsHostNameAsync), ipAddress.ToString());
+                _logger.LogWarning(exception, "Exception occurred during {0} method with IP address {1}.", nameof(GetDnsHostNameAsync), ipAddress.ToString());
                 return ipAddress.ToString();
             }
         }

@@ -267,7 +267,7 @@ async function updateWatcher(thread) {
         replyCount = post.replyCount;
     }
     catch (error) {
-        console.error("Error occured during updateWatcher function.", error);
+        console.error("Error occurred during updateWatcher function.", error);
         replyCount = null;
     }
 
