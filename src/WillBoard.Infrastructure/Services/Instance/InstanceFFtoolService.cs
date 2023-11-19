@@ -182,8 +182,8 @@ namespace WillBoard.Infrastructure.Services.Instance
                 {
                     _logger.LogError(exception, "Exception occurred during {0} method with {1}.", nameof(FFprocessAsync), fileName);
 
-                    //Linux produces "Broken Pipe" exception, but it seems working, when is ignored.
-                    //As long as the problem is not solved, the exception in Linux will be discarded.
+                    // Linux produces "Broken Pipe" exception, but it seems working, when is ignored.
+                    // As long as the problem is not solved, the exception in Linux will be discarded.
                     if (!RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
                     {
                         throw;
