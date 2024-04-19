@@ -33,15 +33,17 @@ document.addEventListener("DOMContentLoaded", function (event) {
         watcherUlElement.appendChild(watcherLiElement);
     }
 
-    let threadArticleElements = document.querySelectorAll("body > main > article.thread");
-    for (var i = 0; i < threadArticleElements.length; i++) {
-        addWatcherOptionHyperlinkElement(threadArticleElements[i]);
-    }
+    if (viewConfiguration.boardViewType === BoardViewType.ClassicBoard || viewConfiguration.boardViewType === BoardViewType.ClassicThread || viewConfiguration.boardViewType === BoardViewType.Search) {
+        let threadArticleElements = document.querySelectorAll("body > main > article.thread");
+        for (var i = 0; i < threadArticleElements.length; i++) {
+            addWatcherOptionHyperlinkElement(threadArticleElements[i]);
+        }
 
-    window.addEventListener("after-create-thread-article-element-event", function (event) {
-        let postArticleElement = event.detail.element;
-        addWatcherOptionHyperlinkElement(postArticleElement);
-    }, false);
+        window.addEventListener("after-create-thread-article-element-event", function (event) {
+            let postArticleElement = event.detail.element;
+            addWatcherOptionHyperlinkElement(postArticleElement);
+        }, false);
+    }
 });
 
 function addLocalStorageWatcherItem(watcherItem) {
@@ -59,9 +61,14 @@ function updateWatcherStorage() {
 }
 
 function addWatcherOptionHyperlinkElement(threadArticleElement) {
+    let threadSectionElement = threadArticleElement.querySelector("section.thread");
+    if (threadSectionElement == null) {
+        return;
+    }
+
     let boardId = threadArticleElement.getAttribute("data-boardid");
     let threadId = threadArticleElement.getAttribute("data-threadid");
-    let optionsAsideElement = threadArticleElement.querySelector("aside.options");
+    let optionsAsideElement = threadSectionElement.querySelector("aside.options");
 
     let optionHyperlinkElement = document.createElement("a");
     optionHyperlinkElement.classList.add("watcher");
