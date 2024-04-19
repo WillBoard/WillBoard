@@ -303,8 +303,6 @@ body > nav {
         border-bottom: 1px solid var(--nav-background-hover);
         padding: 0;
         min-height: calc(100% - 39px);
-        scrollbar-width: thin;
-        scrollbar-color: var(--nav-background-hover) var(--nav-background);
     }
 
         body > nav > section.navigation::-webkit-scrollbar {
@@ -3090,6 +3088,17 @@ section.post .captcha.classiccaptcha {
 
     div.file-expand {
         padding-left: 0px;
+    }
+}
+/* #endregion */
+
+/*#region Fixes */
+/* Wrap new scrollbar properties in @supports rule for browsers without `::-webkit-scrollbar-*` support */
+/* This way chrome won't override `::-webkit-scrollbar-*` selectors */
+@supports not selector(::-webkit-scrollbar) {
+    body > nav > section.navigation {
+        scrollbar-width: thin;
+        scrollbar-color: var(--nav-background-hover) var(--nav-background);
     }
 }
 /* #endregion */

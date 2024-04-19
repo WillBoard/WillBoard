@@ -72,6 +72,8 @@ namespace WillBoard.Web.Filters
                     var cookiePassword = context.HttpContext.Request.Cookies["password_" + board.BoardId];
                     if (board.AccessibilityPassword != cookiePassword)
                     {
+                        context.HttpContext.Response.Cookies.Delete("password_" + board.BoardId);
+
                         if (contentType is EndpointContentType.JSON)
                         {
                             context.Result = await _errorService.ApplicationErrorAsync(new InternalError(403, TranslationKey.ErrorForbidden), EndpointContentType.JSON);
