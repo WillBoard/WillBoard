@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using WillBoard.Core.Entities;
 using WillBoard.Core.Enums;
+using WillBoard.Core.Utilities;
 
 namespace WillBoard.Application.DataModels
 {
@@ -26,6 +27,7 @@ namespace WillBoard.Application.DataModels
         public string FileNameOriginal { get; set; }
         public string FileName { get; set; }
         public string FileMimeType { get; set; }
+        public string FileHash { get; set; }
         public long? FileSize { get; set; }
         public int? FileWidth { get; set; }
         public int? FileHeight { get; set; }
@@ -78,6 +80,7 @@ namespace WillBoard.Application.DataModels
             FileNameOriginal = post.File ? post.FileNameOriginal : null;
             FileName = post.File ? post.FileName : null;
             FileMimeType = post.File ? post.FileMimeType : null;
+            FileHash = post.File ? HashUtility.Serialize(post.FileHash) : null;
             FileSize = post.File ? post.FileSize : null;
             FileWidth = post.File ? post.FileWidth : null;
             FileHeight = post.File ? post.FileHeight : null;

@@ -464,9 +464,10 @@ function createPostSectionElement(post) {
     if (post.file === true && post.filePreview === true && !post.fileDeleted) {
         let fileDiv = document.createElement("div");
         fileDiv.classList.add("file");
-        fileDiv.setAttribute("data-mime", post.fileMimeType);
 
+        fileDiv.setAttribute("data-mime", post.fileMimeType);
         fileDiv.setAttribute("data-spoiler", post.fileSpoiler === true ? true : false);
+        fileDiv.setAttribute("data-hash", post.fileHash);
 
         let fileA = document.createElement("a");
         fileA.setAttribute("href", `/boards/${post.boardId}/source/${post.fileName}`);

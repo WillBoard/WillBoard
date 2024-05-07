@@ -21,6 +21,7 @@ namespace WillBoard.Core.Utilities
             {
                 return string.Format("-{0}", FormatDataSize(-value));
             }
+
             if (value == 0)
             {
                 return string.Format("0.00 {0}", SizeSuffixArray[0]);
