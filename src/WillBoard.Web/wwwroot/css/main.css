@@ -187,12 +187,11 @@ html, body {
 body {
     font-size: 13px;
     font-family: 'Roboto', sans-serif;
-    padding: 40px 0px 0px 48px;
+    padding: 40px 0px 0px 49px;
     background-color: var(--body-background);
     color: var(--body-font);
     height: 100%;
     display: grid;
-    grid-gap: 10px;
     grid-template-columns: 1fr;
     grid-gap: 0px;
     grid-template-areas: "top" "header" "main" "footer" "bottom";
