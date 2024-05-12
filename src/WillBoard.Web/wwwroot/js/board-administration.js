@@ -139,11 +139,11 @@ document.addEventListener("DOMContentLoaded", function (event) {
 });
 
 function ipVersion4NumberToIpVersion4AddressString(ipNumber) {
-    return parseInt(Math.floor(ipNumber / 16777216) % 256) + "." + parseInt(Math.floor(ipNumber / 65536) % 256) + "." + parseInt(Math.floor(ipNumber / 256) % 256) + "." + parseInt(ipNumber % 256);
+    return parseInt((ipNumber / 16777216n) % 256n) + "." + parseInt((ipNumber / 65536n) % 256n) + "." + parseInt((ipNumber / 256n) % 256n) + "." + parseInt(ipNumber % 256n);
 }
 
 function ipVersion6NumberToIpVersion6AddressString(ipNumber) {
-    return (parseInt(Math.floor(ipNumber / Math.pow(65536, 7)) % 65536)).toString(16) + ":" + (parseInt(Math.floor(ipNumber / Math.pow(65536, 6)) % 65536)).toString(16) + ":" + (parseInt(Math.floor(ipNumber / Math.pow(65536, 5)) % 65536)).toString(16) + ":" + (parseInt(Math.floor(ipNumber / Math.pow(65536, 4)) % 65536)).toString(16) + ":" + (parseInt(Math.floor(ipNumber / Math.pow(65536, 3)) % 65536)).toString(16) + ":" + (parseInt(Math.floor(ipNumber / Math.pow(65536, 2)) % 65536)).toString(16) + ":" + (parseInt(Math.floor(ipNumber / 65536) % 65536)).toString(16) + ":" + (parseInt(ipNumber % 65536)).toString(16);
+    return (parseInt(ipNumber / (65536n ** 7n) % 65536n)).toString(16) + ":" + (parseInt(ipNumber / (65536n ** 6n) % 65536n)).toString(16) + ":" + (parseInt(ipNumber / (65536n ** 5n) % 65536n)).toString(16) + ":" + (parseInt(ipNumber / (65536n ** 4n) % 65536n)).toString(16) + ":" + (parseInt(ipNumber / (65536n ** 3n) % 65536n)).toString(16) + ":" + (parseInt(ipNumber / (65536n ** 2n) % 65536n)).toString(16) + ":" + (parseInt(ipNumber / 65536n % 65536n)).toString(16) + ":" + (parseInt(ipNumber % 65536n)).toString(16);
 }
 
 function ipNumberToIpAddressString(ipVersion, ipNumber) {

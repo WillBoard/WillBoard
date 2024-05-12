@@ -93,7 +93,7 @@ function handleHeartbeatSynchronizationEvent(event) {
     });
     window.dispatchEvent(beforeEvent);
 
-    let data = JSON.parse(event.data);
+    let data = JSON.parse(event.data, customReviver);
 
     if (boardConfiguration.onlineCounterAvailability === true) {
         let onlineSpanElement = document.querySelector("body > nav > span.online-counter");
@@ -119,7 +119,7 @@ async function handleCreateSynchronizationEventAsync(event) {
     });
     window.dispatchEvent(beforeEvent);
 
-    let post = JSON.parse(event.data);
+    let post = JSON.parse(event.data, customReviver);
 
     if (viewConfiguration.boardViewType === BoardViewType.ClassicThread) {
         if (post.threadId != null) {
@@ -231,7 +231,7 @@ async function handleUpdateSynchronizationEventAsync(event) {
     });
     window.dispatchEvent(beforeEvent);
 
-    let data = JSON.parse(event.data);
+    let data = JSON.parse(event.data, customReviver);
 
     let afterEvent = new CustomEvent("after-update-synchronization-event", {
         detail: data
@@ -247,7 +247,7 @@ async function handleDeleteSynchronizationEventAsync(event) {
     });
     window.dispatchEvent(beforeEvent);
 
-    let data = JSON.parse(event.data);
+    let data = JSON.parse(event.data, customReviver);
 
     if (data.threadId == null) {
         let threadArticleElement = document.querySelector(`article.thread[data-boardid='${data.boardId}'][data-threadid='${data.postId}']`);

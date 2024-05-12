@@ -18,6 +18,13 @@ const VerificationType = {
     ReCAPTCHA: 2
 };
 
+function customReviver(key, value, context) {
+    if (key === "ipNumber") {
+        return BigInt(context.source);
+    }
+    return value;
+}
+
 function getBoardClassicPath(boardId) {
     return `/${boardId}`;
 }
@@ -67,7 +74,8 @@ async function getVerificationAsync(boardId, thread) {
             method: "GET"
         });
 
-        let response = await fetchResponse.json();
+        let responseJson = await fetchResponse.text();
+        let response = JSON.parse(responseJson, customReviver);
 
         if (response.error != null) {
             console.error(`Error with status ${response.error.status}.`, response.error);
@@ -95,7 +103,8 @@ async function getPostAsync(boardId, postId) {
             method: "GET"
         });
 
-        let response = await fetchResponse.json();
+        let responseJson = await fetchResponse.text();
+        let response = JSON.parse(responseJson, customReviver);
 
         if (response.error != null) {
             console.error(`Error with status ${response.error.status}.`, response.error);
@@ -123,7 +132,8 @@ async function getRepliesAsync(boardId, threadId, last = 0) {
             method: "GET"
         });
 
-        let response = await fetchResponse.json();
+        let responseJson = await fetchResponse.text();
+        let response = JSON.parse(responseJson, customReviver);
 
         if (response.error != null) {
             console.error(`Error with status ${response.error.status}.`, response.error);
