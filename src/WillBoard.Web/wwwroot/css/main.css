@@ -1263,6 +1263,11 @@ section.reply {
     box-sizing: border-box;
 }
 
+    section.thread:target,
+    section.reply:target {
+        scroll-margin-top: 44px;
+    }
+
 section.thread.hover {
     background-color: var(--thread-background-active);
 }
