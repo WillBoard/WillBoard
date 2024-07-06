@@ -28,7 +28,7 @@ Update `configuration.json` file (`src\WillBoard.Web`) and add database connecti
 
 - If you want run it locally use [`dotnet run`](https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-run "dotnet run")
 
-- If you want run it on server use [`dotnet publish`](https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-publish "dotnet publish") for publish application (eg. `dotnet publish "src\WillBoard.Web\WillBoard.Web.csproj" -c Release -r linux-x64 --self-contained -o "OUTPUT_DIRECTORY"`) and deploy it. After deploy run application on server (eg. `./WillBoard.Web --urls "https://localhost:5000"`)
+- If you want run it on server use [`dotnet publish`](https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-publish "dotnet publish") for publish application (eg. `dotnet publish "src\WillBoard.Web\WillBoard.Web.csproj" -c Release -r linux-x64 --self-contained -o "OUTPUT_DIRECTORY"`) and deploy it. After deploy run application on server (eg. `./WillBoard.Web --urls "http://localhost:5000"`)
 
 Remember to set proper file permission for application and binaries (read, write, execute).
 
