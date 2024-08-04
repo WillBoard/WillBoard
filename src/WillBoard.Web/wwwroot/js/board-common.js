@@ -302,7 +302,6 @@ function createPostSectionElement(post) {
     infoOptionsLabel.setAttribute("for", `options-${post.boardId}${post.postId}`);
     infoOptionsLabel.setAttribute("title", localization.options);
     infoOptionsLabel.textContent = "";
-    infoOptionsLabel.classList.add("optionsLabel");
     info.appendChild(infoOptionsLabel);
 
     let optionsAside = document.createElement("aside");

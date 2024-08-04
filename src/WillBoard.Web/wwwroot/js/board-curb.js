@@ -51,14 +51,12 @@ document.addEventListener("DOMContentLoaded", function (event) {
 });
 
 function checkCurbs() {
-    for (let i = 0; i < curbs.length; i++) {
-        let boardId = curbs[i];
-        for (let i = 0; i < boardId.length; i++) {
-            let postId = boardId[i];
-            if (curbs[boardId][postId] < Date.now() - 60 * 60 * 24 * 180) {
+    for (let boardId in curbs) {
+        for (let postId in curbs[boardId]) {
+            if (curbs[boardId][postId] < Date.now() - 1000 * 60 * 60 * 24 * 180) {
                 curbs[boardId][postId] = undefined;
                 let jsonCurbs = JSON.stringify(curbs);
-                localStorage.setItem(curbs, jsonCurbs);
+                localStorage.setItem("curbs", jsonCurbs);
             }
         }
     }
