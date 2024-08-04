@@ -362,7 +362,7 @@ function createPostSectionElement(post) {
         }
 
         else {
-            infoFile.setAttribute("title", `${sizeSuffix(post.fileSize)}${post.fileHeight == null || post.fileWidth == null ? "" : ` ${post.fileHeight}x${post.fileWidth}`}${post.fileDuration == null || post.fileDuration == 0 ? "" : ` ${post.fileDuration.toFixed(2)}s`} "${post.fileNameOriginal}" (${post.fileMimeType})`);
+            infoFile.setAttribute("title", `${sizeSuffix(post.fileSize)}${post.fileWidth == null || post.fileHeight == null ? "" : ` ${post.fileWidth}x${post.fileHeight}`}${post.fileDuration == null || post.fileDuration == 0 ? "" : ` ${post.fileDuration.toFixed(2)}s`} "${post.fileNameOriginal}" (${post.fileMimeType})`);
             infoFile.setAttribute("href", `/boards/${post.boardId}/source/${post.fileName}`);
 
             let infoFileName = document.createElement("span");
