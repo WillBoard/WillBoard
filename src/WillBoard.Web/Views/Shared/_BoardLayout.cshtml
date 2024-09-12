@@ -71,7 +71,7 @@
     }
     @if (!string.IsNullOrEmpty(board.JsInline))
     {
-        <style>@Html.Raw(board.JsInline)</style>
+        <script>@Html.Raw(board.JsInline)</script>
     }
 </head>
 <body>
