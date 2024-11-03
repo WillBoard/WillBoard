@@ -20,9 +20,7 @@ namespace WillBoard.Infrastructure.Repositories.MySql
         {
             using (var dbConnection = _sqlConnectionService.Connection)
             {
-                // String interpolation is a workaround for converting parameter into a string.
-                // The problem still exists even when when DbType is set to VarNumeric in UInt128TypeHandler.
-                var sql = $"SELECT * FROM `BadIp` WHERE `IpVersion` = @IpVersion AND `IpNumberFrom` <= {ipNumber} AND `IpNumberTo` >= {ipNumber} LIMIT 1;";
+                var sql = $"SELECT * FROM `BadIp` WHERE `IpVersion` = @IpVersion AND `IpNumberFrom` <= @IpNumber AND `IpNumberTo` >= @IpNumber LIMIT 1;";
 
                 dbConnection.Open();
                 return await dbConnection.QueryFirstOrDefaultAsync<BadIp>(sql, new { IpVersion = ipVersion, IpNumber = ipNumber });

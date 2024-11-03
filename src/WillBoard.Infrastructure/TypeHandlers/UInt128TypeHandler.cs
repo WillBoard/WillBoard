@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using System;
 using System.Data;
+using System.Numerics;
 
 namespace WillBoard.Infrastructure.TypeHandlers
 {
@@ -13,7 +14,7 @@ namespace WillBoard.Infrastructure.TypeHandlers
 
         public override void SetValue(IDbDataParameter parameter, UInt128 value)
         {
-            parameter.Value = value.ToString();
+            parameter.Value = (BigInteger)value;
         }
     }
 }
