@@ -5,6 +5,7 @@
         <RuntimeIdentifiers>win-x64;linux-x64</RuntimeIdentifiers>
         <Nullable>disable</Nullable>
         <ImplicitUsings>disable</ImplicitUsings>
+        <CompressionEnabled>false</CompressionEnabled>
     </PropertyGroup>
 
     <ItemGroup>
