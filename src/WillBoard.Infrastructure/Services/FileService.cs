@@ -62,79 +62,81 @@ namespace WillBoard.Infrastructure.Services
 
             if (post.FileMimeType == "image/jpeg" || post.FileMimeType == "image/png" || post.FileMimeType == "image/gif" || post.FileMimeType == "image/bmp")
             {
-                using (var streamInput = file.OpenReadStream())
+                using (var inputStream = file.OpenReadStream())
                 {
-                    var dataInput = SKData.Create(streamInput);
-                    var imageInput = SKImage.FromEncodedData(dataInput);
+                    var inputData = SKData.Create(inputStream);
+                    var inputImage = SKImage.FromEncodedData(inputData);
 
-                    if (imageInput == null)
+                    if (inputImage == null)
                     {
                         return Status<string>.ErrorStatus(post.IsThread() ? TranslationKey.ErrorThreadFieldFile : TranslationKey.ErrorReplyFieldFile);
                     }
 
                     if (post.IsThread())
                     {
-                        if (imageInput.Width < board.ThreadFieldFileImageWidthMin)
+                        if (inputImage.Width < board.ThreadFieldFileImageWidthMin)
                         {
                             return Status<string>.ErrorStatus(TranslationKey.ErrorThreadFieldFileImageWidthMin);
                         }
-                        if (imageInput.Width > board.ThreadFieldFileImageWidthMax)
+                        if (inputImage.Width > board.ThreadFieldFileImageWidthMax)
                         {
                             return Status<string>.ErrorStatus(TranslationKey.ErrorThreadFieldFileImageWidthMax);
                         }
-                        if (imageInput.Height < board.ThreadFieldFileImageHeightMin)
+                        if (inputImage.Height < board.ThreadFieldFileImageHeightMin)
                         {
                             return Status<string>.ErrorStatus(TranslationKey.ErrorThreadFieldFileImageHeightMin);
                         }
-                        if (imageInput.Height > board.ThreadFieldFileImageHeightMax)
+                        if (inputImage.Height > board.ThreadFieldFileImageHeightMax)
                         {
                             return Status<string>.ErrorStatus(TranslationKey.ErrorThreadFieldFileImageHeightMax);
                         }
                     }
                     else
                     {
-                        if (imageInput.Width < board.ReplyFieldFileImageWidthMin)
+                        if (inputImage.Width < board.ReplyFieldFileImageWidthMin)
                         {
                             return Status<string>.ErrorStatus(TranslationKey.ErrorReplyFieldFileImageWidthMin);
                         }
-                        if (imageInput.Width > board.ReplyFieldFileImageWidthMax)
+                        if (inputImage.Width > board.ReplyFieldFileImageWidthMax)
                         {
                             return Status<string>.ErrorStatus(TranslationKey.ErrorReplyFieldFileImageWidthMax);
                         }
-                        if (imageInput.Height < board.ReplyFieldFileImageHeightMin)
+                        if (inputImage.Height < board.ReplyFieldFileImageHeightMin)
                         {
                             return Status<string>.ErrorStatus(TranslationKey.ErrorReplyFieldFileImageHeightMin);
                         }
-                        if (imageInput.Height > board.ReplyFieldFileImageHeightMax)
+                        if (inputImage.Height > board.ReplyFieldFileImageHeightMax)
                         {
                             return Status<string>.ErrorStatus(TranslationKey.ErrorReplyFieldFileImageHeightMax);
                         }
                     }
 
-                    post.FileWidth = imageInput.Width;
-                    post.FileHeight = imageInput.Height;
+                    post.FileWidth = inputImage.Width;
+                    post.FileHeight = inputImage.Height;
 
-                    CalculatePreviewDemensions(imageInput.Width, imageInput.Height, previewWidthMax, previewHeightMax, out int previewWidth, out int previewHeight);
+                    CalculatePreviewDemensions(inputImage.Width, inputImage.Height, previewWidthMax, previewHeightMax, out int previewWidth, out int previewHeight);
 
                     post.FilePreviewWidth = previewWidth;
                     post.FilePreviewHeight = previewHeight;
 
-                    var imageInfoOutput = new SKImageInfo(previewWidth, previewHeight, SKColorType.Rgba8888, SKAlphaType.Premul);
-                    using (var imageOutput = SKImage.Create(imageInfoOutput))
+                    var outputImageInfo = new SKImageInfo(previewWidth, previewHeight, SKColorType.Rgba8888, SKAlphaType.Premul);
+                    using (var outputImage = SKImage.Create(outputImageInfo))
                     {
-                        bool resized = imageInput.ScalePixels(imageOutput.PeekPixels(), SKFilterQuality.High);
+                        var outputPixmap = outputImage.PeekPixels();
+                        var outputSamplingOptions = new SKSamplingOptions(SKCubicResampler.Mitchell);
+                        var resized = inputImage.ScalePixels(outputPixmap, outputSamplingOptions, SKImageCachingHint.Disallow);
 
-                        imageInput.Dispose();
+                        inputImage.Dispose();
 
                         if (!resized)
                         {
                             return Status<string>.ErrorStatus(post.IsThread() ? TranslationKey.ErrorThreadFieldFile : TranslationKey.ErrorReplyFieldFile);
                         }
 
-                        using (var dataOutput = imageOutput.Encode(SKEncodedImageFormat.Png, 100))
-                        using (var stream = File.OpenWrite(previewPath))
+                        using (var outputData = outputImage.Encode(SKEncodedImageFormat.Png, 100))
+                        using (var outputStream = File.OpenWrite(previewPath))
                         {
-                            dataOutput.SaveTo(stream);
+                            outputData.SaveTo(outputStream);
                         }
                     }
 
@@ -149,9 +151,9 @@ namespace WillBoard.Infrastructure.Services
 
             if (post.FileMimeType == "video/webm" || post.FileMimeType == "audio/webm" || post.FileMimeType == "video/mp4" || post.FileMimeType == "audio/mpeg")
             {
-                using (var streamInput = file.OpenReadStream())
+                using (var inputStream = file.OpenReadStream())
                 {
-                    var result = await _fftoolService.FFprobeAsync(streamInput);
+                    var result = await _fftoolService.FFprobeAsync(inputStream);
 
                     if (!result.Success)
                     {
@@ -330,9 +332,9 @@ namespace WillBoard.Infrastructure.Services
         {
             using (var inputStream = formFile.OpenReadStream())
             {
-                var outputArgs = $"-loglevel error -vframes 1 -filter:v scale=\"{previewWidthMax}:{previewHeightMax}\" \"{previewPath}\"";
+                var outputArguments = $"-loglevel error -vframes 1 -filter:v scale=\"{previewWidthMax}:{previewHeightMax}\" \"{previewPath}\"";
 
-                var result = await _fftoolService.FFmpegAsync(inputStream, outputArgs);
+                var result = await _fftoolService.FFmpegAsync(inputStream, outputArguments);
 
                 if (!result.Success)
                 {
@@ -348,9 +350,9 @@ namespace WillBoard.Infrastructure.Services
         {
             using (var inputStream = formFile.OpenReadStream())
             {
-                var outputArgs = $"-loglevel error -filter_complex \"aformat=channel_layouts=mono,showwavespic=s={previewWidthMax}x{previewHeightMax}:colors=000000\" -frames:v 1 \"{previewPath}\"";
+                var outputArguments = $"-loglevel error -filter_complex \"aformat=channel_layouts=mono,showwavespic=s={previewWidthMax}x{previewHeightMax}:colors=000000\" -frames:v 1 \"{previewPath}\"";
 
-                var result = await _fftoolService.FFmpegAsync(inputStream, outputArgs);
+                var result = await _fftoolService.FFmpegAsync(inputStream, outputArguments);
 
                 if (!result.Success)
                 {
@@ -373,7 +375,8 @@ namespace WillBoard.Infrastructure.Services
         public string GetMimeType(Stream stream, string fileName)
         {
             Span<byte> buffer = stackalloc byte[128];
-            stream.Read(buffer);
+
+            stream.ReadExactly(buffer);
 
             return GetMimeType(buffer, fileName);
         }
