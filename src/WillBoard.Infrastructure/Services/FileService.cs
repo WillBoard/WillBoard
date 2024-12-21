@@ -389,84 +389,84 @@ namespace WillBoard.Infrastructure.Services
 
             if (extension == "bmp")
             {
-                if (file[0] == 66 && file[1] == 77)
+                if (file[0] == 0x42 && file[1] == 0x4D)
                 {
                     mime = "image/bmp";
                 }
             }
             else if (extension == "gif")
             {
-                if (file[0] == 71 && file[1] == 73 && file[2] == 70 && file[3] == 56 && file[4] == 55 && file[5] == 97 ||
-                    file[0] == 71 && file[1] == 73 && file[2] == 70 && file[3] == 56 && file[4] == 57 && file[5] == 97)
+                if (file[0] == 0x47 && file[1] == 0x49 && file[2] == 0x46 && file[3] == 0x38 && file[4] == 0x37 && file[5] == 0x61 ||
+                    file[0] == 0x47 && file[1] == 0x49 && file[2] == 0x46 && file[3] == 0x38 && file[4] == 0x39 && file[5] == 0x61)
                 {
                     mime = "image/gif";
                 }
             }
             else if (extension == "jpg" || extension == "jpeg")
             {
-                if (file[0] == 255 && file[1] == 216 && file[2] == 255 && file[3] == 219 ||
-                    file[0] == 255 && file[1] == 216 && file[2] == 255 && file[3] == 226 ||
-                    file[0] == 255 && file[1] == 216 && file[2] == 255 && file[3] == 227 ||
-                    file[0] == 255 && file[1] == 216 && file[2] == 255 && file[3] == 224 && file[6] == 112 && file[7] == 70 && file[8] == 73 && file[9] == 70 && file[10] == 0 && file[11] == 1 ||
-                    file[0] == 255 && file[1] == 216 && file[2] == 255 && file[3] == 224 && file[6] == 74 && file[7] == 70 && file[8] == 73 && file[9] == 70 && file[10] == 0 && file[11] == 1 ||
-                    file[0] == 255 && file[1] == 216 && file[2] == 255 && file[3] == 225 && file[6] == 69 && file[7] == 120 && file[8] == 105 && file[9] == 102 && file[10] == 0 && file[11] == 0 ||
-                    file[0] == 255 && file[1] == 216 && file[2] == 255 && file[3] == 232 && file[6] == 83 && file[7] == 80 && file[8] == 73 && file[9] == 70 && file[10] == 70 && file[11] == 0)
+                if (file[0] == 0xFF && file[1] == 0xD8 && file[2] == 0xFF && file[3] == 0xDB ||
+                    file[0] == 0xFF && file[1] == 0xD8 && file[2] == 0xFF && file[3] == 0xE2 ||
+                    file[0] == 0xFF && file[1] == 0xD8 && file[2] == 0xFF && file[3] == 0xE3 ||
+                    file[0] == 0xFF && file[1] == 0xD8 && file[2] == 0xFF && file[3] == 0xE0 && file[6] == 0x70 && file[7] == 0x46 && file[8] == 0x49 && file[9] == 0x46 && file[10] == 0x00 && file[11] == 0x01 ||
+                    file[0] == 0xFF && file[1] == 0xD8 && file[2] == 0xFF && file[3] == 0xE0 && file[6] == 0x4A && file[7] == 0x46 && file[8] == 0x49 && file[9] == 0x46 && file[10] == 0x00 && file[11] == 0x01 ||
+                    file[0] == 0xFF && file[1] == 0xD8 && file[2] == 0xFF && file[3] == 0xE1 && file[6] == 0x45 && file[7] == 0x78 && file[8] == 0x69 && file[9] == 0x66 && file[10] == 0x00 && file[11] == 0x00 ||
+                    file[0] == 0xFF && file[1] == 0xD8 && file[2] == 0xFF && file[3] == 0xE8 && file[6] == 0x53 && file[7] == 0x50 && file[8] == 0x49 && file[9] == 0x46 && file[10] == 0x46 && file[11] == 0x00)
                 {
                     mime = "image/jpeg";
                 }
             }
             else if (extension == "png")
             {
-                if (file[0] == 137 && file[1] == 80 && file[2] == 78 && file[3] == 71 && file[4] == 13 && file[5] == 10 && file[6] == 26 && file[7] == 10)
+                if (file[0] == 0x89 && file[1] == 0x50 && file[2] == 0x4E && file[3] == 0x47 && file[4] == 0x0D && file[5] == 0x0A && file[6] == 0x1A && file[7] == 0x0A)
                 {
                     mime = "image/png";
                 }
             }
             else if (extension == "webp")
             {
-                if (file[0] == 82 && file[1] == 73 && file[2] == 70 && file[3] == 70 && file[6] == 87 && file[7] == 69 && file[8] == 66 && file[9] == 80)
+                if (file[0] == 0x52 && file[1] == 0x49 && file[2] == 0x46 && file[3] == 0x46 && file[6] == 0x57 && file[7] == 0x45 && file[8] == 0x42 && file[9] == 0x50)
                 {
                     mime = "image/webp";
                 }
             }
             else if (extension == "psd")
             {
-                if (file[0] == 56 && file[1] == 66 && file[2] == 80 && file[3] == 83)
+                if (file[0] == 0x38 && file[1] == 0x42 && file[2] == 0x50 && file[3] == 0x53)
                 {
                     mime = "image/x-photoshop";
                 }
             }
             else if (extension == "mid" || extension == "midi")
             {
-                if (file[0] == 77 && file[1] == 84 && file[2] == 104 && file[3] == 100)
+                if (file[0] == 0x4D && file[1] == 0x54 && file[2] == 0x68 && file[3] == 0x64)
                 {
                     mime = "audio/midi";
                 }
             }
             else if (extension == "mp3")
             {
-                if (file[0] == 255 && file[1] == 251 || file[0] == 73 && file[1] == 68 && file[2] == 51)
+                if (file[0] == 0xFF && file[1] == 0xFB || file[0] == 0x49 && file[1] == 0x44 && file[2] == 0x33)
                 {
                     mime = "audio/mpeg";
                 }
             }
             else if (extension == "flac")
             {
-                if (file[0] == 102 && file[1] == 76 && file[2] == 97 && file[3] == 67)
+                if (file[0] == 0x66 && file[1] == 0x4C && file[2] == 0x61 && file[3] == 0x43)
                 {
                     mime = "audio/flac";
                 }
             }
             else if (extension == "wav")
             {
-                if (file[0] == 82 && file[1] == 73 && file[2] == 70 && file[3] == 70 && file[6] == 87 && file[7] == 65 && file[8] == 86 && file[9] == 69)
+                if (file[0] == 0x52 && file[1] == 0x49 && file[2] == 0x46 && file[3] == 0x46 && file[6] == 0x57 && file[7] == 0x41 && file[8] == 0x56 && file[9] == 0x45)
                 {
                     mime = "audio/wav";
                 }
             }
             else if (extension == "ogg" || extension == "oga" || extension == "ogv")
             {
-                if (file[0] == 79 && file[1] == 103 && file[2] == 80 && file[3] == 83)
+                if (file[0] == 0x4F && file[1] == 0x67 && file[2] == 0x50 && file[3] == 0x53)
                 {
                     if (extension == "ogg")
                     {
@@ -484,30 +484,30 @@ namespace WillBoard.Infrastructure.Services
             }
             else if (extension == "webm")
             {
-                if (file[0] == 26 && file[1] == 69 && file[2] == 223 && file[3] == 163)
+                if (file[0] == 0x1A && file[1] == 0x45 && file[2] == 0xDF && file[3] == 0xA3)
                 {
                     mime = "video/webm";
                 }
             }
             else if (extension == "mp4")
             {
-                if (file[4] == 102 && file[5] == 116 && file[6] == 121 && file[7] == 112 && file[8] == 109 && file[9] == 112 && file[10] == 52 && file[11] == 50 ||
-                    file[4] == 102 && file[5] == 116 && file[6] == 121 && file[7] == 112 && file[8] == 105 && file[9] == 115 && file[10] == 111 && file[11] == 109 ||
-                    file[4] == 102 && file[5] == 116 && file[6] == 121 && file[7] == 112 && file[8] == 77 && file[9] == 83 && file[10] == 78 && file[11] == 86)
+                if (file[4] == 0x66 && file[5] == 0x74 && file[6] == 0x79 && file[7] == 0x70 && file[8] == 0x6D && file[9] == 0x70 && file[10] == 0x34 && file[11] == 0x32 ||
+                    file[4] == 0x66 && file[5] == 0x74 && file[6] == 0x79 && file[7] == 0x70 && file[8] == 0x69 && file[9] == 0x73 && file[10] == 0x6F && file[11] == 0x6D ||
+                    file[4] == 0x66 && file[5] == 0x74 && file[6] == 0x79 && file[7] == 0x70 && file[8] == 0x4D && file[9] == 0x53 && file[10] == 0x4E && file[11] == 0x56)
                 {
                     mime = "video/mp4";
                 }
             }
             else if (extension == "avi")
             {
-                if (file[0] == 82 && file[1] == 73 && file[2] == 70 && file[3] == 70 && file[6] == 65 && file[7] == 86 && file[8] == 73 && file[9] == 32)
+                if (file[0] == 0x52 && file[1] == 0x49 && file[2] == 0x46 && file[3] == 0x46 && file[6] == 0x41 && file[7] == 0x56 && file[8] == 0x49 && file[9] == 0x20)
                 {
                     mime = "video/avi";
                 }
             }
             else if (extension == "wasm")
             {
-                if (file[0] == 0 && file[1] == 97 && file[2] == 115 && file[3] == 109)
+                if (file[0] == 0x00 && file[1] == 0x61 && file[2] == 0x73 && file[3] == 0x6D)
                 {
                     mime = "application/wasm";
                 }
