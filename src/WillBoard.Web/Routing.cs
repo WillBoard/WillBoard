@@ -15,7 +15,7 @@ namespace WillBoard.Web
         private static CompositeRouteConstraint _int = new CompositeRouteConstraint(new IRouteConstraint[] { new IntRouteConstraint() });
         private static CompositeRouteConstraint _bool = new CompositeRouteConstraint(new IRouteConstraint[] { new BoolRouteConstraint() });
         private static CompositeRouteConstraint _guid = new CompositeRouteConstraint(new IRouteConstraint[] { new GuidRouteConstraint() });
-        private static CompositeRouteConstraint _uInt128 = new CompositeRouteConstraint(new IRouteConstraint[] { new RegexRouteConstraint("^[1-9][0-9]{1,38}$") });
+        private static CompositeRouteConstraint _uInt128 = new CompositeRouteConstraint(new IRouteConstraint[] { new RegexRouteConstraint("^[1-9]+[0-9]{0,38}$") });
 
         public static IEndpointRouteBuilder Generate(IEndpointRouteBuilder endpointRouteBuilder)
         {
@@ -445,6 +445,13 @@ namespace WillBoard.Web
                 pattern: "administration/board/{boardId}/view/search",
                 defaults: new { controller = "Administration", action = "BoardViewSearch" },
                 constraints: new { boardId = _boardId }
+            ).WithMetadata(new EndpointResponse(EndpointContentType.HTML));
+
+            endpointRouteBuilder.MapControllerRoute(
+                name: "administration/ip/{ipVersion}/{ipNumber}/delete-posts",
+                pattern: "administration/ip/{ipVersion}/{ipNumber}/delete-posts",
+                defaults: new { controller = "Administration", action = "IpDeletePosts" },
+                constraints: new { ipVersion = _int, ipNumber = _uInt128 }
             ).WithMetadata(new EndpointResponse(EndpointContentType.HTML));
 
             endpointRouteBuilder.MapControllerRoute(

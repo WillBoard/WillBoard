@@ -40,6 +40,7 @@ using WillBoard.Application.Administration.Commands.CacheClear;
 using WillBoard.Application.Administration.Commands.ConfigurationCreate;
 using WillBoard.Application.Administration.Commands.ConfigurationDelete;
 using WillBoard.Application.Administration.Commands.ConfigurationUpdate;
+using WillBoard.Application.Administration.Commands.IpDeletePosts;
 using WillBoard.Application.Administration.Commands.Login;
 using WillBoard.Application.Administration.Commands.Logout;
 using WillBoard.Application.Administration.Commands.NavigationCreate;
@@ -95,6 +96,7 @@ using WillBoard.Application.Administration.Queries.ConfigurationCreate;
 using WillBoard.Application.Administration.Queries.ConfigurationDelete;
 using WillBoard.Application.Administration.Queries.Configurations;
 using WillBoard.Application.Administration.Queries.ConfigurationUpdate;
+using WillBoard.Application.Administration.Queries.IpDeletePosts;
 using WillBoard.Application.Administration.Queries.NavigationCreate;
 using WillBoard.Application.Administration.Queries.NavigationDelete;
 using WillBoard.Application.Administration.Queries.Navigations;
@@ -1432,6 +1434,51 @@ namespace WillBoard.Web.Controllers
         }
 
         #endregion Board IP
+
+        #region IP
+
+        [HttpGet]
+        [AuthenticationFilter]
+        [CsrfFilter(Csrf.Set)]
+        public async Task<IActionResult> IpDeletePostsAsync([FromRoute] IpVersion ipVersion, [FromRoute] string ipNumber)
+        {
+            var query = new IpDeletePostsQuery()
+            {
+                IpVersion = ipVersion,
+                IpNumber = ipNumber
+            };
+
+            var result = await _mediator.Send(query);
+
+            if (!result.Success)
+            {
+                return await _errorService.AdministrationErrorAsync(result.Error, EndpointContentType.HTML);
+            }
+
+            return View("IpDeletePosts", result.Value);
+        }
+
+        [HttpPost]
+        [AuthenticationFilter]
+        [CsrfFilter(Csrf.Check)]
+        public async Task<IActionResult> IpDeletePostsAsync([FromRoute] IpVersion ipVersion, [FromRoute] string ipNumber, [FromForm] IpDeletePostsCommand command)
+        {
+            if (ipVersion != command.IpVersion || ipNumber != command.IpNumber)
+            {
+                return await _errorService.AdministrationErrorAsync(new InternalError(400, TranslationKey.ErrorBadRequest), EndpointContentType.HTML);
+            }
+
+            var result = await _mediator.Send(command);
+
+            if (!result.Success)
+            {
+                return await _errorService.AdministrationErrorAsync(result.Error, EndpointContentType.HTML);
+            }
+
+            return RedirectToAction("Boards");
+        }
+
+        #endregion IP
 
         #region Bans
 

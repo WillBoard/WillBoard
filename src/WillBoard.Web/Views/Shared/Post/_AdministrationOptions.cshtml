@@ -40,4 +40,5 @@
 @if (account.Type == AccountType.Administrator)
 {
     <a href="@_linkGenerator.GetPathByAction("BanCreate", "Administration", new { ipVersion = (int)Model.IpVersion, ipNumber = Model.IpNumber })">Ban - Create</a>
+    <a href="@_linkGenerator.GetPathByAction("IpDeletePosts", "Administration", new { ipVersion = (int)Model.IpVersion, ipNumber = Model.IpNumber })">IP - Delete Posts</a>
 }

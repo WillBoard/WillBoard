@@ -23,7 +23,7 @@
                 <input type="hidden" name="@nameof(BoardIpDeletePostsCommand.IpVersion)" value="@Model.IpVersion" autocomplete="off">
                 <input type="hidden" name="@nameof(BoardIpDeletePostsCommand.IpNumber)" value="@Model.IpNumber" autocomplete="off">
                 <p>
-                    <button type="submit">Delete posts from IP address @IpConversion.IpNumberToIpAddressString(Model.IpVersion, Model.IpNumber)</button>
+                    <button type="submit">Delete @Model.BoardId/@IpConversion.IpNumberToIpAddressString(Model.IpVersion, Model.IpNumber) posts</button>
                 </p>
             </form>
         </section>

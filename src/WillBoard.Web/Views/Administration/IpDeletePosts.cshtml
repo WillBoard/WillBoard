@@ -1,0 +1,30 @@
+﻿@using Microsoft.AspNetCore.Routing
+@using WillBoard.Application.Administration.Commands.IpDeletePosts
+@using WillBoard.Application.Administration.Queries.IpDeletePosts
+@using WillBoard.Core.Managers
+@using WillBoard.Core.Utilities
+@using WillBoard.Web.Services
+@using WillBoard.Core.Extensions
+@inject LinkGenerator _linkGenerator
+@inject ViewService _viewService
+@inject AccountManager _accountManager
+@model IpDeletePostsViewModel
+@{
+    Layout = "~/Views/Shared/_AdministrationLayout.cshtml";
+}
+
+<main>
+    <article>
+        <header>Ip - Delete Posts</header>
+        <section>
+            <form method="post">
+                <input type="hidden" name="csrf" value="@ViewData["csrf"]" autocomplete="off">
+                <input type="hidden" name="@nameof(IpDeletePostsCommand.IpVersion)" value="@Model.IpVersion" autocomplete="off">
+                <input type="hidden" name="@nameof(IpDeletePostsCommand.IpNumber)" value="@Model.IpNumber" autocomplete="off">
+                <p>
+                    <button type="submit">Delete @IpConversion.IpNumberToIpAddressString(Model.IpVersion, Model.IpNumber) posts</button>
+                </p>
+            </form>
+        </section>
+    </article>
+</main>
