@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Text.Json;
 using WillBoard.Application;
 using WillBoard.Core.Interfaces.Services;
 using WillBoard.Core.Managers;
@@ -52,12 +53,14 @@ namespace WillBoard.Web
             {
                 builder.ClearProviders();
 
-                builder.AddSimpleConsole(options =>
+                builder.AddJsonConsole(options =>
                 {
                     options.IncludeScopes = false;
-                    options.SingleLine = false;
-                    options.TimestampFormat = "[yyyy-MM-dd HH:mm:ss] ";
                     options.UseUtcTimestamp = true;
+                    options.JsonWriterOptions = new JsonWriterOptions
+                    {
+                        Indented = true,
+                    };
                 });
 
                 builder.SetMinimumLevel(_configurationService.Configuration.Logger.Level);
@@ -79,8 +82,7 @@ namespace WillBoard.Web
             serviceCollection.AddApplication();
 
             serviceCollection.AddMvcCore(options => options.ModelMetadataDetailsProviders.Add(new StringMetadataProvider()))
-                .AddRazorViewEngine()
-                .AddRazorRuntimeCompilation();
+                .AddRazorViewEngine();
 
             // For render ViewResult from middleware
             // eg. context.RequestServices.GetService<IActionResultExecutor<ViewResult>>();

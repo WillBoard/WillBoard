@@ -6,16 +6,15 @@
         <Nullable>disable</Nullable>
         <ImplicitUsings>disable</ImplicitUsings>
         <CompressionEnabled>false</CompressionEnabled>
+        <InvariantGlobalization>true</InvariantGlobalization>
+        <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+        <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
     </PropertyGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\WillBoard.Core\WillBoard.Core.csproj" />
         <ProjectReference Include="..\WillBoard.Application\WillBoard.Application.csproj" />
         <ProjectReference Include="..\WillBoard.Infrastructure\WillBoard.Infrastructure.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="9.0.1" />
     </ItemGroup>
 
     <ItemGroup>
