@@ -123,7 +123,7 @@ namespace WillBoard.Infrastructure.Services
                     using (var outputImage = SKImage.Create(outputImageInfo))
                     {
                         var outputPixmap = outputImage.PeekPixels();
-                        var outputSamplingOptions = new SKSamplingOptions(SKCubicResampler.Mitchell);
+                        var outputSamplingOptions = new SKSamplingOptions(SKFilterMode.Linear, SKMipmapMode.Linear);
                         var resized = inputImage.ScalePixels(outputPixmap, outputSamplingOptions, SKImageCachingHint.Disallow);
 
                         inputImage.Dispose();
