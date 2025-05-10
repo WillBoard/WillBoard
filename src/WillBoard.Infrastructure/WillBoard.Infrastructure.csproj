@@ -14,9 +14,9 @@
 		<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="9.0.4" />
 		<PackageReference Include="Microsoft.Extensions.Http" Version="9.0.4" />
 		<PackageReference Include="MySqlConnector" Version="2.4.0" />
-		<PackageReference Include="SkiaSharp" Version="3.116.1" />
-		<PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="3.116.1" />
-		<PackageReference Include="StackExchange.Redis" Version="2.8.31" />
+		<PackageReference Include="SkiaSharp" Version="3.119.0" />
+		<PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="3.119.0" />
+		<PackageReference Include="StackExchange.Redis" Version="2.8.37" />
 		<PackageReference Include="System.Data.SqlClient" Version="4.9.0" />
 	</ItemGroup>
 
