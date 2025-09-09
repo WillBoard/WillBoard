@@ -8,15 +8,15 @@
 
 	<ItemGroup>
 		<PackageReference Include="Dapper" Version="2.1.66" />
-		<PackageReference Include="Microsoft.AspNetCore.Cryptography.KeyDerivation" Version="9.0.6" />
-		<PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="9.0.6" />
-		<PackageReference Include="Microsoft.Extensions.Features" Version="9.0.6" />
-		<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="9.0.6" />
-		<PackageReference Include="Microsoft.Extensions.Http" Version="9.0.6" />
+		<PackageReference Include="Microsoft.AspNetCore.Cryptography.KeyDerivation" Version="9.0.9" />
+		<PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="9.0.9" />
+		<PackageReference Include="Microsoft.Extensions.Features" Version="9.0.9" />
+		<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="9.0.9" />
+		<PackageReference Include="Microsoft.Extensions.Http" Version="9.0.9" />
 		<PackageReference Include="MySqlConnector" Version="2.4.0" />
 		<PackageReference Include="SkiaSharp" Version="3.119.0" />
 		<PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="3.119.0" />
-		<PackageReference Include="StackExchange.Redis" Version="2.8.41" />
+		<PackageReference Include="StackExchange.Redis" Version="2.9.11" />
 		<PackageReference Include="System.Data.SqlClient" Version="4.9.0" />
 	</ItemGroup>
 
