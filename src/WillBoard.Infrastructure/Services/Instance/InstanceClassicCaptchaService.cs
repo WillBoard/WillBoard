@@ -87,15 +87,16 @@ namespace WillBoard.Infrastructure.Services.Instance
 
                 using (var textPaint = new SKPaint())
                 {
-                    textPaint.TextSize = Random.Shared.Next(22, 26);
                     textPaint.IsAntialias = true;
-                    textPaint.Typeface = _typeface;
+
+                    var textFont = new SKFont();
+                    textFont.Size = Random.Shared.Next(22, 26);
+                    textFont.Typeface = _typeface;
 
                     float xCenter = _captchaImageInfo.Width / 2;
                     float yCenter = _captchaImageInfo.Height / 2;
 
-                    var textBounds = new SKRect();
-                    textPaint.MeasureText(captchaValue, ref textBounds);
+                    textFont.MeasureText(captchaValue, out var textBounds, textPaint);
                     float xText = xCenter - textBounds.MidX;
                     float yText = yCenter - textBounds.MidY;
 
@@ -112,8 +113,7 @@ namespace WillBoard.Infrastructure.Services.Instance
                     var yDegrees = (double)Random.Shared.Next(-20, 20);
                     canvas.Skew((float)Math.Tan(Math.PI * xDegrees / 180), (float)Math.Tan(Math.PI * yDegrees / 180));
                     canvas.Translate(-xCenter, -yCenter);
-
-                    canvas.DrawText(captchaValue, xText + Random.Shared.Next(-60, 60), yText, textPaint);
+                    canvas.DrawText(captchaValue, xText + Random.Shared.Next(-60, 60), yText, SKTextAlign.Left, textFont, textPaint);
                 }
 
                 canvas.ResetMatrix();
