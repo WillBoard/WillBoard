@@ -1,6 +1,6 @@
-﻿using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using System.IO;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using WillBoard.Core.Interfaces.Services;
 
 namespace WillBoard.Infrastructure.Services.Instance

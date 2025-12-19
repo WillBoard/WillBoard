@@ -1,4 +1,4 @@
-﻿namespace WillBoard.Core.Enums
+namespace WillBoard.Core.Enums
 {
     public enum BoardType
     {

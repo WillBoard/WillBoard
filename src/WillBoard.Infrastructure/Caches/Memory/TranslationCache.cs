@@ -1,7 +1,7 @@
-﻿using Microsoft.Extensions.Caching.Memory;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Caching.Memory;
 using WillBoard.Core.Entities;
 using WillBoard.Core.Interfaces.Caches;
 using WillBoard.Core.Interfaces.Managers;

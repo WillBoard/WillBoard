@@ -98,9 +98,20 @@
                     <td colspan="2"><input type="file" name="file" id="file" accept="@Html.Raw(string.Join(",", board.ReplyFieldFileTypeCollection))" @Html.Raw(board.ReplyFieldFileRequirement ? "required" : "")></td>
                 </tr>
             }
-            @if (board.ThreadFieldVerificationMode != VerificationMode.None || board.ReplyFieldVerificationMode == VerificationMode.None)
+            @if (board.ThreadFieldVerificationMode != VerificationMode.None || board.ReplyFieldVerificationMode != VerificationMode.None)
             {
-                @if (board.FieldVerificationType == VerificationType.ReCaptcha)
+				@if (board.FieldVerificationType == VerificationType.ClassicCaptcha)
+				{
+					<tr data-field="captcha" class="captcha classiccaptcha @(!Model.Verification ? @" hide" : string.Empty)">
+						<td colspan="2">
+							<noscript>
+								<iframe src="/api/captcha/wildcard"></iframe>
+								<input type="text" name="verificationValue" autocomplete="off" placeholder="Code">
+							</noscript>
+						</td>
+					</tr>
+				}
+                else if (board.FieldVerificationType == VerificationType.ReCaptcha)
                 {
                     <tr data-field="captcha" class="captcha recaptcha @(!Model.Verification ? @" hide" : string.Empty)">
                         <td colspan="2">
@@ -120,14 +131,11 @@
                         </td>
                     </tr>
                 }
-                else if (board.FieldVerificationType == VerificationType.ClassicCaptcha)
+                else if (board.FieldVerificationType == VerificationType.Turnstile)
                 {
-                    <tr data-field="captcha" class="captcha classiccaptcha @(!Model.Verification ? @" hide" : string.Empty)">
+					<tr data-field="captcha" class="captcha turnstile @(!Model.Verification ? @" hide" : string.Empty)">
                         <td colspan="2">
-                            <noscript>
-                                <iframe src="/api/captcha/wildcard"></iframe>
-                                <input type="text" name="verificationValue" autocomplete="off" placeholder="Code">
-                            </noscript>
+							<div class="cf-turnstile" data-sitekey="@board.VerificationPublicKey" data-size="flexible"></div>
                         </td>
                     </tr>
                 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using WillBoard.Application.ViewModels;
 using WillBoard.Core.Entities;

@@ -1,4 +1,4 @@
-﻿using MediatR;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 using WillBoard.Core.Errors;
 using WillBoard.Core.Results;

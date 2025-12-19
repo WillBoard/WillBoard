@@ -1,4 +1,4 @@
-﻿using WillBoard.Core.Entities;
+using WillBoard.Core.Entities;
 
 namespace WillBoard.Core.Managers
 {

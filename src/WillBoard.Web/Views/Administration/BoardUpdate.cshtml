@@ -1,4 +1,4 @@
-﻿@using Microsoft.AspNetCore.Routing;
+@using Microsoft.AspNetCore.Routing;
 @using WillBoard.Application.Administration.Commands.BoardUpdate
 @using WillBoard.Application.Administration.Queries.BoardUpdate
 @using WillBoard.Core.Enums;
@@ -45,7 +45,7 @@
                             <td>
                                 <select name="@nameof(BoardUpdateCommand.Type)">
                                     <option value="0" @(Model.Board.Type == BoardType.Standard ? "selected" : "")>@BoardType.Standard</option>
-                                    <option disabled value="1" @(Model.Board.Type == BoardType.Group ? "selected" : "")>@BoardType.Group</optio>
+                                    <option disabled value="1" @(Model.Board.Type == BoardType.Group ? "selected" : "")>@BoardType.Group</option>
                                 </select>
                             </td>
                         </tr>
@@ -1088,6 +1088,7 @@
                                     <option value="0" @(Model.Board.FieldVerificationType == VerificationType.None ? "selected" : "")>@VerificationType.None</option>
                                     <option value="1" @(Model.Board.FieldVerificationType == VerificationType.ClassicCaptcha ? "selected" : "")>@VerificationType.ClassicCaptcha</option>
                                     <option value="2" @(Model.Board.FieldVerificationType == VerificationType.ReCaptcha ? "selected" : "")>@VerificationType.ReCaptcha</option>
+                                    <option value="3" @(Model.Board.FieldVerificationType == VerificationType.Turnstile ? "selected" : "")>@VerificationType.Turnstile</option>
                                 </select>
                             </td>
                         </tr>

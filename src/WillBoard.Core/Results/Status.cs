@@ -1,4 +1,4 @@
-﻿namespace WillBoard.Core.Results
+namespace WillBoard.Core.Results
 {
     public readonly struct Status<TError>
     {

@@ -1,7 +1,7 @@
-﻿using MediatR;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using MediatR;
 using WillBoard.Core.Consts;
 using WillBoard.Core.Entities;
 using WillBoard.Core.Enums;
@@ -25,6 +25,7 @@ namespace WillBoard.Application.Administration.Commands.Login
         private readonly IAuthenticationCache _authenticationCache;
         private readonly IPasswordService _passwordService;
         private readonly IReCaptchaV2Service _reCaptchaV2Service;
+        private readonly ITurnstileService _turnstileService;
 
         public LoginCommandHandler(
             IpManager ipManager,
@@ -34,7 +35,8 @@ namespace WillBoard.Application.Administration.Commands.Login
             IAccountCache accountCache,
             IAuthenticationCache authenticationCache,
             IPasswordService passwordService,
-            IReCaptchaV2Service reCaptchaV2Service)
+            IReCaptchaV2Service reCaptchaV2Service,
+            ITurnstileService turnstileService)
         {
             _ipManager = ipManager;
             _dateTimeProvider = dateTimeProvider;
@@ -44,6 +46,7 @@ namespace WillBoard.Application.Administration.Commands.Login
             _authenticationCache = authenticationCache;
             _passwordService = passwordService;
             _reCaptchaV2Service = reCaptchaV2Service;
+            _turnstileService = turnstileService;
         }
 
         public async Task<Result<Authentication, InternalError>> Handle(LoginCommand request, CancellationToken cancellationToken)
@@ -51,6 +54,14 @@ namespace WillBoard.Application.Administration.Commands.Login
             if (_configurationService.Configuration.Administration.VerificationType == VerificationType.ReCaptcha)
             {
                 var verificationResult = await _reCaptchaV2Service.VerifyAsync(_configurationService.Configuration.Administration.VerificationSecretKey, request.VerificationValue);
+                if (!verificationResult)
+                {
+                    return Result<Authentication, InternalError>.ErrorResult(new InternalError(400, TranslationKey.ErrorVerification));
+                }
+            }
+            else if (_configurationService.Configuration.Administration.VerificationType == VerificationType.Turnstile)
+            {
+                var verificationResult = await _turnstileService.VerifyAsync(_configurationService.Configuration.Administration.VerificationSecretKey, request.VerificationValue);
                 if (!verificationResult)
                 {
                     return Result<Authentication, InternalError>.ErrorResult(new InternalError(400, TranslationKey.ErrorVerification));

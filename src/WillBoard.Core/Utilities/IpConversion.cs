@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Net;
 using System.Numerics;
 using WillBoard.Core.Enums;

@@ -1,4 +1,4 @@
-﻿namespace WillBoard.Core.Consts
+namespace WillBoard.Core.Consts
 {
     public static class ConfigurationKey
     {

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using WillBoard.Core.Entities;
@@ -15,16 +15,18 @@ namespace WillBoard.Infrastructure.Services
         private readonly IDateTimeProvider _dateTimeProvider;
         private readonly IVerificationRepository _verificationRepository;
         private readonly IVerificationCache _verificationCache;
-        private readonly IReCaptchaV2Service _reCaptchaV2Service;
         private readonly IClassicCaptchaService _classicCaptchaService;
+        private readonly IReCaptchaV2Service _reCaptchaV2Service;
+        private readonly ITurnstileService _turnstileService;
 
-        public VerificationService(IDateTimeProvider dateTimeProvider, IVerificationRepository verificationRepository, IVerificationCache verificationCache, IReCaptchaV2Service reCaptchaV2Service, IClassicCaptchaService classicCaptchaService)
+        public VerificationService(IDateTimeProvider dateTimeProvider, IVerificationRepository verificationRepository, IVerificationCache verificationCache, IClassicCaptchaService classicCaptchaService, IReCaptchaV2Service reCaptchaV2Service, ITurnstileService turnstileService)
         {
             _dateTimeProvider = dateTimeProvider;
             _verificationRepository = verificationRepository;
             _verificationCache = verificationCache;
-            _reCaptchaV2Service = reCaptchaV2Service;
             _classicCaptchaService = classicCaptchaService;
+            _reCaptchaV2Service = reCaptchaV2Service;
+            _turnstileService = turnstileService;
         }
 
         public async Task<bool> CheckAsync(bool thread, IpVersion ipVersion, UInt128 ipNumber, Board board)
@@ -180,11 +182,7 @@ namespace WillBoard.Infrastructure.Services
 
         private async Task<bool> VerifyTypeAsync(VerificationType verificationType, string key, string value, string verificationSecretKey)
         {
-            if (verificationType == VerificationType.ReCaptcha)
-            {
-                return await _reCaptchaV2Service.VerifyAsync(verificationSecretKey, value);
-            }
-            else if (verificationType == VerificationType.ClassicCaptcha)
+            if (verificationType == VerificationType.ClassicCaptcha)
             {
                 if (string.IsNullOrEmpty(key))
                 {
@@ -194,6 +192,14 @@ namespace WillBoard.Infrastructure.Services
                 {
                     return _classicCaptchaService.Verify(key, value);
                 }
+            }
+            else if (verificationType == VerificationType.ReCaptcha)
+            {
+                return await _reCaptchaV2Service.VerifyAsync(verificationSecretKey, value);
+            }
+            else if (verificationType == VerificationType.Turnstile)
+            {
+                return await _turnstileService.VerifyAsync(verificationSecretKey, value);
             }
             else
             {

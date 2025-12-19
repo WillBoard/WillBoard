@@ -1,6 +1,6 @@
-﻿using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
+using MediatR;
 using WillBoard.Core.Errors;
 using WillBoard.Core.Interfaces.Services;
 using WillBoard.Core.Managers;

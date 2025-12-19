@@ -1,5 +1,5 @@
-﻿using MySqlConnector;
 using System.Data;
+using MySqlConnector;
 using WillBoard.Core.Interfaces.Repositories;
 using WillBoard.Core.Interfaces.Services;
 

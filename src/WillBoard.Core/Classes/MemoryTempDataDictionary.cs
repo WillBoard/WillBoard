@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace WillBoard.Core.Classes
 {

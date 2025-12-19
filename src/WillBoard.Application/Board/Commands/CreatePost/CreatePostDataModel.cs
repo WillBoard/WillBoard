@@ -1,4 +1,4 @@
-﻿namespace WillBoard.Application.Board.Commands.CreatePost
+namespace WillBoard.Application.Board.Commands.CreatePost
 {
     public class CreatePostDataModel
     {

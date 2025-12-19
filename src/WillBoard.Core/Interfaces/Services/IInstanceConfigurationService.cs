@@ -1,4 +1,4 @@
-﻿using WillBoard.Core.Classes;
+using WillBoard.Core.Classes;
 
 namespace WillBoard.Core.Interfaces.Services
 {

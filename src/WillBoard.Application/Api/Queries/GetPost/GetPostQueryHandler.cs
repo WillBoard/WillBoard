@@ -1,7 +1,7 @@
-﻿using MediatR;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using MediatR;
 using WillBoard.Application.DataModels;
 using WillBoard.Core.Consts;
 using WillBoard.Core.Errors;

@@ -1,4 +1,4 @@
-﻿namespace WillBoard.Core.Classes
+namespace WillBoard.Core.Classes
 {
     public class CssTheme
     {

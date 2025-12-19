@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using WillBoard.Core.Interfaces.Providers;
 
 namespace WillBoard.Infrastructure.Providers

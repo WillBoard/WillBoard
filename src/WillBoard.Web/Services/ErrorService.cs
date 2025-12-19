@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using System.Threading.Tasks;
 using WillBoard.Application.ViewModels;
 using WillBoard.Core.Classes;
 using WillBoard.Core.Consts;

@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using WillBoard.Core.Interfaces.Caches;
 using WillBoard.Core.Interfaces.Services;
 

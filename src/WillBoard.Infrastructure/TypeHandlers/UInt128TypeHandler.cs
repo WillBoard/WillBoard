@@ -1,7 +1,7 @@
-﻿using Dapper;
 using System;
 using System.Data;
 using System.Numerics;
+using Dapper;
 
 namespace WillBoard.Infrastructure.TypeHandlers
 {

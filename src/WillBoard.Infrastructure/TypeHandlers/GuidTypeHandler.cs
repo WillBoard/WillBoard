@@ -1,6 +1,6 @@
-﻿using Dapper;
 using System;
 using System.Data;
+using Dapper;
 using WillBoard.Core.Utilities;
 
 namespace WillBoard.Infrastructure.TypeHandlers

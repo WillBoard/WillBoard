@@ -1,4 +1,4 @@
-﻿using WillBoard.Core.Enums;
+using WillBoard.Core.Enums;
 
 namespace WillBoard.Core.Classes
 {

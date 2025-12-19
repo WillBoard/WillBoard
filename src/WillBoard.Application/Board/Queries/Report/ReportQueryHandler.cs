@@ -1,6 +1,6 @@
-﻿using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
+using MediatR;
 using WillBoard.Application.ViewModels;
 using WillBoard.Core.Consts;
 using WillBoard.Core.Enums;

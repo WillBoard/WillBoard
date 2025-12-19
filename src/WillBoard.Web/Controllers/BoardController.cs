@@ -1,9 +1,9 @@
-﻿using MediatR;
+using System;
+using System.Threading.Tasks;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
-using System;
-using System.Threading.Tasks;
 using WillBoard.Application.Board.Commands.BanAppealBoard;
 using WillBoard.Application.Board.Commands.BanAppealSystem;
 using WillBoard.Application.Board.Commands.CreatePost;
@@ -155,6 +155,11 @@ namespace WillBoard.Web.Controllers
             if (board.FieldVerificationType == VerificationType.ReCaptcha)
             {
                 command.VerificationValue = Request.Form["g-recaptcha-response"].ToString();
+            }
+
+            if (board.FieldVerificationType == VerificationType.Turnstile)
+            {
+                command.VerificationValue = Request.Form["cf-turnstile-response"].ToString();
             }
 
             var result = await _mediator.Send(command);

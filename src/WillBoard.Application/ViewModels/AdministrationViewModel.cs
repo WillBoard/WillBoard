@@ -1,4 +1,4 @@
-﻿namespace WillBoard.Application.ViewModels
+namespace WillBoard.Application.ViewModels
 {
     public class AdministrationViewModel : ApplicationViewModel
     {

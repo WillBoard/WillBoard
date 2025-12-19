@@ -1,11 +1,11 @@
-﻿using MediatR;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
+using MediatR;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using WillBoard.Application.Api.Queries.GetPost;
 using WillBoard.Application.Api.Queries.GetReplies;
 using WillBoard.Application.Api.Queries.GetVerification;
@@ -177,6 +177,11 @@ $@"<!doctype html>
             if (board.FieldVerificationType == VerificationType.ReCaptcha)
             {
                 command.VerificationValue = Request.Form["g-recaptcha-response"].ToString();
+            }
+
+            if (board.FieldVerificationType == VerificationType.Turnstile)
+            {
+                command.VerificationValue = Request.Form["cf-turnstile-response"].ToString();
             }
 
             var result = await _mediator.Send(command);

@@ -36,6 +36,12 @@
                     </noscript>
                 </div>
             }
+            else if (_configurationService.Configuration.Administration.VerificationType == VerificationType.Turnstile)
+            {
+				<div>
+					<div class="cf-turnstile" data-sitekey="@_configurationService.Configuration.Administration.VerificationPublicKey" data-size="flexible"></div>
+                </div>
+            }
             <p class="center">
                 <button type="submit">Login</button>
             </p>
@@ -50,4 +56,8 @@
 @if (_configurationService.Configuration.Administration.VerificationType == VerificationType.ReCaptcha)
 {
     <script src='https://www.google.com/recaptcha/api.js' async defer></script>
+}
+else if (_configurationService.Configuration.Administration.VerificationType == VerificationType.Turnstile)
+{
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 }

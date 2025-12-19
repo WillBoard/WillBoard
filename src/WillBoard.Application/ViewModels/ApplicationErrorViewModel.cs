@@ -1,4 +1,4 @@
-﻿using WillBoard.Core.Errors;
+using WillBoard.Core.Errors;
 
 namespace WillBoard.Application.ViewModels
 {

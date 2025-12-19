@@ -1,4 +1,4 @@
-﻿const ViewType = {
+const ViewType = {
     Other: 0,
     Application: 1,
     Board: 2
@@ -15,7 +15,8 @@ const BoardViewType = {
 const VerificationType = {
     None: 0,
     ClassicCAPTCHA: 1,
-    ReCAPTCHA: 2
+    ReCAPTCHA: 2,
+    Turnstile: 3
 };
 
 function customReviver(key, value, context) {
@@ -687,4 +688,3 @@ function createInputRangeSettingElement(name, value, min, max, step, type, func)
 
     return newSetting;
 }
-

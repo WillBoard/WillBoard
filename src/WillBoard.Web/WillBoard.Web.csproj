@@ -1,29 +1,29 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
-    <PropertyGroup>
-        <TargetFramework>net9.0</TargetFramework>
-        <RuntimeIdentifiers>win-x64;linux-x64</RuntimeIdentifiers>
-        <Nullable>disable</Nullable>
-        <ImplicitUsings>disable</ImplicitUsings>
-        <CompressionEnabled>false</CompressionEnabled>
-        <InvariantGlobalization>true</InvariantGlobalization>
-        <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
-        <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
-    </PropertyGroup>
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <RuntimeIdentifiers>win-x64;linux-x64</RuntimeIdentifiers>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <CompressionEnabled>false</CompressionEnabled>
+    <InvariantGlobalization>true</InvariantGlobalization>
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+    <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
+  </PropertyGroup>
 
-    <ItemGroup>
-        <ProjectReference Include="..\WillBoard.Core\WillBoard.Core.csproj" />
-        <ProjectReference Include="..\WillBoard.Application\WillBoard.Application.csproj" />
-        <ProjectReference Include="..\WillBoard.Infrastructure\WillBoard.Infrastructure.csproj" />
-    </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\WillBoard.Core\WillBoard.Core.csproj" />
+    <ProjectReference Include="..\WillBoard.Application\WillBoard.Application.csproj" />
+    <ProjectReference Include="..\WillBoard.Infrastructure\WillBoard.Infrastructure.csproj" />
+  </ItemGroup>
 
-    <ItemGroup>
-        <Content Update="configuration.json">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-        <None Update="Assets\**">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-    </ItemGroup>
+  <ItemGroup>
+    <Content Update="configuration.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <None Update="Assets\**">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 
 </Project>

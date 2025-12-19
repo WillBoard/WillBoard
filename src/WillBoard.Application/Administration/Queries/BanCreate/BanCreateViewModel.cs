@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using WillBoard.Application.ViewModels;
 using WillBoard.Core.Enums;
 

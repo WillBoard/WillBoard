@@ -1,4 +1,4 @@
-﻿namespace WillBoard.Core.Errors
+namespace WillBoard.Core.Errors
 {
     public class InternalError
     {

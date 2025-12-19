@@ -1,5 +1,5 @@
-﻿using MediatR;
 using System;
+using MediatR;
 using WillBoard.Core.Enums;
 using WillBoard.Core.Errors;
 using WillBoard.Core.Results;

@@ -1,4 +1,4 @@
-﻿namespace WillBoard.Core.Extensions
+namespace WillBoard.Core.Extensions
 {
     public static class StringExtension
     {

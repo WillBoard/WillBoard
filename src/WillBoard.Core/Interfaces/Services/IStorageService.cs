@@ -1,4 +1,4 @@
-﻿namespace WillBoard.Core.Interfaces.Services
+namespace WillBoard.Core.Interfaces.Services
 {
     public interface IStorageService
     {

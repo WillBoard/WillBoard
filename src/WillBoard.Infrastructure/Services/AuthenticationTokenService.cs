@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Buffers.Text;
 using System.Text;
 using WillBoard.Core.Interfaces.Services;

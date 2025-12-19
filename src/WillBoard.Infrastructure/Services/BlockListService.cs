@@ -1,10 +1,10 @@
-﻿using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using WillBoard.Core.Classes;
 using WillBoard.Core.Interfaces.Services;
 using WillBoard.Core.Utilities;

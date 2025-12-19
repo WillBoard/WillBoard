@@ -1,8 +1,8 @@
-﻿using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Hosting;
-using SkiaSharp;
 using System;
 using System.Linq;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Hosting;
+using SkiaSharp;
 using WillBoard.Core.Interfaces.Providers;
 using WillBoard.Core.Interfaces.Services;
 

@@ -1,5 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
 using System;
+using Microsoft.Extensions.DependencyInjection;
 using WillBoard.Core.Enums;
 using WillBoard.Core.Interfaces.Caches;
 using WillBoard.Core.Interfaces.Managers;
@@ -109,6 +109,8 @@ namespace WillBoard.Infrastructure
             services.AddTransient<IIpService, IpService>();
 
             services.AddTransient<IReCaptchaV2Service, ReCaptchaV2Service>();
+
+            services.AddTransient<ITurnstileService, TurnstileService>();
 
             services.AddHostedService<ExcessiveBackgroundService>();
 

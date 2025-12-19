@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using WillBoard.Core.Enums;
 
 namespace WillBoard.Core.Entities

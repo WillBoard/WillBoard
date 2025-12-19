@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 using System.Threading.Tasks;
 using WillBoard.Core.Classes;
 using WillBoard.Core.Results;

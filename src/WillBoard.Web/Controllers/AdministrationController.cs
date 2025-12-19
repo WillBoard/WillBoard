@@ -1,8 +1,8 @@
-﻿using MediatR;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
+using MediatR;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using WillBoard.Application.Administration.Commands.AccountAuthenticationDeactivate;
 using WillBoard.Application.Administration.Commands.AccountCreate;
 using WillBoard.Application.Administration.Commands.AccountInvitationAccept;
@@ -155,6 +155,10 @@ namespace WillBoard.Web.Controllers
             if (_configurationService.Configuration.Administration.VerificationType == VerificationType.ReCaptcha)
             {
                 command.VerificationValue = Request.Form["g-recaptcha-response"].ToString();
+            }
+            else if (_configurationService.Configuration.Administration.VerificationType == VerificationType.Turnstile)
+            {
+                command.VerificationValue = Request.Form["cf-turnstile-response"].ToString();
             }
 
             var result = await _mediator.Send(command);

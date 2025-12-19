@@ -1,4 +1,4 @@
-﻿using WillBoard.Application.ViewModels;
+using WillBoard.Application.ViewModels;
 
 namespace WillBoard.Application.Administration.Queries.AccountPasswordChange
 {

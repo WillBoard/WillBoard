@@ -1,4 +1,4 @@
-﻿namespace WillBoard.Web.Models.Json
+namespace WillBoard.Web.Models.Json
 {
     public class Json
     {

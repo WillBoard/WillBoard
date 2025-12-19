@@ -1,4 +1,4 @@
-﻿using System.Net.Sockets;
+using System.Net.Sockets;
 using WillBoard.Core.Enums;
 
 namespace WillBoard.Core.Extensions

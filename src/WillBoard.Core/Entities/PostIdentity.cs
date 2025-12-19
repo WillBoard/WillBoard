@@ -1,4 +1,4 @@
-﻿namespace WillBoard.Core.Entities
+namespace WillBoard.Core.Entities
 {
     public class PostIdentity
     {

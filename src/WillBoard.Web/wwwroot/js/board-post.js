@@ -1,4 +1,4 @@
-﻿document.addEventListener("DOMContentLoaded", function (event) {
+document.addEventListener("DOMContentLoaded", function (event) {
     let submitInputElements = document.querySelectorAll("section.post input[type=submit]");
     for (let i = 0; i < submitInputElements.length; i++) {
         submitInputElements[i].addEventListener("click", postAsynchronous);
@@ -140,6 +140,9 @@ function handleReadyStateChange(submitInputElement, submitInputElementInitialVal
                 break;
             case VerificationType.ReCAPTCHA:
                 grecaptcha.reset();
+                break;
+            case VerificationType.Turnstile:
+                window.turnstile.reset();
                 break;
         }
     }

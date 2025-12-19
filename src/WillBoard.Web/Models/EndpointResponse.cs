@@ -1,4 +1,4 @@
-﻿namespace WillBoard.Web.Models
+namespace WillBoard.Web.Models
 {
     public class EndpointResponse
     {
