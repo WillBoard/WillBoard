@@ -1,4 +1,4 @@
-﻿@using WillBoard.Core.Enums
+@using WillBoard.Core.Enums
 @using WillBoard.Core.Interfaces.Services
 @using WillBoard.Application.ViewModels
 @inject IConfigurationService _configurationService
@@ -38,8 +38,8 @@
             }
             else if (_configurationService.Configuration.Administration.VerificationType == VerificationType.Turnstile)
             {
-				<div>
-					<div class="cf-turnstile" data-sitekey="@_configurationService.Configuration.Administration.VerificationPublicKey" data-size="flexible"></div>
+                <div>
+                    <div class="cf-turnstile" data-sitekey="@_configurationService.Configuration.Administration.VerificationPublicKey" data-size="flexible"></div>
                 </div>
             }
             <p class="center">
