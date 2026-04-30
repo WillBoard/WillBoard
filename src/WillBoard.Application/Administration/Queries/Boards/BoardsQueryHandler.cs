@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
+using Mediator;
 using WillBoard.Core.Consts;
 using WillBoard.Core.Enums;
 using WillBoard.Core.Errors;
@@ -24,7 +24,7 @@ namespace WillBoard.Application.Administration.Queries.Boards
             _boardCache = boardCache;
         }
 
-        public async Task<Result<BoardsViewModel, InternalError>> Handle(BoardsQuery request, CancellationToken cancellationToken)
+        public async ValueTask<Result<BoardsViewModel, InternalError>> Handle(BoardsQuery request, CancellationToken cancellationToken)
         {
             var requestAccount = _accountManager.GetAccount();
             var requestAuthorizationCollection = _accountManager.GetAuthorizationCollection();

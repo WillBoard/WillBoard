@@ -1,7 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
+using Mediator;
 using WillBoard.Core.Consts;
 using WillBoard.Core.Enums;
 using WillBoard.Core.Errors;
@@ -22,7 +22,7 @@ namespace WillBoard.Application.Administration.Queries.BoardIpDeletePosts
             _boardCache = boardCache;
         }
 
-        public async Task<Result<BoardIpDeletePostsViewModel, InternalError>> Handle(BoardIpDeletePostsQuery request, CancellationToken cancellationToken)
+        public async ValueTask<Result<BoardIpDeletePostsViewModel, InternalError>> Handle(BoardIpDeletePostsQuery request, CancellationToken cancellationToken)
         {
             var board = await _boardCache.GetAsync(request.BoardId);
 

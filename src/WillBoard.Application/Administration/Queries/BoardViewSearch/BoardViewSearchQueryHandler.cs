@@ -1,6 +1,6 @@
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
+using Mediator;
 using WillBoard.Core.Consts;
 using WillBoard.Core.Enums;
 using WillBoard.Core.Errors;
@@ -23,7 +23,7 @@ namespace WillBoard.Application.Administration.Queries.BoardViewSearch
             _postCache = postCache;
         }
 
-        public async Task<Result<BoardViewSearchViewModel, InternalError>> Handle(BoardViewSearchQuery request, CancellationToken cancellationToken)
+        public async ValueTask<Result<BoardViewSearchViewModel, InternalError>> Handle(BoardViewSearchQuery request, CancellationToken cancellationToken)
         {
             var board = _boardManager.GetBoard();
 

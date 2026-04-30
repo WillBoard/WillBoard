@@ -1,6 +1,6 @@
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
+using Mediator;
 using WillBoard.Core.Consts;
 using WillBoard.Core.Enums;
 using WillBoard.Core.Errors;
@@ -21,7 +21,7 @@ namespace WillBoard.Application.Administration.Queries.Configurations
             _configurationCache = configurationCache;
         }
 
-        public async Task<Result<ConfigurationsViewModel, InternalError>> Handle(ConfigurationsQuery request, CancellationToken cancellationToken)
+        public async ValueTask<Result<ConfigurationsViewModel, InternalError>> Handle(ConfigurationsQuery request, CancellationToken cancellationToken)
         {
             var requestAccount = _accountManager.GetAccount();
 

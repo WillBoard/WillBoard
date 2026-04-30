@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
+using Mediator;
 using WillBoard.Core.Entities;
 using WillBoard.Core.Enums;
 using WillBoard.Core.Errors;
@@ -31,7 +31,7 @@ namespace WillBoard.Application.Board.Queries.Ban
             _banAppealCache = banAppealCache;
         }
 
-        public async Task<Result<BanViewModel, InternalError>> Handle(BanQuery request, CancellationToken cancellationToken)
+        public async ValueTask<Result<BanViewModel, InternalError>> Handle(BanQuery request, CancellationToken cancellationToken)
         {
             var ipVersion = _ipManager.GetIpVersion();
             var ipNumber = _ipManager.GetIpNumber();

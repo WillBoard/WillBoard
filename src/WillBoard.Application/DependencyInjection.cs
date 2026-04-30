@@ -1,5 +1,4 @@
-using System.Reflection;
-using MediatR;
+using Mediator;
 using Microsoft.Extensions.DependencyInjection;
 using WillBoard.Application.Behaviors;
 
@@ -9,9 +8,10 @@ namespace WillBoard.Application
     {
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
-            services.AddMediatR(configuration =>
+            services.AddMediator(options =>
             {
-                configuration.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
+                options.Namespace = "WillBoard.Mediator";
+                options.ServiceLifetime = ServiceLifetime.Transient;
             });
 
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(PerformanceBehavior<,>));

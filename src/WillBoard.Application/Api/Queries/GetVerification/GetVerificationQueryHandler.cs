@@ -1,6 +1,6 @@
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
+using Mediator;
 using WillBoard.Core.Errors;
 using WillBoard.Core.Interfaces.Services;
 using WillBoard.Core.Managers;
@@ -21,7 +21,7 @@ namespace WillBoard.Application.Api.Queries.GetVerification
             _verificationService = verificationService;
         }
 
-        public async Task<Result<bool, InternalError>> Handle(GetVerificationQuery request, CancellationToken cancellationToken)
+        public async ValueTask<Result<bool, InternalError>> Handle(GetVerificationQuery request, CancellationToken cancellationToken)
         {
             var verification = await _verificationService.CheckAsync(request.Thread, _ipManager.GetIpVersion(), _ipManager.GetIpNumber(), _boardManager.GetBoard());
 

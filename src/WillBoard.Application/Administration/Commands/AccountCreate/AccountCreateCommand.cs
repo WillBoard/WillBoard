@@ -1,4 +1,4 @@
-using MediatR;
+using Mediator;
 using WillBoard.Core.Enums;
 using WillBoard.Core.Errors;
 using WillBoard.Core.Results;

@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
+using Mediator;
 using WillBoard.Core.Consts;
 using WillBoard.Core.Entities;
 using WillBoard.Core.Enums;
@@ -24,7 +24,7 @@ namespace WillBoard.Application.Board.Queries.Catalog
             _postCache = postCache;
         }
 
-        public async Task<Result<CatalogViewModel, InternalError>> Handle(CatalogQuery request, CancellationToken cancellationToken)
+        public async ValueTask<Result<CatalogViewModel, InternalError>> Handle(CatalogQuery request, CancellationToken cancellationToken)
         {
             var board = _boardManager.GetBoard();
 

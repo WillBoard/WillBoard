@@ -1,7 +1,7 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
+using Mediator;
 using WillBoard.Core.Consts;
 using WillBoard.Core.Enums;
 using WillBoard.Core.Errors;
@@ -22,7 +22,7 @@ namespace WillBoard.Application.Administration.Queries.TranslationUpdate
             _translationCache = translationCache;
         }
 
-        public async Task<Result<TranslationUpdateViewModel, InternalError>> Handle(TranslationUpdateQuery request, CancellationToken cancellationToken)
+        public async ValueTask<Result<TranslationUpdateViewModel, InternalError>> Handle(TranslationUpdateQuery request, CancellationToken cancellationToken)
         {
             var requestAccount = _accountManager.GetAccount();
 

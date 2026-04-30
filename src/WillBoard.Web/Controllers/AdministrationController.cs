@@ -1,6 +1,6 @@
 using System;
 using System.Threading.Tasks;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WillBoard.Application.Administration.Commands.AccountAuthenticationDeactivate;

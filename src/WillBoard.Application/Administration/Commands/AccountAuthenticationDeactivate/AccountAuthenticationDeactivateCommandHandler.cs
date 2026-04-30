@@ -1,6 +1,6 @@
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
+using Mediator;
 using WillBoard.Core.Consts;
 using WillBoard.Core.Entities;
 using WillBoard.Core.Enums;
@@ -30,7 +30,7 @@ namespace WillBoard.Application.Administration.Commands.AccountAuthenticationDea
             _authenticationCache = authenticationCache;
         }
 
-        public async Task<Status<InternalError>> Handle(AccountAuthenticationDeactivateCommand request, CancellationToken cancellationToken)
+        public async ValueTask<Status<InternalError>> Handle(AccountAuthenticationDeactivateCommand request, CancellationToken cancellationToken)
         {
             var requestAccount = _accountManager.GetAccount();
             if (request.AccountId != requestAccount.AccountId && requestAccount.Type != AccountType.Administrator)

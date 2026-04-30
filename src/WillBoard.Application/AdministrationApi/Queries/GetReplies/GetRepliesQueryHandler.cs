@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
+using Mediator;
 using WillBoard.Application.DataModels;
 using WillBoard.Core.Consts;
 using WillBoard.Core.Errors;
@@ -25,7 +25,7 @@ namespace WillBoard.Application.AdministrationApi.Queries.GetReplies
             _postCache = postCache;
         }
 
-        public async Task<Result<IEnumerable<PostDataModel>, InternalError>> Handle(GetRepliesQuery request, CancellationToken cancellationToken)
+        public async ValueTask<Result<IEnumerable<PostDataModel>, InternalError>> Handle(GetRepliesQuery request, CancellationToken cancellationToken)
         {
             var board = _boardManager.GetBoard();
 

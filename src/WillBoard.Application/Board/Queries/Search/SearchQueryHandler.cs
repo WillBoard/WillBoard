@@ -1,6 +1,6 @@
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
+using Mediator;
 using WillBoard.Core.Consts;
 using WillBoard.Core.Enums;
 using WillBoard.Core.Errors;
@@ -21,7 +21,7 @@ namespace WillBoard.Application.Board.Queries.Search
             _postCache = postCache;
         }
 
-        public async Task<Result<SearchViewModel, InternalError>> Handle(SearchQuery request, CancellationToken cancellationToken)
+        public async ValueTask<Result<SearchViewModel, InternalError>> Handle(SearchQuery request, CancellationToken cancellationToken)
         {
             var board = _boardManager.GetBoard();
 

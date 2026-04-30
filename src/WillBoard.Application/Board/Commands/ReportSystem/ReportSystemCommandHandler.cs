@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
+using Mediator;
 using WillBoard.Core.Consts;
 using WillBoard.Core.Entities;
 using WillBoard.Core.Errors;
@@ -35,7 +35,7 @@ namespace WillBoard.Application.Board.Commands.ReportSystem
             _postCache = postCache;
         }
 
-        public async Task<Status<InternalError>> Handle(ReportSystemCommand request, CancellationToken cancellationToken)
+        public async ValueTask<Status<InternalError>> Handle(ReportSystemCommand request, CancellationToken cancellationToken)
         {
             if (request.Reason == null)
             {

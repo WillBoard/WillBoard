@@ -1,5 +1,5 @@
 using System;
-using MediatR;
+using Mediator;
 using WillBoard.Core.Errors;
 using WillBoard.Core.Results;
 

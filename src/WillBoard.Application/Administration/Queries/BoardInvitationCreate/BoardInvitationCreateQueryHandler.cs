@@ -1,6 +1,6 @@
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
+using Mediator;
 using WillBoard.Core.Consts;
 using WillBoard.Core.Errors;
 using WillBoard.Core.Interfaces.Caches;
@@ -20,7 +20,7 @@ namespace WillBoard.Application.Administration.Queries.BoardInvitationCreate
             _boardCache = boardCache;
         }
 
-        public async Task<Result<BoardInvitationCreateViewModel, InternalError>> Handle(BoardInvitationCreateQuery request, CancellationToken cancellationToken)
+        public async ValueTask<Result<BoardInvitationCreateViewModel, InternalError>> Handle(BoardInvitationCreateQuery request, CancellationToken cancellationToken)
         {
             var board = await _boardCache.GetAsync(request.BoardId);
 

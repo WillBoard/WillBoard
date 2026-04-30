@@ -1,6 +1,6 @@
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
+using Mediator;
 using WillBoard.Core.Consts;
 using WillBoard.Core.Entities;
 using WillBoard.Core.Errors;
@@ -33,7 +33,7 @@ namespace WillBoard.Application.Board.Commands.DeleteFile
             _storageService = storageService;
         }
 
-        public async Task<Status<InternalError>> Handle(DeleteFileCommand request, CancellationToken cancellationToken)
+        public async ValueTask<Status<InternalError>> Handle(DeleteFileCommand request, CancellationToken cancellationToken)
         {
             var board = _boardManager.GetBoard();
 

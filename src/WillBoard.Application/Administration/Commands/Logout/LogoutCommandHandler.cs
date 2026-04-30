@@ -1,6 +1,6 @@
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
+using Mediator;
 using WillBoard.Core.Errors;
 using WillBoard.Core.Interfaces.Caches;
 using WillBoard.Core.Interfaces.Providers;
@@ -25,7 +25,7 @@ namespace WillBoard.Application.Administration.Commands.Logout
             _authenticationCache = authenticationCache;
         }
 
-        public async Task<Status<InternalError>> Handle(LogoutCommand request, CancellationToken cancellationToken)
+        public async ValueTask<Status<InternalError>> Handle(LogoutCommand request, CancellationToken cancellationToken)
         {
             var account = _accountManager.GetAccount();
             var authentication = _accountManager.GetAuthentication();

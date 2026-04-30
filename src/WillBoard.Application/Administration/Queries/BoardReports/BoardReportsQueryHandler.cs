@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
+using Mediator;
 using WillBoard.Core.Consts;
 using WillBoard.Core.Entities;
 using WillBoard.Core.Errors;
@@ -26,7 +26,7 @@ namespace WillBoard.Application.Administration.Queries.BoardReports
             _postCache = postCache;
         }
 
-        public async Task<Result<BoardReportsViewModel, InternalError>> Handle(BoardReportsQuery request, CancellationToken cancellationToken)
+        public async ValueTask<Result<BoardReportsViewModel, InternalError>> Handle(BoardReportsQuery request, CancellationToken cancellationToken)
         {
             var board = await _boardCache.GetAsync(request.BoardId);
 

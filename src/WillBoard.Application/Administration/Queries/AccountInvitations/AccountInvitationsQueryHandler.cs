@@ -1,6 +1,6 @@
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
+using Mediator;
 using WillBoard.Core.Consts;
 using WillBoard.Core.Enums;
 using WillBoard.Core.Errors;
@@ -23,7 +23,7 @@ namespace WillBoard.Application.Administration.Queries.AccountInvitations
             _invitationCache = invitationCache;
         }
 
-        public async Task<Result<AccountInvitationsViewModel, InternalError>> Handle(AccountInvitationsQuery request, CancellationToken cancellationToken)
+        public async ValueTask<Result<AccountInvitationsViewModel, InternalError>> Handle(AccountInvitationsQuery request, CancellationToken cancellationToken)
         {
             var requestAccount = _accountManager.GetAccount();
             if (request.AccountId != requestAccount.AccountId && requestAccount.Type != AccountType.Administrator)

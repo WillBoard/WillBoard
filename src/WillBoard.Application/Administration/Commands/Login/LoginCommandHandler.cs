@@ -1,7 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
+using Mediator;
 using WillBoard.Core.Consts;
 using WillBoard.Core.Entities;
 using WillBoard.Core.Enums;
@@ -49,7 +49,7 @@ namespace WillBoard.Application.Administration.Commands.Login
             _turnstileService = turnstileService;
         }
 
-        public async Task<Result<Authentication, InternalError>> Handle(LoginCommand request, CancellationToken cancellationToken)
+        public async ValueTask<Result<Authentication, InternalError>> Handle(LoginCommand request, CancellationToken cancellationToken)
         {
             if (_configurationService.Configuration.Administration.VerificationType == VerificationType.ReCaptcha)
             {

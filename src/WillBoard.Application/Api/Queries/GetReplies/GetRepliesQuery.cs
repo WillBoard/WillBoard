@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using MediatR;
+using Mediator;
 using WillBoard.Application.DataModels;
 using WillBoard.Core.Errors;
 using WillBoard.Core.Results;

@@ -1,6 +1,6 @@
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
+using Mediator;
 using WillBoard.Core.Consts;
 using WillBoard.Core.Errors;
 using WillBoard.Core.Interfaces.Caches;
@@ -27,7 +27,7 @@ namespace WillBoard.Application.Administration.Commands.BoardBanDelete
             _banAppealCache = banAppealCache;
         }
 
-        public async Task<Status<InternalError>> Handle(BoardBanDeleteCommand request, CancellationToken cancellationToken)
+        public async ValueTask<Status<InternalError>> Handle(BoardBanDeleteCommand request, CancellationToken cancellationToken)
         {
             var board = await _boardCache.GetAsync(request.BoardId);
             if (board == null)

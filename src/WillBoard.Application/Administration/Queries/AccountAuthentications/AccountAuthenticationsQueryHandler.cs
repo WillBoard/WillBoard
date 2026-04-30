@@ -1,6 +1,6 @@
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
+using Mediator;
 using WillBoard.Core.Consts;
 using WillBoard.Core.Enums;
 using WillBoard.Core.Errors;
@@ -23,7 +23,7 @@ namespace WillBoard.Application.Administration.Queries.AccountAuthentications
             _authenticationCache = authenticationCache;
         }
 
-        public async Task<Result<AccountAuthenticationsViewModel, InternalError>> Handle(AccountAuthenticationsQuery request, CancellationToken cancellationToken)
+        public async ValueTask<Result<AccountAuthenticationsViewModel, InternalError>> Handle(AccountAuthenticationsQuery request, CancellationToken cancellationToken)
         {
             var requestAccount = _accountManager.GetAccount();
 

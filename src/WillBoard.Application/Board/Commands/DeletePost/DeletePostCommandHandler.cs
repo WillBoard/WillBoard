@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
+using Mediator;
 using WillBoard.Core.Classes;
 using WillBoard.Core.Consts;
 using WillBoard.Core.Entities;
@@ -48,7 +48,7 @@ namespace WillBoard.Application.Board.Commands.DeletePost
             _storageService = storageService;
         }
 
-        public async Task<Status<InternalError>> Handle(DeletePostCommand request, CancellationToken cancellationToken)
+        public async ValueTask<Status<InternalError>> Handle(DeletePostCommand request, CancellationToken cancellationToken)
         {
             var board = _boardManager.GetBoard();
 

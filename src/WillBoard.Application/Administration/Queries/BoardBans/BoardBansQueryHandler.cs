@@ -1,6 +1,6 @@
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
+using Mediator;
 using WillBoard.Core.Consts;
 using WillBoard.Core.Errors;
 using WillBoard.Core.Interfaces.Caches;
@@ -22,7 +22,7 @@ namespace WillBoard.Application.Administration.Queries.BoardBans
             _banCache = banCache;
         }
 
-        public async Task<Result<BoardBansViewModel, InternalError>> Handle(BoardBansQuery request, CancellationToken cancellationToken)
+        public async ValueTask<Result<BoardBansViewModel, InternalError>> Handle(BoardBansQuery request, CancellationToken cancellationToken)
         {
             var board = await _boardCache.GetAsync(request.BoardId);
 

@@ -1,6 +1,6 @@
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
+using Mediator;
 using WillBoard.Core.Consts;
 using WillBoard.Core.Errors;
 using WillBoard.Core.Interfaces.Caches;
@@ -25,7 +25,7 @@ namespace WillBoard.Application.Administration.Commands.BoardThreadPin
             _postCache = postCache;
         }
 
-        public async Task<Status<InternalError>> Handle(BoardThreadPinCommand request, CancellationToken cancellationToken)
+        public async ValueTask<Status<InternalError>> Handle(BoardThreadPinCommand request, CancellationToken cancellationToken)
         {
             var board = await _boardCache.GetAsync(request.BoardId);
 

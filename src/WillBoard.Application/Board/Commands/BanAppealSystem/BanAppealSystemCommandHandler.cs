@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
+using Mediator;
 using WillBoard.Core.Consts;
 using WillBoard.Core.Entities;
 using WillBoard.Core.Errors;
@@ -36,7 +36,7 @@ namespace WillBoard.Application.Board.Commands.BanAppealSystem
             _lockManager = lockManager;
         }
 
-        public async Task<Status<InternalError>> Handle(BanAppealSystemCommand request, CancellationToken cancellationToken)
+        public async ValueTask<Status<InternalError>> Handle(BanAppealSystemCommand request, CancellationToken cancellationToken)
         {
             var ipVersion = _ipManager.GetIpVersion();
             var ipNumber = _ipManager.GetIpNumber();

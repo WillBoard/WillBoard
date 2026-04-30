@@ -1,7 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
+using Mediator;
 using WillBoard.Core.Consts;
 using WillBoard.Core.Entities;
 using WillBoard.Core.Enums;
@@ -35,7 +35,7 @@ namespace WillBoard.Application.Administration.Commands.AccountInvitationAccept
             _authorizationCache = authorizationCache;
         }
 
-        public async Task<Status<InternalError>> Handle(AccountInvitationAcceptCommand request, CancellationToken cancellationToken)
+        public async ValueTask<Status<InternalError>> Handle(AccountInvitationAcceptCommand request, CancellationToken cancellationToken)
         {
             var requestAccount = _accountManager.GetAccount();
             if (request.AccountId != requestAccount.AccountId && requestAccount.Type != AccountType.Administrator)

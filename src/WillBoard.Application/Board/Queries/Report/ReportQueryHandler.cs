@@ -1,6 +1,6 @@
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
+using Mediator;
 using WillBoard.Application.ViewModels;
 using WillBoard.Core.Consts;
 using WillBoard.Core.Enums;
@@ -22,7 +22,7 @@ namespace WillBoard.Application.Board.Queries.Report
             _postCache = postCache;
         }
 
-        public async Task<Result<PostViewModel, InternalError>> Handle(ReportQuery request, CancellationToken cancellationToken)
+        public async ValueTask<Result<PostViewModel, InternalError>> Handle(ReportQuery request, CancellationToken cancellationToken)
         {
             var board = _boardManager.GetBoard();
             var post = await _postCache.GetAdaptedAsync(board, request.PostId);

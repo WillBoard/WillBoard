@@ -1,7 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
+using Mediator;
 using WillBoard.Core.Consts;
 using WillBoard.Core.Entities;
 using WillBoard.Core.Enums;
@@ -30,7 +30,7 @@ namespace WillBoard.Application.Administration.Commands.BanCreate
             _banCache = banCache;
         }
 
-        public async Task<Status<InternalError>> Handle(BanCreateCommand request, CancellationToken cancellationToken)
+        public async ValueTask<Status<InternalError>> Handle(BanCreateCommand request, CancellationToken cancellationToken)
         {
             var requestAccount = _accountManager.GetAccount();
 

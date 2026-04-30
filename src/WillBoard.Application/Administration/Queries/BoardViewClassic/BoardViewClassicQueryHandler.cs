@@ -1,6 +1,6 @@
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
+using Mediator;
 using WillBoard.Core.Consts;
 using WillBoard.Core.Enums;
 using WillBoard.Core.Errors;
@@ -28,7 +28,7 @@ namespace WillBoard.Application.Administration.Queries.BoardViewClassic
             _verificationService = verificationService;
         }
 
-        public async Task<Result<BoardViewClassicViewModel, InternalError>> Handle(BoardViewClassicQuery request, CancellationToken cancellationToken)
+        public async ValueTask<Result<BoardViewClassicViewModel, InternalError>> Handle(BoardViewClassicQuery request, CancellationToken cancellationToken)
         {
             var board = _boardManager.GetBoard();
 

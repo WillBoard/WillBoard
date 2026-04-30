@@ -1,6 +1,6 @@
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
+using Mediator;
 using WillBoard.Core.Consts;
 using WillBoard.Core.Errors;
 using WillBoard.Core.Interfaces.Caches;
@@ -20,7 +20,7 @@ namespace WillBoard.Application.Administration.Queries.BoardDelete
             _boardCache = boardCache;
         }
 
-        public async Task<Result<BoardDeleteViewModel, InternalError>> Handle(BoardDeleteQuery request, CancellationToken cancellationToken)
+        public async ValueTask<Result<BoardDeleteViewModel, InternalError>> Handle(BoardDeleteQuery request, CancellationToken cancellationToken)
         {
             var board = await _boardCache.GetAsync(request.BoardId);
 

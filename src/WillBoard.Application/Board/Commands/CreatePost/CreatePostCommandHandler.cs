@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
+using Mediator;
 using Microsoft.Extensions.Logging;
 using WillBoard.Application.DataModels;
 using WillBoard.Core.Classes;
@@ -80,7 +80,7 @@ namespace WillBoard.Application.Board.Commands.CreatePost
             _markupService = markupService;
         }
 
-        public async Task<Result<CreatePostDataModel, InternalError>> Handle(CreatePostCommand request, CancellationToken cancellationToken)
+        public async ValueTask<Result<CreatePostDataModel, InternalError>> Handle(CreatePostCommand request, CancellationToken cancellationToken)
         {
             var post = new Post();
 
@@ -277,7 +277,7 @@ namespace WillBoard.Application.Board.Commands.CreatePost
             }
         }
 
-        private async Task<Status<InternalError>> CreateThread(CreatePostCommand request, Core.Entities.Board board, Post post)
+        private async ValueTask<Status<InternalError>> CreateThread(CreatePostCommand request, Core.Entities.Board board, Post post)
         {
             if (!board.ThreadFieldNameAvailability)
             {
@@ -590,7 +590,7 @@ namespace WillBoard.Application.Board.Commands.CreatePost
             return Status<InternalError>.SuccessStatus();
         }
 
-        private async Task<Status<InternalError>> CreateReply(CreatePostCommand request, Core.Entities.Board board, Post post)
+        private async ValueTask<Status<InternalError>> CreateReply(CreatePostCommand request, Core.Entities.Board board, Post post)
         {
             if (!board.ReplyFieldNameAvailability)
             {

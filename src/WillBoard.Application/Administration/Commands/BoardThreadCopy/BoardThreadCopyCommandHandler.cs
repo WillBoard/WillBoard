@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
+using Mediator;
 using WillBoard.Application.DataModels;
 using WillBoard.Core.Classes;
 using WillBoard.Core.Consts;
@@ -41,7 +41,7 @@ namespace WillBoard.Application.Administration.Commands.BoardThreadCopy
             _synchronizationService = synchronizationService;
         }
 
-        public async Task<Status<InternalError>> Handle(BoardThreadCopyCommand request, CancellationToken cancellationToken)
+        public async ValueTask<Status<InternalError>> Handle(BoardThreadCopyCommand request, CancellationToken cancellationToken)
         {
             var board = await _boardCache.GetAsync(request.BoardId);
 

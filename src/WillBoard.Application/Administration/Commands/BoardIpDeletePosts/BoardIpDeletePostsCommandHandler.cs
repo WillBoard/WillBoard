@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
+using Mediator;
 using WillBoard.Core.Classes;
 using WillBoard.Core.Consts;
 using WillBoard.Core.Entities;
@@ -45,7 +45,7 @@ namespace WillBoard.Application.Administration.Commands.BoardIpDeletePosts
             _lockManager = lockManager;
         }
 
-        public async Task<Status<InternalError>> Handle(BoardIpDeletePostsCommand request, CancellationToken cancellationToken)
+        public async ValueTask<Status<InternalError>> Handle(BoardIpDeletePostsCommand request, CancellationToken cancellationToken)
         {
             var board = await _boardCache.GetAsync(request.BoardId);
 

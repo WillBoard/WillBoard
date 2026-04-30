@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
+using Mediator;
 using WillBoard.Core.Consts;
 using WillBoard.Core.Entities;
 using WillBoard.Core.Enums;
@@ -43,7 +43,7 @@ namespace WillBoard.Application.Administration.Commands.BoardCreate
             _storageService = storageService;
         }
 
-        public async Task<Status<InternalError>> Handle(BoardCreateCommand request, CancellationToken cancellationToken)
+        public async ValueTask<Status<InternalError>> Handle(BoardCreateCommand request, CancellationToken cancellationToken)
         {
             var requestAccount = _accountManager.GetAccount();
             if (requestAccount.Type != AccountType.Administrator)

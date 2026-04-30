@@ -1,6 +1,6 @@
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
+using Mediator;
 using WillBoard.Core.Consts;
 using WillBoard.Core.Enums;
 using WillBoard.Core.Errors;
@@ -26,7 +26,7 @@ namespace WillBoard.Application.Administration.Commands.BanDelete
             _banAppealCache = banAppealCache;
         }
 
-        public async Task<Status<InternalError>> Handle(BanDeleteCommand request, CancellationToken cancellationToken)
+        public async ValueTask<Status<InternalError>> Handle(BanDeleteCommand request, CancellationToken cancellationToken)
         {
             var requestAccount = _accountManager.GetAccount();
 

@@ -1,6 +1,6 @@
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
+using Mediator;
 using WillBoard.Core.Consts;
 using WillBoard.Core.Enums;
 using WillBoard.Core.Errors;
@@ -18,7 +18,7 @@ namespace WillBoard.Application.Administration.Queries.BoardCreate
             _accountManager = accountManager;
         }
 
-        public async Task<Result<BoardCreateViewModel, InternalError>> Handle(BoardCreateQuery request, CancellationToken cancellationToken)
+        public async ValueTask<Result<BoardCreateViewModel, InternalError>> Handle(BoardCreateQuery request, CancellationToken cancellationToken)
         {
             var requestAccount = _accountManager.GetAccount();
 

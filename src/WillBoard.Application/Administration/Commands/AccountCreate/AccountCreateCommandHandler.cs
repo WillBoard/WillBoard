@@ -1,7 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
+using Mediator;
 using WillBoard.Core.Consts;
 using WillBoard.Core.Entities;
 using WillBoard.Core.Enums;
@@ -32,7 +32,7 @@ namespace WillBoard.Application.Administration.Commands.AccountCreate
             _passwordService = passwordService;
         }
 
-        public async Task<Status<InternalError>> Handle(AccountCreateCommand request, CancellationToken cancellationToken)
+        public async ValueTask<Status<InternalError>> Handle(AccountCreateCommand request, CancellationToken cancellationToken)
         {
             var requestAccount = _accountManager.GetAccount();
 

@@ -1,7 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
+using Mediator;
 using WillBoard.Core.Consts;
 using WillBoard.Core.Entities;
 using WillBoard.Core.Enums;
@@ -29,7 +29,7 @@ namespace WillBoard.Application.Administration.Commands.BoardBanUpdate
             _banCache = banCache;
         }
 
-        public async Task<Status<InternalError>> Handle(BoardBanUpdateCommand request, CancellationToken cancellationToken)
+        public async ValueTask<Status<InternalError>> Handle(BoardBanUpdateCommand request, CancellationToken cancellationToken)
         {
             var board = await _boardCache.GetAsync(request.BoardId);
             if (board == null)

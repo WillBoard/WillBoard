@@ -1,6 +1,6 @@
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
+using Mediator;
 using WillBoard.Core.Consts;
 using WillBoard.Core.Entities;
 using WillBoard.Core.Errors;
@@ -29,7 +29,7 @@ namespace WillBoard.Application.Administration.Commands.BoardPostUpdate
             _markupService = markupService;
         }
 
-        public async Task<Status<InternalError>> Handle(BoardPostUpdateCommand request, CancellationToken cancellationToken)
+        public async ValueTask<Status<InternalError>> Handle(BoardPostUpdateCommand request, CancellationToken cancellationToken)
         {
             var board = await _boardCache.GetAsync(request.BoardId);
             if (board == null)
