@@ -83,7 +83,8 @@ namespace WillBoard.Infrastructure.Services.Instance
                 var canvas = surface.Canvas;
                 canvas.Clear(SKColors.Black);
 
-                canvas.DrawImage(_backgroundImage, new SKPoint(0, 0));
+                var skSamplingOptions = new SKSamplingOptions(SKFilterMode.Nearest, SKMipmapMode.None);
+                canvas.DrawImage(_backgroundImage, 0, 0, skSamplingOptions);
 
                 using (var textPaint = new SKPaint())
                 {
